@@ -1,42 +1,22 @@
 # gravity-maze
 
-A [reagent](https://github.com/reagent-project/reagent) application designed to ... well, that part is up to you.
+Ever wondered what throwing a ball would be like if walls had a repulsive
+gravity forces?
+Wouldn't that make playing catch a lot of fun?
 
-## Development Mode
 
-### Start Cider from Emacs:
+### TODO
+ - setup canvas
+ - design world-store
+   - ball
+     - mass, position, velocity (mag, dir), accel (mag, dir)
+     - :fixed false
+   - walls
+     - position (line, width?) (model as points? -> research)
+     - :fixed true
+     - mass (kg/m?)
+   - end point
+     - pos, radius (no mass, etc.)
 
-Put this in your Emacs config file:
-
-```
-(setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
-```
-
-Navigate to a clojurescript file and start a figwheel REPL with `cider-jack-in-clojurescript` or (`C-c M-J`)
-
-### Run application:
-
-```
-lein clean
-lein figwheel dev
-```
-
-Figwheel will automatically push cljs changes to the browser.
-
-Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
-
-### Run tests:
-
-```
-lein clean
-lein doo phantom test once
-```
-
-The above command assumes that you have [phantomjs](https://www.npmjs.com/package/phantomjs) installed. However, please note that [doo](https://github.com/bensu/doo) can be configured to run cljs.test in many other JS environments (chrome, ie, safari, opera, slimer, node, rhino, or nashorn). 
-
-## Production Build
-
-```
-lein clean
-lein cljsbuild once min
-```
+ - calculate multi-mass interactions
+ - collision detection

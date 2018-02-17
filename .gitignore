@@ -4,3 +4,5 @@
 /resources/public/js
 out
 .lein-failures
+.cljs_rhino_repl/
+.nrepl-port

@@ -1,23 +1,20 @@
 (ns gravity-maze.core
   (:require
-   [reagent.core :as reagent]
-   ))
+   [reagent.core :as reagent]))
 
+(defonce app-state (reagent/atom {}))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
+(defonce context
+  #(-> (.getElementById js/document "ctxt")
+       (.getContext "2d")))
 
-(defonce app-state
-  (reagent/atom {}))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
+(defn context-container [ratom]
+  [:canvas#ctxt])
 
 (defn page [ratom]
   [:div
-   "Welcome to reagent-figwheel."])
+   [:div "Welcome to reagent-figwheel." ]
+   (context-container ratom)])
 
 
 
@@ -27,8 +24,7 @@
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG
     (enable-console-print!)
-    (println "dev mode")
-    ))
+    (println "dev mode")))
 
 (defn reload []
   (reagent/render [page app-state]
@@ -36,4 +32,5 @@
 
 (defn ^:export main []
   (dev-setup)
-  (reload))
+  (reload)
+  (context))

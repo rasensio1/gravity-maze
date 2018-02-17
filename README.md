@@ -2,7 +2,7 @@
 
 Ever wondered what throwing a ball would be like if walls had a repulsive
 gravity forces?
-Wouldn't that make playing catch a lot of fun?
+EXTREME GAMES OF CATCH!
 
 
 ### TODO
@@ -20,3 +20,6 @@ Wouldn't that make playing catch a lot of fun?
 
  - calculate multi-mass interactions
  - collision detection
+ 
+ 
+ - Simplify fixed masses by averaging?

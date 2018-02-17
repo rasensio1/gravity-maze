@@ -1,6 +1,17 @@
 (ns gravity-maze.state)
 
-(def initial-state {})
+(def initial-state {:elements [{:type :point
+                                 :mass 23
+                                 :pos [0 20]
+                                 :fixed true}
+
+                                {:type :line
+                                 :mass 1 ;kg/px
+                                 :pos [[0 0] [100 100]]
+                                 :fixed true
+                                 }]
+                     :f-const 10
+                     :drag 0.1})
 
 
   {:elements [{:type :point

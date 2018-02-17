@@ -1,6 +1,7 @@
 (ns gravity-maze.core
   (:require
    [reagent.core :as reagent]
+   [gravity-maze.state :as state]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
@@ -11,16 +12,28 @@
    [:div "Welcome to reagent-figwheel." ]])
 
 (defn setup []
-  {:radius 10})
+  state/initial-state)
 
 (defn update-state [state]
   state)
 
+(defmulti draw-elem (fn [x] (x :type)))
+(defmethod draw-elem :point [{:keys [pos r] :or {r 10}}]
+    (q/fill 0)
+    (q/ellipse (pos 0) (pos 1) r r))
+
+(defmethod draw-elem :line [{:keys [pos]}]
+  (let [[a b] pos]
+    (q/line a b)))
+
+(defn draw-point [{:keys [pos]}]
+  (q/fill 0)
+  (q/ellipse (pos 0) (pos 1) 10 10))
+
 (defn draw [state]
   (q/background 255)
-  (q/fill 0)
-  (let [r (:radius state)]
-    (q/ellipse 56 46 r r)))
+  (doseq [el (:elements state)]
+    (draw-elem el)))
 
 (q/defsketch hello
   :draw draw

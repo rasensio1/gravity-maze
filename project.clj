@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.1"]
+                 [quil "2.6.0"]
                  [binaryage/devtools "0.9.9"]
                  [reagent-forms "0.5.35"]]
 

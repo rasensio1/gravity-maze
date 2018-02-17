@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [reagent "0.6.1"]
+                 [binaryage/devtools "0.9.9"]
                  [reagent-forms "0.5.35"]]
 
   :min-lein-version "2.5.3"
@@ -39,6 +40,12 @@
                     :output-to            "resources/public/js/app.js"
                     :output-dir           "resources/public/js/dev"
                     :asset-path           "js/dev"
+                    :preloads             [devtools.preload]
+                    :external-config {
+                      :devtools/config {
+                        :features-to-install    [:formatters :hints]
+                        :fn-symbol              "F"
+                        :print-config-overrides true}}
                     :source-map-timestamp true}}
 
     {:id           "min"

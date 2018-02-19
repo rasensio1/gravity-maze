@@ -6,7 +6,6 @@ EXTREME GAMES OF CATCH!
 
 
 ### TODO
- - setup canvas
  - design world-store
    - ball
      - mass, position, velocity (mag, dir), accel (mag, dir)

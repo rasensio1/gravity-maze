@@ -3,26 +3,24 @@
    [reagent.core :as reagent]
    [gravity-maze.state :as state]
    [gravity-maze.draw :as drw]
+   [gravity-maze.engine :as eng]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
-(defonce app-state (reagent/atom {}))
+(defonce app-state (atom state/initial-state))
 
 (defn page [ratom]
   [:div
    [:div "Welcome to reagent-figwheel." ]])
 
-(defn setup [] state/initial-state)
-
-(defn update-state [state]
-  state)
+(defn setup [] @app-state)
 
 (q/defsketch hello
   :draw drw/main
   :setup setup
   :host "host"
   :size [300 300]
-  :update update-state
+  :update eng/update-state
   :middleware [m/fun-mode])
 
 (defn reload []
@@ -31,8 +29,7 @@
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG
-    (enable-console-print!)
-    (println "dev mode")))
+    (enable-console-print!)))
 
 (defn ^:export main []
   (dev-setup)

@@ -11,7 +11,8 @@
 
 (def simple-point-world {:elements [zero-point
                                     (assoc zero-point :pos [1 1])]
-                         :g 1})
+                         :g 1
+                         :dt 1})
 
 (deftest div-v-test
   (testing "divides numerator by each element in vector"
@@ -57,7 +58,12 @@
   (testing "calculates the total force on an element"
     (is (= [1 1] (eng/calc-force zero-point simple-point-world)))))
 
-;; (deftest update-elem-test
-;;   (testing "updates all elements attrs given a world"
-;;     (is (= [1 1] (eng/update-elem zero-point simple-point-world)))))
+(deftest update-elem-test
+  (testing "updates all elements attrs given a world"
+    (is (= {:vel [0.5 0.5] :accel [1 1]}
+           (select-keys (eng/update-elem zero-point simple-point-world) [:vel :accel]))
+        (let [res (->> (iterate #(eng/update-elem % simple-point-world) zero-point)
+                      (take 3)
+                      last)]
+          (= [1 1] (:pos res))))))
 

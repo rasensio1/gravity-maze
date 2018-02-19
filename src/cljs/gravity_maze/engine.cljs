@@ -56,13 +56,10 @@
 (defn calc-force [el {:keys [elements g]}]
   (reduce (fn [agg el2] (v+ agg (force-between g el el2))) [0 0] elements))
 
-;; (defn update-elem [el {:keys [dt] :as world}]
-;;   ;;calculate force on element -> (new accel)
-;;   ;; update pos -> velocity (w/ new accel) -> accel
-;;   (let [force (calc-force el world)
-;;         new-accel (calc-accel force el)]
-;;     (->> el
-;;         (update-pos dt)
-;;         (update-vel dt new-accel)
-;;         (update-accel new-accel)
-;;       ) ))
+(defn update-elem [el {:keys [dt] :as world}]
+  (let [force (calc-force el world)
+        new-accel (calc-accel force el)]
+    (->> el
+        (update-pos dt)
+        (update-vel dt new-accel)
+        (update-accel new-accel))))

@@ -9,6 +9,24 @@
                  :accel [0 0]
                  :fixed false})
 
+(def simple-point-world {:elements [zero-point
+                                    (assoc zero-point :pos [1 1])]
+                         :g 1})
+
+(deftest div-v-test
+  (testing "divides numerator by each element in vector"
+    (is (= [3 1.5] (eng/div-v 3 [1 2]))))
+  (testing "return zero force if distance is zero"
+    (is (= [0 0] (eng/div-v 3 [0 0])))))
+
+(deftest vec-exp-test
+  (testing "exponents each element"
+    (is (= [1 4 9] (eng/vec-exp 2 [1 2 3])))))
+
+(deftest vec-sub-test
+  (testing "subtracts first from second, element-wise"
+    (is (= [1 4] (eng/vec-sub [3 4] [2 0])))))
+
 (deftest update-pos-test
   (testing "Updates a position with velocity and acceleration"
     (is (= zero-point (eng/update-pos 1 zero-point)))
@@ -25,8 +43,21 @@
     (is (= {:vel [1 1] :accel [2 2]}
            (eng/update-vel 1 [0 0] {:vel [0 0 ] :accel [2 2]})))))
 
-(deftest update-accel-test
-  (testing "updates acceleration with force and accel"
-    (is (= zero-point (eng/update-accel [0 0] zero-point)))
-    (is (= [1 1] (:accel (eng/update-accel [1 1] zero-point))))))
+(deftest calc-accel-test
+  (testing "calculates acceleration given force and element"
+    (is (= [0 0] (eng/calc-accel [0 0] zero-point)))
+    (is (= [1 1] (eng/calc-accel [1 1] zero-point)))))
+
+(deftest force-between-test
+  (testing "Force between self is zero"
+    (is (= [0 0] (eng/force-between 1 zero-point zero-point))
+        (= [1 1] (eng/force-between 1 zero-point (assoc zero-point :pos [1 1]))))))
+
+(deftest calc-force-test
+  (testing "calculates the total force on an element"
+    (is (= [1 1] (eng/calc-force zero-point simple-point-world)))))
+
+;; (deftest update-elem-test
+;;   (testing "updates all elements attrs given a world"
+;;     (is (= [1 1] (eng/update-elem zero-point simple-point-world)))))
 

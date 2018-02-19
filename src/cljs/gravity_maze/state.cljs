@@ -10,7 +10,8 @@
                                  :pos [[0 0] [100 100]]
                                  :fixed true
                                  }]
-                     :f-const 10
+                     :g 10
+                     :dt 1
                      :drag 0.1})
 
   ;; {:elements [{:type :point

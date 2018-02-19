@@ -3,7 +3,7 @@
             [cljs.test :refer-macros [deftest testing is]]))
 
 (def zero-point {:type :point
-                 :mass 0
+                 :mass 1
                  :pos [0 0]
                  :vel [0 0]
                  :accel [0 0]
@@ -24,4 +24,9 @@
     (is (= zero-point (eng/update-vel 1 [0 0] zero-point)))
     (is (= {:vel [1 1] :accel [2 2]}
            (eng/update-vel 1 [0 0] {:vel [0 0 ] :accel [2 2]})))))
+
+(deftest update-accel-test
+  (testing "updates acceleration with force and accel"
+    (is (= zero-point (eng/update-accel [0 0] zero-point)))
+    (is (= [1 1] (:accel (eng/update-accel [1 1] zero-point))))))
 

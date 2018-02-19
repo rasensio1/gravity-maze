@@ -27,8 +27,7 @@
         new-vel (v+ vel accel-dv)]
     (assoc el :vel new-vel)))
 
-;; ;; for each vector
-;; position += velocity * time_step + ( 0.5 * last_acceleration * time_step^2 )
-;; new_acceleration = force / mass 
-;; avg_acceleration = ( last_acceleration + new_acceleration ) / 2
-;; velocity += avg_acceleration * time_step
+(defn update-accel [force {:keys [mass] :as el}]
+  (let [new-accel (v-div mass force)]
+    (assoc el :accel new-accel)))
+

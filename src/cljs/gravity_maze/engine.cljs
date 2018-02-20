@@ -17,11 +17,17 @@
           0
           (/ n %)) vec))
 
-(defn vec-sub [vec1 vec2]
+(defn v- [vec1 vec2]
   (mapv - vec1 vec2))
 
-(defn vec-exp [n vec]
-  (mapv #(Math/pow % n) vec))
+(defn sumsqs [vec]
+  (reduce #(+ %1 (* %2 %2)) 0 vec))
+
+(defn unit-vec [v]
+  (if (= [0 0] v) [0 0]
+    (let [d2 (sumsqs v)
+          norm (/ 1 (Math/sqrt d2))]
+      (v* norm v))))
 
 (defn update-pos [dt {:keys [pos vel accel] :as el}]
   (let [velocity-disp (v* dt vel)
@@ -42,16 +48,18 @@
   (assoc el :accel new-accel))
 
 (defn force-between [g el1 el2]
-  (let [gmm (apply * (cons g (map :mass [el1 el2])))
-        dist (apply vec-sub (map :pos [el2 el1]))
-        d2 (vec-exp 2 dist)]
-    (div-v gmm d2)))
+  (let [force-dir (apply v- (map :pos [el2 el1]))
+        d2 (sumsqs force-dir)
+        unit-force (unit-vec force-dir)
+        gmm (apply * (cons g (map :mass [el1 el2])))]
+    (if (zero? d2) [0 0]
+        (v* (/ gmm d2) unit-force))))
 
-(defn calc-force [el {:keys [elements g]}]
-  (reduce (fn [agg el2] (v+ agg (force-between g el el2))) [0 0] elements))
+(defn sum-interactions [interaction el {:keys [elements g]}]
+  (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))
 
 (defn update-elem [el {:keys [dt] :as world}]
-  (let [force (calc-force el world)
+  (let [force (sum-interactions force-between el world)
         new-accel (calc-accel force el)]
     (->> el
         (update-pos dt)
@@ -59,6 +67,7 @@
         (update-accel new-accel))))
 
 (defn update-world [world]
+  (js-debugger)
   (let [elems (:elements world)
         fixed (filter :fixed elems)
         to-update (filter (complement :fixed) elems)

@@ -1,5 +1,6 @@
 (ns gravity-maze.draw
   (:require
+   [gravity-maze.engine :as eng]
    [quil.core :as q :include-macros true]))
 
 (defmulti draw-elem (fn [x] (x :type)))
@@ -12,6 +13,8 @@
 
 (defn main [state]
   (q/background 255)
-  (doseq [el (:elements state)]
-    (draw-elem el)))
+  (doseq [el (:elements @state)]
+    (draw-elem el))
+  (reset! state (eng/update-world @state))
+  (js/setTimeout #(main state) 500))
 

@@ -1,5 +1,4 @@
-(ns gravity-maze.engine
-  (:require [clojure.core.matrix :as mtx]))
+(ns gravity-maze.engine)
 
 (defn v+ [& args]
   (apply (partial mapv +) args))
@@ -53,29 +52,36 @@
       sumsqs
       Math/sqrt))
 
+(defn det3x3
+  "Constructs 3x3 matrix from 3 points and calculates determinant"
+  [[[xa ya][xb yb][xc yc]]]
+  (letfn [(add-prods [vec1 vec2] (apply + (map * vec1 vec2)))]
+    (- (add-prods [xa xb xc] [yb yc ya])
+       (add-prods [xa xc xb] [yc yb ya]))))
+
 ;; TODO test
 ;; document
 (defn line-dist [[lna lnb] point]
   (let [pts [lna lnb point]
-        raw-mtx [(map first pts)
-                 (map second pts)
-                 [1 1 1]]
-        matrix (mtx/matrix raw-mtx)
-        area (-> (mtx/det matrix)
-                 Math/abs
-                 (* 0.5))
+        area (/ (Math/abs (det3x3 pts)) 2)
         base (pts-dist lna lnb)]
     (/ area base)))
+
+;; TODO test
+;; document
+(defn normal-vec [[lna lnb]]
+  [1 1])
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
 (defmethod force-between :line [g el1 line]
-  (let [force-dir (normal-vec line)
-        d2 (sumsqs force-dir)
-        unit-force (unit-vec force-dir)
-        gmm (apply * (cons g (map :mass [el1 line])))]
-    (if (zero? d2) [0 0]
-        (v* (/ gmm d2) unit-force)))
+  ;; (let [force-dir (normal-vec line)
+  ;;       d2 (sumsqs force-dir)
+  ;;       unit-force (unit-vec force-dir)
+  ;;       gmm (apply * (cons g (map :mass [el1 line])))]
+  ;;   (if (zero? d2) [0 0]
+  ;;       (v* (/ gmm d2) unit-force)))
+  [1 1]
   )
 
 (defmethod force-between :point [g el1 point]

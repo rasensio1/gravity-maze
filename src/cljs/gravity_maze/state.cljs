@@ -3,13 +3,13 @@
 (def initial-state {:elements [{:type :point
                                  :mass 23
                                  :pos [0 20]
-                                 :fixed true}
+                                 :fixed false}
 
-                                {:type :line
-                                 :mass 1
-                                 :pos [[0 0] [100 100]]
-                                 :fixed true
-                                 }]
+                               {:type :point
+                                :mass 50
+                                :pos [100 100]
+                                :fixed true}
+                                ]
                      :g 10
                      :dt 1
                      :drag 0.1})

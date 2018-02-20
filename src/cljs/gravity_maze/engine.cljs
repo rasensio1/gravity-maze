@@ -1,16 +1,10 @@
 (ns gravity-maze.engine)
 
-(defn update-state [state]
-  ;; calculate new el values
-  ;; swap with app-state atom
-  ;; return updated @app-state
-  state)
-
 (defn v+ [& args]
-  (apply (partial map +) args))
+  (apply (partial mapv +) args))
 
 (defn v* [n vec]
-  (map #(* n %) vec))
+  (mapv #(* n %) vec))
 
 (defn v-div [n vec]
   (v* (/ 1 n) vec))
@@ -19,15 +13,15 @@
   " 3 / [1 2] => [3/1 3/2]
   Vector value of zero returns zero"
   [n vec]
-  (map #(if (= 0 %)
+  (mapv #(if (= 0 %)
           0
           (/ n %)) vec))
 
 (defn vec-sub [vec1 vec2]
-  (map - vec1 vec2))
+  (mapv - vec1 vec2))
 
 (defn vec-exp [n vec]
-  (map #(Math/pow % n) vec))
+  (mapv #(Math/pow % n) vec))
 
 (defn update-pos [dt {:keys [pos vel accel] :as el}]
   (let [velocity-disp (v* dt vel)
@@ -63,3 +57,10 @@
         (update-pos dt)
         (update-vel dt new-accel)
         (update-accel new-accel))))
+
+(defn update-world [world]
+  (let [elems (:elements world)
+        fixed (filter :fixed elems)
+        to-update (filter (complement :fixed) elems)
+        updated (map update-elem to-update (repeat world))]
+    (assoc world :elements (concat updated fixed))))

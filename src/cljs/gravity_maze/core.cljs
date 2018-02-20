@@ -2,8 +2,8 @@
   (:require
    [reagent.core :as r]
    [gravity-maze.state :as state]
-   [gravity-maze.draw :as drw]
    [gravity-maze.engine :as eng]
+   [gravity-maze.draw :as drw]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
@@ -13,15 +13,27 @@
   [:div
    [:div "Welcome to reagent-figwheel." ]])
 
+(defn update-state [ratom]
+  (reset! ratom (eng/update-world @ratom))
+  ratom)
+
+(defn setup []
+  (q/frame-rate 30)
+  (q/background 250)
+  app-state)
+
+
 (q/defsketch hello
-  :draw #(drw/main app-state)
+  :setup setup
+  :draw drw/main
+  :update update-state
   :host "host"
   :size [300 300]
   :middleware [m/fun-mode])
 
 (defn reload []
   (r/render [page app-state]
-                  (.getElementById js/document "app")))
+            (.getElementById js/document "app")))
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG

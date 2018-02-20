@@ -13,8 +13,15 @@
                                 :vel [0 0]
                                 :accel [0 0]
                                 :fixed true}
+
+                               {:type :point
+                                :mass 50
+                                :pos [200 100]
+                                :vel [0 0]
+                                :accel [0 0]
+                                :fixed false}
                                 ]
                      :g -1
-                     :dt 0.2
+                     :dt 0.08
                      :drag 0.1})
 

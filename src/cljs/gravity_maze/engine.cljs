@@ -1,4 +1,5 @@
-(ns gravity-maze.engine)
+(ns gravity-maze.engine
+  (:require [clojure.core.matrix :as mtx]))
 
 (defn v+ [& args]
   (apply (partial mapv +) args))
@@ -47,11 +48,41 @@
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
 
-(defn force-between [g el1 el2]
-  (let [force-dir (apply v- (map :pos [el2 el1]))
+(defn pts-dist [pt1 pt2]
+  (-> (v- pt1 pt2)
+      sumsqs
+      Math/sqrt))
+
+;; TODO test
+;; document
+(defn line-dist [[lna lnb] point]
+  (let [pts [lna lnb point]
+        raw-mtx [(map first pts)
+                 (map second pts)
+                 [1 1 1]]
+        matrix (mtx/matrix raw-mtx)
+        area (-> (mtx/det matrix)
+                 Math/abs
+                 (* 0.5))
+        base (pts-dist lna lnb)]
+    (/ area base)))
+
+(defmulti force-between (fn [g e1 e2] (e2 :type)))
+
+(defmethod force-between :line [g el1 line]
+  (let [force-dir (normal-vec line)
         d2 (sumsqs force-dir)
         unit-force (unit-vec force-dir)
-        gmm (apply * (cons g (map :mass [el1 el2])))]
+        gmm (apply * (cons g (map :mass [el1 line])))]
+    (if (zero? d2) [0 0]
+        (v* (/ gmm d2) unit-force)))
+  )
+
+(defmethod force-between :point [g el1 point]
+  (let [force-dir (apply v- (map :pos [point el1]))
+        d2 (sumsqs force-dir)
+        unit-force (unit-vec force-dir)
+        gmm (apply * (cons g (map :mass [el1 point])))]
     (if (zero? d2) [0 0]
         (v* (/ gmm d2) unit-force))))
 
@@ -67,7 +98,6 @@
         (update-accel new-accel))))
 
 (defn update-world [world]
-  (js-debugger)
   (let [elems (:elements world)
         fixed (filter :fixed elems)
         to-update (filter (complement :fixed) elems)

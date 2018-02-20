@@ -9,6 +9,20 @@
                  :accel [0 0]
                  :fixed false})
 
+(def zero-x-line {:type :line
+                  :mass 1
+                  :pos [[0 0] [0 10]]
+                  :fixed true})
+
+;; lines create force-gradients like so
+
+;; 0 0 0 0 0 0 0 0 0 0 0
+;; ... 1 2 3 | 3 2 1 ...
+;; ... 1 2 3 | 3 2 1 ...
+;; ... 1 2 3 | 3 2 1 ...
+;; ... 1 2 3 | 3 2 1 ...
+;; 0 0 0 0 0 0 0 0 0 0 0
+
 (def simple-point-world {:elements [zero-point
                                     (assoc zero-point
                                            :pos [1 1]
@@ -16,8 +30,8 @@
                          :g 1
                          :dt 1})
 
-(defn roundme [round n]
-  (.toFixed n round))
+(defn roundme [decs n]
+  (.toFixed n decs))
 
 (defn simple-forces [i j k]
   (if (apply = (map :pos [j k]))
@@ -41,6 +55,13 @@
           res (first (eng/unit-vec [1 1]))])
     (is (= exp res))))
 
+(deftest pts-dist-test
+  (testing "can do right triangles"
+    (is (= 5 (eng/pts-dist [0 0] [3 4])))
+    (is (= 5 (eng/pts-dist [1 1] [4 5]))))
+  (testing "can do non-right triangles"
+    (is (= "8.06" (roundme 2 (eng/pts-dist [1 1] [2 9]))))))
+
 (deftest update-pos-test
   (testing "Updates a position with velocity and acceleration"
     (is (= zero-point (eng/update-pos 1 zero-point)))
@@ -63,6 +84,7 @@
     (is (= [1 1] (eng/calc-accel [1 1] zero-point)))))
 
 (deftest force-between-test
+  ;; Point - Point
   (testing "Force between self is zero"
     (is (= [0 0] (eng/force-between 1 zero-point zero-point))))
   (testing "Force in x=y direction"
@@ -72,7 +94,13 @@
   (testing "Force in x-direction mainly"
     (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [10 1]))
           fmt-res (mapv (partial roundme 3) res)]
-      (is (= ["0.010" "0.001"] fmt-res)))))
+      (is (= ["0.010" "0.001"] fmt-res))))
+  ;; Point - line
+
+  (testing "Force is normal to the line"
+    (let [point (assoc zero-point :pos [1 0])]
+      (is (= [1 0] (eng/force-between 1 point zero-x-line)))
+      )))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

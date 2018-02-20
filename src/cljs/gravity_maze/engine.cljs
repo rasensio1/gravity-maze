@@ -59,13 +59,14 @@
     (- (add-prods [xa xb xc] [yb yc ya])
        (add-prods [xa xc xb] [yc yb ya]))))
 
-;; TODO test
-;; document
-(defn line-dist [[lna lnb] point]
+(defn line-dist
+  "Calculates the distance between a point and line.
+  Finds area by creating a triangle out of line and point."
+  [[lna lnb] point]
   (let [pts [lna lnb point]
         area (/ (Math/abs (det3x3 pts)) 2)
         base (pts-dist lna lnb)]
-    (/ area base)))
+    (* 2 (/ area base))))
 
 ;; TODO test
 ;; document

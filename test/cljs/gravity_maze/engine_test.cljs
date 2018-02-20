@@ -69,7 +69,10 @@
 
 (deftest line-dist-test
   (testing "can find simple distances"
-    (is (= 2 (eng/line-dist [[0 0] [5 0]] [0 2])))))
+    (is (= 2 (eng/line-dist [[0 0] [5 0]] [0 2])))
+    (is (= 5 (eng/line-dist [[0 0] [5 0]] [0 5]))))
+  (testing "can find non-simple distances"
+    (is (= "4.95" (roundme 2 (eng/line-dist [[0 0] [10 10]] [2 9]))))))
 
 (deftest update-pos-test
   (testing "Updates a position with velocity and acceleration"

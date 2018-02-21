@@ -37,12 +37,6 @@
   (if (apply = (map :pos [j k]))
     [0 0] [1 1]))
 
-(deftest div-v-test
-  (testing "divides numerator by each element in vector"
-    (is (= [3 1.5] (eng/div-v 3 [1 2]))))
-  (testing "return zero force if distance is zero"
-    (is (= [0 0] (eng/div-v 3 [0 0])))))
-
 (deftest v--test
   (testing "subtracts first from second, element-wise"
     (is (= [1 4] (eng/v- [3 4] [2 0])))))
@@ -73,6 +67,13 @@
     (is (= 5 (eng/line-dist [[0 0] [5 0]] [0 5]))))
   (testing "can find non-simple distances"
     (is (= "4.95" (roundme 2 (eng/line-dist [[0 0] [10 10]] [2 9]))))))
+
+(deftest normal-vec-test
+  (testing "can find the normal vector of a line"
+    (let [res (eng/normal-vec [[0 0] [2 20]] [1 12])]
+      (is (= ["0.995" "-0.100"] (mapv (partial roundme 3) res))))
+    (let [res (eng/normal-vec [[3 7] [7 3]] [6 6])]
+      (is (= ["-0.7" "-0.7"] (mapv (partial roundme 1) res))))))
 
 (deftest update-pos-test
   (testing "Updates a position with velocity and acceleration"

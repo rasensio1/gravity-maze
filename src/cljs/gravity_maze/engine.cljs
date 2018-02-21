@@ -1,24 +1,16 @@
 (ns gravity-maze.engine)
 
-(defn v+ [& args]
-  (apply (partial mapv +) args))
+(defn v+ [& vecs]
+  (apply (partial mapv +) vecs))
 
-(defn v* [n vec]
+(defn v- [& vecs]
+  (apply (partial mapv -) vecs))
+
+(defn mult-v [n vec]
   (mapv #(* n %) vec))
 
-(defn v-div [n vec]
-  (v* (/ 1 n) vec))
-
-(defn div-v
-  " 3 / [1 2] => [3/1 3/2]
-  Vector value of zero returns zero"
-  [n vec]
-  (mapv #(if (= 0 %)
-          0
-          (/ n %)) vec))
-
-(defn v- [vec1 vec2]
-  (mapv - vec1 vec2))
+(defn div-v [n vec]
+  (mult-v (/ 1 n) vec))
 
 (defn sumsqs [vec]
   (reduce #(+ %1 (* %2 %2)) 0 vec))
@@ -27,22 +19,22 @@
   (if (= [0 0] v) [0 0]
     (let [d2 (sumsqs v)
           norm (/ 1 (Math/sqrt d2))]
-      (v* norm v))))
+      (mult-v norm v))))
 
 (defn update-pos [dt {:keys [pos vel accel] :as el}]
-  (let [velocity-disp (v* dt vel)
-        accel-disp (v* (* 0.5 dt dt) accel)
+  (let [velocity-disp (mult-v dt vel)
+        accel-disp (mult-v (* 0.5 dt dt) accel)
         new-pos (v+ pos velocity-disp accel-disp)]
     (assoc el :pos new-pos)))
 
 (defn update-vel [dt new-accel {:keys [vel accel] :as el}]
-  (let [avg-accel (v-div 2 (v+ accel new-accel))
-        accel-dv (v* dt avg-accel)
+  (let [avg-accel (div-v 2 (v+ accel new-accel))
+        accel-dv (mult-v dt avg-accel)
         new-vel (v+ vel accel-dv)]
     (assoc el :vel new-vel)))
 
 (defn calc-accel [force {:keys [mass] :as el}]
-  (v-div mass force))
+  (div-v mass force))
 
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
@@ -68,20 +60,32 @@
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
 
-;; TODO test
-;; document
-(defn normal-vec [[lna lnb]]
-  [1 1])
+(defn normal-vec
+  "Finds the normal vector of the line that points away from the point.
+  First, uses the sign of the determinant to find out whether the point is
+  'above' or 'below' the line.
+  Second, uses the sign to chose the appropriate normal vector. 
+  Third, makes the normal vector a unit vector
+  "
+  [[[lnAx lnAy] [lnBx lnBy]] [elx ely]]
+  (letfn [(multminus [v1 v2] (apply * (v- v1 v2)))]
+    (let [[lnx lny] (v- [lnAx lnAy] [lnBx lnBy])
+          above? (neg? (- (multminus [lnBx ely] [lnAx lnAy])
+                          (multminus [lnBy elx] [lnAy lnAx])))
+        ;; normal vectors for a line '[x y]' are [-y x] & [y -x]
+          perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
+          vec (perpens above?)]
+      (unit-vec vec))))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
 (defmethod force-between :line [g el1 line]
-  ;; (let [force-dir (normal-vec line)
+  ;; (let [force-dir (normal-vec line el)
   ;;       d2 (sumsqs force-dir)
   ;;       unit-force (unit-vec force-dir)
   ;;       gmm (apply * (cons g (map :mass [el1 line])))]
   ;;   (if (zero? d2) [0 0]
-  ;;       (v* (/ gmm d2) unit-force)))
+  ;;       (mult-v (/ gmm d2) unit-force)))
   [1 1]
   )
 
@@ -91,7 +95,7 @@
         unit-force (unit-vec force-dir)
         gmm (apply * (cons g (map :mass [el1 point])))]
     (if (zero? d2) [0 0]
-        (v* (/ gmm d2) unit-force))))
+        (mult-v (/ gmm d2) unit-force))))
 
 (defn sum-interactions [interaction el {:keys [elements g]}]
   (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))

@@ -68,12 +68,14 @@
   (testing "can find non-simple distances"
     (is (= "4.95" (roundme 2 (eng/line-dist [[0 0] [10 10]] [2 9]))))))
 
-(deftest normal-vec-test
+(deftest unit-normal-vec-test
   (testing "can find the normal vector of a line"
-    (let [res (eng/normal-vec [[0 0] [2 20]] [1 12])]
+    (let [res (eng/unit-normal-vec [[0 0] [2 20]] [1 12])]
       (is (= ["0.995" "-0.100"] (mapv (partial roundme 3) res))))
-    (let [res (eng/normal-vec [[3 7] [7 3]] [6 6])]
-      (is (= ["-0.7" "-0.7"] (mapv (partial roundme 1) res))))))
+    (let [res (eng/unit-normal-vec [[3 7] [7 3]] [6 6])]
+      (is (= ["-0.7" "-0.7"] (mapv (partial roundme 1) res)))))
+  (testing "point on line returns [0 0]"
+    (is (= [0 0] (eng/unit-normal-vec [[0 0] [3 3]] [2 2])))))
 
 (deftest update-pos-test
   (testing "Updates a position with velocity and acceleration"

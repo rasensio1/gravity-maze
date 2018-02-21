@@ -60,34 +60,33 @@
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
 
-(defn normal-vec
+(defn unit-normal-vec
   "Finds the normal vector of the line that points away from the point.
   First, uses the sign of the determinant to find out whether the point is
   'above' or 'below' the line.
-  Second, uses the sign to chose the appropriate normal vector. 
+  Second, uses the sign to chose the appropriate normal vector.
   Third, makes the normal vector a unit vector
   "
   [[[lnAx lnAy] [lnBx lnBy]] [elx ely]]
+
   (letfn [(multminus [v1 v2] (apply * (v- v1 v2)))]
     (let [[lnx lny] (v- [lnAx lnAy] [lnBx lnBy])
-          above? (neg? (- (multminus [lnBx ely] [lnAx lnAy])
-                          (multminus [lnBy elx] [lnAy lnAx])))
+          sign (- (multminus [lnBx ely] [lnAx lnAy]) ;; calculates determinant
+                  (multminus [lnBy elx] [lnAy lnAx]))
         ;; normal vectors for a line '[x y]' are [-y x] & [y -x]
           perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
-          vec (perpens above?)]
+          vec (if (= 0 sign) [0 0] ;; sign is '0' if point is on the line.
+                (perpens (neg? sign)))]
       (unit-vec vec))))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
-(defmethod force-between :line [g el1 line]
-  ;; (let [force-dir (normal-vec line el)
-  ;;       d2 (sumsqs force-dir)
-  ;;       unit-force (unit-vec force-dir)
-  ;;       gmm (apply * (cons g (map :mass [el1 line])))]
-  ;;   (if (zero? d2) [0 0]
-  ;;       (mult-v (/ gmm d2) unit-force)))
-  [1 1]
-  )
+(defmethod force-between :line [g el line]
+  (let [unit-force (unit-normal-vec line el)
+        d2 (Math/pow (line-dist line el) 2)
+        gmm (apply * (cons g (map :mass [el line])))]
+    (if (zero? d2) [0 0]
+        (mult-v (/ gmm d2) unit-force))))
 
 (defmethod force-between :point [g el1 point]
   (let [force-dir (apply v- (map :pos [point el1]))

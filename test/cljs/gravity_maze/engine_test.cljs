@@ -98,6 +98,12 @@
     (is (= [0 0] (eng/calc-accel [0 0] zero-point)))
     (is (= [1 1] (eng/calc-accel [1 1] zero-point)))))
 
+(deftest gravity-calc-test
+  (testing "returns zero with zero distance"
+    (is (= [0 0] (eng/gravity-calc 1 0 [1 1]))))
+  (testing "calculates gravity"
+    (is (= [1 1] (eng/gravity-calc 1 1 [1 1])))))
+
 (deftest force-between-test
   ;; Point - Point
   (testing "Force between self is zero"
@@ -117,9 +123,13 @@
       (is (= [-1 0] (eng/force-between 1 point zero-x-line)))))
 
   (testing "Zero force if on line"
-    (let [point {:type :point :mass 30 :pos [0 20] :vel [80 80] :accel [0 0] :fixed false}
+    (let [point {:type :point :mass 30 :fixed false}
           line {:type :line :mass 30 :pos [[0 0] [0 200] :fixed true]}]
-      (is (= [0 0] (eng/force-between 1 point zero-x-line))))))
+      (is (= [0 0] (eng/force-between 1 point line)))))
+  (testing "Zero force if not in 'zone' of line"
+    (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
+          line {:type :line :mass 30 :pos [[0 20] [0 200] :fixed true]}]
+      (is (= [0 0] (eng/force-between 1 point line))))))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

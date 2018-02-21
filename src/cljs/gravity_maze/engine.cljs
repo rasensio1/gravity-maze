@@ -36,6 +36,10 @@
 (defn calc-accel [force {:keys [mass] :as el}]
   (div-v mass force))
 
+(defn gravity-calc [gmm d2 vec]
+  (if (zero? d2) [0 0]
+      (mult-v (/ gmm d2) vec)))
+
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
 
@@ -81,21 +85,20 @@
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
+;; todo zero if not in sight of line
 (defmethod force-between :line [g el line]
   (let [inputs (map :pos [line el])
         unit-force (apply unit-normal-vec inputs)
         d2 (Math/pow (apply line-dist inputs) 2)
         gmm (apply * (cons g (map :mass [el line])))]
-    (if (zero? d2) [0 0]
-        (mult-v (/ gmm d2) unit-force))))
+    (gravity-calc gmm d2 unit-force)))
 
 (defmethod force-between :point [g el1 point]
   (let [force-dir (apply v- (map :pos [point el1]))
         d2 (sumsqs force-dir)
         unit-force (unit-vec force-dir)
         gmm (apply * (cons g (map :mass [el1 point])))]
-    (if (zero? d2) [0 0]
-        (mult-v (/ gmm d2) unit-force))))
+    (gravity-calc gmm d2 unit-force)))
 
 (defn sum-interactions [interaction el {:keys [elements g]}]
   (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))

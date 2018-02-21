@@ -46,8 +46,8 @@
     (is (= [0 0] (eng/unit-vec [0 0]))))
   (testing "can do a 1x1"
     (let [exp (/ (Math/sqrt 2) 2)
-          res (first (eng/unit-vec [1 1]))])
-    (is (= exp res))))
+          res (first (eng/unit-vec [1 1]))]
+      (is (apply = (map (partial roundme 2) [exp res]))))))
 
 (deftest pts-dist-test
   (testing "can do right triangles"
@@ -110,22 +110,26 @@
     (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [10 1]))
           fmt-res (mapv (partial roundme 3) res)]
       (is (= ["0.010" "0.001"] fmt-res))))
-  ;; Point - line
 
-  ;; (testing "Force is normal to the line"
-  ;;   (let [point (assoc zero-point :pos [1 0])]
-  ;;     (is (= [1 0] (eng/force-between 1 point zero-x-line)))
-  ;;     ))
-  )
+  ;; Point - line
+  (testing "Calculates force"
+    (let [point (assoc zero-point :pos [1 0])]
+      (is (= [-1 0] (eng/force-between 1 point zero-x-line)))))
+
+  (testing "Zero force if on line"
+    (let [point {:type :point :mass 30 :pos [0 20] :vel [80 80] :accel [0 0] :fixed false}
+          line {:type :line :mass 30 :pos [[0 0] [0 200] :fixed true]}]
+      (is (= [0 0] (eng/force-between 1 point zero-x-line))))))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"
     (is (= [2 2] (eng/sum-interactions (fn [g h i] [1 1])
                                        zero-point
                                        simple-point-world)))))
+
 (deftest update-elem-test
   (with-redefs [eng/force-between simple-forces]
-    (testing "updates element attrs given a world"
+    (testing "updates element attrs given a point world"
     (let [res (select-keys (eng/update-elem zero-point simple-point-world)
                            [:vel :accel])]
       (is (= {:vel [0.5 0.5] :accel [1 1]} res)))

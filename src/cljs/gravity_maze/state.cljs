@@ -2,8 +2,8 @@
 
 (def initial-state {:elements [{:type :point
                                  :mass 30
-                                 :pos [0 20]
-                                 :vel [80 80]
+                                 :pos [20 40]
+                                 :vel [40 110]
                                  :accel [0 0]
                                  :fixed false}
 
@@ -22,7 +22,7 @@
                                 :fixed false}
 
                                {:type :line
-                                :mass [30]
+                                :mass 300
                                 :pos [[0 0] [0 200]]
                                 :fixed true}
                                 ]

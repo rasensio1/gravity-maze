@@ -82,8 +82,9 @@
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
 (defmethod force-between :line [g el line]
-  (let [unit-force (unit-normal-vec line el)
-        d2 (Math/pow (line-dist line el) 2)
+  (let [inputs (map :pos [line el])
+        unit-force (apply unit-normal-vec inputs)
+        d2 (Math/pow (apply line-dist inputs) 2)
         gmm (apply * (cons g (map :mass [el line])))]
     (if (zero? d2) [0 0]
         (mult-v (/ gmm d2) unit-force))))

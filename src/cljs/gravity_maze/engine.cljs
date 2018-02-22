@@ -64,34 +64,52 @@
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
 
-(defn unit-normal-vec
-  "Finds the normal vector of the line that points away from the point.
-  First, uses the sign of the determinant to find out whether the point is
-  'above' or 'below' the line.
-  Second, uses the sign to chose the appropriate normal vector.
-  Third, makes the normal vector a unit vector
-  "
-  [[[lnAx lnAy] [lnBx lnBy]] [elx ely]]
-
+(defn perp-dot-prod
+  "Perpendicular dot-product. Used to determine which 'side' of a line a point
+  resides on"
+  [[[lnAX lnAY] [lnBX lnBY]] [ptX ptY]]
   (letfn [(multminus [v1 v2] (apply * (v- v1 v2)))]
-    (let [[lnx lny] (v- [lnAx lnAy] [lnBx lnBy])
-          sign (- (multminus [lnBx ely] [lnAx lnAy]) ;; calculates determinant
-                  (multminus [lnBy elx] [lnAy lnAx]))
+   (- (multminus [lnBX ptY] [lnAX lnAY])
+      (multminus [lnBY ptX] [lnAY lnAX]))))
+
+(defn unit-normal-vec
+  "Finds the normal vector of the line that points away from the point. Uses
+  perpendicular dot product to tell if point is 'above' or 'below' the line.
+  Second, uses the sign to chose the appropriate normal vector.
+  Third, makes the normal vector a unit vector "
+  [[[lnAx lnAy] [lnBx lnBy] :as line ] [elx ely :as point]]
+
+  (let [[lnx lny] (v- [lnAx lnAy] [lnBx lnBy])
+          sign (perp-dot-prod line point)
         ;; normal vectors for a line '[x y]' are [-y x] & [y -x]
           perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
           vec (if (= 0 sign) [0 0] ;; sign is '0' if point is on the line.
                 (perpens (neg? sign)))]
-      (unit-vec vec))))
+      (unit-vec vec)))
+
+(defn in-zone [line el]
+  ;; Use sign of determinant on each 4 sides of zone
+  ;; (expanded on both sides of line)
+  ;; If [(+ (sign longside1)(sign longside2))
+  ;;     (+ (sign shorside1)(sign shortside2))]
+  ;;   == [0 0] (i.e. above one long sides, below other, repeat short sides)
+  ;;   then its in the polygon!
+  true
+
+
+  )
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
-;; todo zero if not in sight of line
+;; TODO zero if not in sight of line
 (defmethod force-between :line [g el line]
-  (let [inputs (map :pos [line el])
-        unit-force (apply unit-normal-vec inputs)
-        d2 (Math/pow (apply line-dist inputs) 2)
-        gmm (apply * (cons g (map :mass [el line])))]
-    (gravity-calc gmm d2 unit-force)))
+  ;; No force if point is outsize of affective zone
+  (if (not (in-zone line el)) [0 0]
+      (let [inputs (map :pos [line el])
+            unit-force (apply unit-normal-vec inputs)
+            d2 (Math/pow (apply line-dist inputs) 2)
+            gmm (apply * (cons g (map :mass [el line])))]
+        (gravity-calc gmm d2 unit-force))))
 
 (defmethod force-between :point [g el1 point]
   (let [force-dir (apply v- (map :pos [point el1]))

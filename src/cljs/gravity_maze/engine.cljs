@@ -67,13 +67,15 @@
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
 
+;; TODO test
 (defn perp-dot-prod
   "Perpendicular dot-product. Used to determine which 'side' of a line a point
-  resides on"
+  resides on. Returns either -1 0 1"
   [[[lnAX lnAY] [lnBX lnBY]] [ptX ptY]]
   (letfn [(multminus [v1 v2] (apply * (v- v1 v2)))]
-   (- (multminus [lnBX ptY] [lnAX lnAY])
-      (multminus [lnBY ptX] [lnAY lnAX]))))
+   (-> (- (multminus [lnBX ptY] [lnAX lnAY])
+          (multminus [lnBY ptX] [lnAY lnAX]))
+       sign-of)))
 
 (defn unit-normal-vec
   "Finds the normal vector of the line that points away from the point. Uses
@@ -90,37 +92,22 @@
                 (perpens (neg? sign)))]
       (unit-vec vec)))
 
-(defn offset-lines [line offset]
-  "Adds offset to each point on line, first in positiv direction, then in
-  negative direction."
-  (letfn [(side [dir-fn] (mapv #(dir-fn % offset) line))]
-    [(side v+) (side v-)]))
+(defn offset-line [line offset]
+  "Offsets each point in 'line' by offset vector"
+  (mapv #(v+ % offset) line))
+
+(defn other-sides [line offset]
+  (mapv #((juxt v+ v-) % offset) line))
 
 (defn in-zone? [line point]
   (let [[line-pos pt-pos] (map :pos [line point])
-        ; [0 3]
         offset (mult-v (:range line) (unit-normal-vec line-pos pt-pos))
-        base-sides [(map (partial v+ offset) line-pos)
-                    (map (partial v- offset) line-pos)]
-        ;base-sides [[ax ay][bx by]]
-        ])
-
-
-  ;; base sides are (line + (perp-unit-vec * dist)
-                  ; (line - (perp-unit-vec * dist)
-
-  ;; short sides are ([lnA, (lnA + perp-unit-vec * dist)])
-  ;;                     repeat with lnB
-
-
-  ;; Use sign of determinant on each 4 sides of zone
-  ;; (expanded on both sides of line)
-  ;; If [(+ (sign longside1)(sign longside2))
-  ;;     (+ (sign shorside1)(sign shortside2))]
-  ;;   == [0 0] (i.e. above one long sides, below other, repeat short sides)
-  ;;   then its in the polygon!
-  true
-  )
+        base-sides [(offset-line line-pos offset)
+                    (offset-line line-pos (mult-v -1 offset))]
+        perp-sides (other-sides line-pos offset)
+        above-bases (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-sides)
+        above-sides (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 perp-sides)]
+    (= [0.0 0.0] [above-bases above-sides])))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 

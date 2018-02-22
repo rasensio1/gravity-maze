@@ -94,11 +94,16 @@
     (let [line [[0 0] [3 0]]
           offset [0 1]]
       (is (= [[0 1] [3 1]]
-             (eng/offset-line line offset))))
+             (eng/offset-line eng/v+ offset line))))
     (let [line [[0 0] [2 2]]
           offset [-1 1]]
       (is (= [[-1 1] [1 3]]
-             (eng/offset-line line offset))))))
+             (eng/offset-line eng/v+ offset line))))))
+
+(deftest base-sides-test
+  (testing "returns base sides"
+    (is (= [[[0 1] [1 1]] [[0 -1] [1 -1]]]
+           (eng/base-sides [[0 0] [1 0]] [0 1])))))
 
 (deftest other-sides-test
   (testing "Creates side lines"

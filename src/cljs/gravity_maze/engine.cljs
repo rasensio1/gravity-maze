@@ -93,7 +93,14 @@
 
 (defn offset-line
   "Offsets each point in 'line' by offset vector"
-  [line offset] (mapv #(v+ % offset) line))
+  [vfn offset line] (mapv #(vfn % offset) line))
+
+(defn base-sides
+  "Returns base sides of zone by offsetting in both + and - dirs."
+  [line offset]
+  ((juxt (partial offset-line v+ offset)
+       (partial offset-line v- offset)) line))
+
 
 (defn other-sides
   "Returns sides of zone by doubling normal vectors at line ends."
@@ -102,14 +109,13 @@
 (defn in-zone? [line point]
   (let [[line-pos pt-pos] (map :pos [line point])
         offset (mult-v (:range line) (unit-normal-vec line-pos pt-pos))
-        base-sides [(offset-line line-pos offset)
-                    (offset-line line-pos (mult-v -1 offset))]
-        perp-sides (other-sides line-pos offset)
+        base-lines (base-sides line-pos offset)
+        side-lines (other-sides line-pos offset)
 
         ;; TODO refactorme
-        above-bases-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-sides)
-        above-sides-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 perp-sides)]
-    (= [0.0 0.0] [above-bases-score above-sides-score])))
+        bases-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-lines)
+        sides-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 side-lines)]
+    (= [0.0 0.0] [bases-score sides-score])))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 

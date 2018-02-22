@@ -92,12 +92,13 @@
                 (perpens (neg? sign)))]
       (unit-vec vec)))
 
-(defn offset-line [line offset]
+(defn offset-line
   "Offsets each point in 'line' by offset vector"
-  (mapv #(v+ % offset) line))
+  [line offset] (mapv #(v+ % offset) line))
 
-(defn other-sides [line offset]
-  (mapv #((juxt v+ v-) % offset) line))
+(defn other-sides
+  "Returns sides of zone by doubling normal vectors at line ends."
+  [line offset] (mapv #((juxt v+ v-) % offset) line))
 
 (defn in-zone? [line point]
   (let [[line-pos pt-pos] (map :pos [line point])
@@ -105,16 +106,16 @@
         base-sides [(offset-line line-pos offset)
                     (offset-line line-pos (mult-v -1 offset))]
         perp-sides (other-sides line-pos offset)
-        above-bases (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-sides)
-        above-sides (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 perp-sides)]
-    (= [0.0 0.0] [above-bases above-sides])))
+
+        ;; TODO refactorme
+        above-bases-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-sides)
+        above-sides-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 perp-sides)]
+    (= [0.0 0.0] [above-bases-score above-sides-score])))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
-;; TODO zero if not in sight of line
 (defmethod force-between :line [g el line]
-  ;; No force if point is outsize of affective zone
-  (if (not (in-zone? line el)) [0 0]
+  (if (not (in-zone? line el)) [0 0] ;; No force if point is outside of zone
       (let [inputs (map :pos [line el])
             unit-force (apply unit-normal-vec inputs)
             d2 (Math/pow (apply line-dist inputs) 2)

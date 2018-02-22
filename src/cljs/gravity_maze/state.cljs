@@ -23,6 +23,7 @@
 
                                {:type :line
                                 :mass 300
+                                :range 100
                                 :pos [[0 0] [0 200]]
                                 :fixed true}
                                 ]

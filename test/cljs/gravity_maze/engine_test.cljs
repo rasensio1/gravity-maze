@@ -100,6 +100,9 @@
   (testing "Point in zone returns true"
     (let [line {:pos [[0 0] [3 0]] :range 3}
           point {:pos [1 1]}]
+      (is (= true (eng/in-zone? line point))))
+    (let [line zero-x-line
+          point (assoc zero-point :pos [2 1])]
       (is (= true (eng/in-zone? line point)))))
   (testing "Point outside of zone returns false"
     (let [line {:pos [[0 0] [3 0]] :range 3}
@@ -148,7 +151,7 @@
 
   ;; Point - line
   (testing "Calculates force"
-    (let [point (assoc zero-point :pos [2 0])]
+    (let [point (assoc zero-point :pos [1 1])]
       (is (= [-1 0] (eng/force-between 1 point zero-x-line)))))
 
   (comment (testing "Zero force if on line"

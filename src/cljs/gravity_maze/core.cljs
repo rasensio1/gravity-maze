@@ -28,7 +28,7 @@
   :draw drw/main
   :update update-state
   :host "host"
-  :size [300 300]
+  :size [800 800]
   :middleware [m/fun-mode])
 
 (defn reload []

@@ -101,21 +101,24 @@
   ((juxt (partial offset-line v+ offset)
        (partial offset-line v- offset)) line))
 
-
 (defn other-sides
   "Returns sides of zone by doubling normal vectors at line ends."
   [line offset] (mapv #((juxt v+ v-) % offset) line))
 
-(defn in-zone? [line point]
+(defn sum-by-dot-prod [point lines]
+  (reduce #(+ %1 (perp-dot-prod %2 point)) 0 lines))
+
+(defn in-zone?
+  "Checks if a point is in the 'zone' of the line. Determines bounds of 'zone'
+  (base-lines, side-lines) and checks if point is inside by making sure it is
+  above and below one of each group of lines "
+  [line point]
   (let [[line-pos pt-pos] (map :pos [line point])
         offset (mult-v (:range line) (unit-normal-vec line-pos pt-pos))
-        base-lines (base-sides line-pos offset)
-        side-lines (other-sides line-pos offset)
-
-        ;; TODO refactorme
-        bases-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 base-lines)
-        sides-score (reduce #(+ %1 (perp-dot-prod %2 pt-pos)) 0 side-lines)]
-    (= [0.0 0.0] [bases-score sides-score])))
+        [b-lines s-lines] ((juxt base-sides other-sides) line-pos offset)
+        [b-score s-score] (map (partial sum-by-dot-prod pt-pos)
+                                       [b-lines s-lines])]
+    (= [0.0 0.0] [b-score s-score])))
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 

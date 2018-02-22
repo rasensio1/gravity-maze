@@ -67,7 +67,6 @@
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
 
-;; TODO test
 (defn perp-dot-prod
   "Perpendicular dot-product. Used to determine which 'side' of a line a point
   resides on. Returns either -1 0 1"

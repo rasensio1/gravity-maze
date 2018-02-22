@@ -69,6 +69,17 @@
   (testing "can find non-simple distances"
     (is (= "4.95" (roundme 2 (eng/line-dist [[0 0] [10 10]] [2 9]))))))
 
+(deftest perp-dot-prod-test
+  (testing "Finds if point is above line"
+    (is (= 1 (eng/perp-dot-prod [[0 0] [10 10]] [2 3])))
+    (is (= 1 (eng/perp-dot-prod [[0 0] [10 0]] [3 6]))))
+  (testing "Finds if point is below line"
+    (is (= -1 (eng/perp-dot-prod [[0 0] [10 10]] [2 1])))
+    (is (= -1 (eng/perp-dot-prod [[0 0] [10 0]] [3 -2]))))
+  (testing "Finds if point is on line"
+    (is (= 0 (eng/perp-dot-prod [[0 0] [10 10]] [1 1])))
+    (is (= 0 (eng/perp-dot-prod [[0 0] [10 0]] [3 0])))))
+
 (deftest unit-normal-vec-test
   (testing "can find the normal vector of a line"
     (let [res (eng/unit-normal-vec [[0 0] [2 20]] [1 12])]

@@ -1,5 +1,8 @@
 (ns gravity-maze.engine)
 
+(defn sign-of [n]
+  (if (zero? n) 0 (/ n (Math/abs n))))
+
 (defn v+ [& vecs]
   (apply (partial mapv +) vecs))
 
@@ -77,11 +80,11 @@
   perpendicular dot product to tell if point is 'above' or 'below' the line.
   Second, uses the sign to chose the appropriate normal vector.
   Third, makes the normal vector a unit vector "
-  [[[lnAx lnAy] [lnBx lnBy] :as line ] [elx ely :as point]]
+  [[lnA lnB :as line ] point]
 
-  (let [[lnx lny] (v- [lnAx lnAy] [lnBx lnBy])
+  (let [[lnx lny] (v- lnA lnB) ;; represent line as vector
           sign (perp-dot-prod line point)
-        ;; normal vectors for a line '[x y]' are [-y x] & [y -x]
+        ;; the 2 normal vectors for a line '[x y]' are [-y x] & [y -x]
           perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
           vec (if (= 0 sign) [0 0] ;; sign is '0' if point is on the line.
                 (perpens (neg? sign)))]
@@ -95,8 +98,6 @@
   ;;   == [0 0] (i.e. above one long sides, below other, repeat short sides)
   ;;   then its in the polygon!
   true
-
-
   )
 
 (defmulti force-between (fn [g e1 e2] (e2 :type)))

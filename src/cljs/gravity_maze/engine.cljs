@@ -90,7 +90,29 @@
                 (perpens (neg? sign)))]
       (unit-vec vec)))
 
-(defn in-zone [line el]
+(defn offset-lines [line offset]
+  "Adds offset to each point on line, first in positiv direction, then in
+  negative direction."
+  (letfn [(side [dir-fn] (mapv #(dir-fn % offset) line))]
+    [(side v+) (side v-)]))
+
+(defn in-zone? [line point]
+  (let [[line-pos pt-pos] (map :pos [line point])
+        ; [0 3]
+        offset (mult-v (:range line) (unit-normal-vec line-pos pt-pos))
+        base-sides [(map (partial v+ offset) line-pos)
+                    (map (partial v- offset) line-pos)]
+        ;base-sides [[ax ay][bx by]]
+        ])
+
+
+  ;; base sides are (line + (perp-unit-vec * dist)
+                  ; (line - (perp-unit-vec * dist)
+
+  ;; short sides are ([lnA, (lnA + perp-unit-vec * dist)])
+  ;;                     repeat with lnB
+
+
   ;; Use sign of determinant on each 4 sides of zone
   ;; (expanded on both sides of line)
   ;; If [(+ (sign longside1)(sign longside2))
@@ -105,7 +127,7 @@
 ;; TODO zero if not in sight of line
 (defmethod force-between :line [g el line]
   ;; No force if point is outsize of affective zone
-  (if (not (in-zone line el)) [0 0]
+  (if (not (in-zone? line el)) [0 0]
       (let [inputs (map :pos [line el])
             unit-force (apply unit-normal-vec inputs)
             d2 (Math/pow (apply line-dist inputs) 2)

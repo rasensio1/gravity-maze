@@ -18,7 +18,7 @@
   ratom)
 
 (defn setup []
-  (q/frame-rate 40)
+  (q/frame-rate 100)
   (q/background 250)
   app-state)
 

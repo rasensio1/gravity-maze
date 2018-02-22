@@ -6,14 +6,8 @@ EXTREME GAMES OF CATCH!
 
 
 ### TODO
- - design world-store
-   - walls
-     - position (line, width?) (model as points? -> research)
-     - :fixed true
-     - mass (kg/m?)
-   - end point
-     - pos, radius (no mass, etc.)
 
- - calculate multi-mass interactions
+ - Continuous collision detection?
+    - balls sometimes hop over lines at high speeds
  
  - Simplify fixed masses by averaging?

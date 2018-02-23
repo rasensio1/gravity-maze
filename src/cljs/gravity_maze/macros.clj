@@ -6,5 +6,4 @@
        (as-> (:elements (deref ~'atm)) ~'elems
          (update (vec ~'elems) (:id ~'point) ~updater)
          (swap! ~'atm assoc :elements ~'elems)))
-     ~'atm
-     ))
+     ~'atm))

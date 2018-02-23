@@ -39,14 +39,28 @@
 
 (deftest launch-drag-test
   (testing "Stores vector of drag when mousepressed"
-    (let [myatm (atom {:elements [{:type :point :id 0
-                                   :pos [0 0] :mousepress? true}]})
+    (let [myatm (atom {:elements
+                       [{:type :point :id 0 :pos [0 0] :mousepress? true}]})
           event {:x 1 :y 1}
           res (intr/launch-drag myatm event)]
-      (is (= [-1 -1] (-> (:elements @res)
-                       first
-                       :drag-vec)))))
+      (is (= [-1 -1] (-> (:elements @res) first :drag-vec)))))
   (testing "Does nothing for no mousepress"
-    (is (= 1 0))
-    )
-  )
+    (let [myatm (atom {:elements
+                       [{:type :point :id 0 :pos [0 0] :mousepress? false}
+                        {:type :line :id 1 :pos [0 0]}]})
+          event {:x 1 :y 1}
+          res (intr/launch-drag myatm event)]
+      (is (= nil (-> (:elements @res) first :drag-vec))))))
+
+(deftest launch-mouse-release-test
+  (testing "Sets velocity if mouse is released with non-nil :drag-vec"
+    (let [myatm (atom {:elements
+                       [{:type :point :id 0
+                         :pos [0 0] :mousepress? true :drag-vec [10 10]}
+                        {:type :line :id 1 :pos [0 0]}]})
+          event {}
+          res (intr/launch-mouse-release myatm event)
+          elem (first (:elements @res))]
+      (is (= [10 10] (:vel elem)))
+      (is (= nil (:mousepress? elem)))
+      (is (= nil (:drag-vec elem))))))

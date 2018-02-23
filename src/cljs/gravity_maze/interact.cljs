@@ -25,6 +25,9 @@
 (defn pressed? [elem]
   (if (:mousepress? elem) elem false))
 
+(defn drag-vec? [elem]
+  (if (:drag-vec elem) elem false))
+
 (defn find-point
   "Returns point based on filter-fn, else nil."
   [filter-fn world]
@@ -40,10 +43,10 @@
   pressed?
   (fn [el] (assoc el :drag-vec (mth/v- (:pos point) [x y]))))
 
-(defn launch-mouse-release [ratom event]
-  ;; if element has mousepress?
-  ;; set velocity to (:drag-vec)
-  ;; reset mousepress? false
-  (println "released")
-  ratom
-  )
+(mac/defn-point-event launch-mouse-release
+  drag-vec?
+  (fn [el] (as-> el point
+               (assoc point :vel (:drag-vec el))
+               (assoc point :fixed false)
+               (dissoc point :mousepress? :drag-vec))))
+

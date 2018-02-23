@@ -2,7 +2,7 @@
 
 (def initial-state {:elements [{:type :point
                                  :mass 30
-                                 :id 1
+                                 :id 0
                                  :pos [100 100]
                                  :vel [0 0]
                                  :accel [0 0]

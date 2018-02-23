@@ -30,12 +30,11 @@
       (some (partial clicked? click-range [x y]))))
 
 (defn launch-mouse-press [ratom event]
-  (if-let [point (find-point @ratom event)]
+  (when-let [point (find-point @ratom event)]
     (as-> (:elements @ratom) elems
-      (update elems (:id point) #(assoc % :mousepress? true))
+      (update (vec elems) (:id point) #(assoc % :mousepress? true))
       (swap! ratom assoc :elements elems)))
-  ratom
-  )
+  ratom)
 
 (defn launch-drag [ratom event]
   ratom)

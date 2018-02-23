@@ -1,5 +1,7 @@
 (ns gravity-maze.engine-test
   (:require [gravity-maze.engine :as eng]
+            [gravity-maze.math.helpers :as mth]
+            [gravity-maze.test-helpers :refer [roundme]]
             [cljs.test :refer-macros [deftest testing is]]))
 
 (def zero-point {:type :point
@@ -31,16 +33,9 @@
                          :g 1
                          :dt 1})
 
-(defn roundme [decs n]
-  (.toFixed n decs))
-
 (defn simple-forces [i j k]
   (if (apply = (map :pos [j k]))
     [0 0] [1 1]))
-
-(deftest v--test
-  (testing "subtracts first from second, element-wise"
-    (is (= [1 4] (eng/v- [3 4] [2 0])))))
 
 (deftest unit-vec-test
   (testing "can do a [0 0]"
@@ -49,13 +44,6 @@
     (let [exp (/ (Math/sqrt 2) 2)
           res (first (eng/unit-vec [1 1]))]
       (is (apply = (map (partial roundme 2) [exp res]))))))
-
-(deftest pts-dist-test
-  (testing "can do right triangles"
-    (is (= 5 (eng/pts-dist [0 0] [3 4])))
-    (is (= 5 (eng/pts-dist [1 1] [4 5]))))
-  (testing "can do non-right triangles"
-    (is (= "8.06" (roundme 2 (eng/pts-dist [1 1] [2 9]))))))
 
 (deftest det3x3-test
   (testing "can calculate determinant"
@@ -94,11 +82,11 @@
     (let [line [[0 0] [3 0]]
           offset [0 1]]
       (is (= [[0 1] [3 1]]
-             (eng/offset-line eng/v+ offset line))))
+             (eng/offset-line mth/v+ offset line))))
     (let [line [[0 0] [2 2]]
           offset [-1 1]]
       (is (= [[-1 1] [1 3]]
-             (eng/offset-line eng/v+ offset line))))))
+             (eng/offset-line mth/v+ offset line))))))
 
 (deftest base-sides-test
   (testing "returns base sides"

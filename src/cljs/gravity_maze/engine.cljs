@@ -1,13 +1,8 @@
-(ns gravity-maze.engine)
+(ns gravity-maze.engine
+  (:require [gravity-maze.math.helpers :as mth :refer [v+ v-]]))
 
 (defn sign-of [n]
   (if (zero? n) 0 (/ n (Math/abs n))))
-
-(defn v+ [& vecs]
-  (apply (partial mapv +) vecs))
-
-(defn v- [& vecs]
-  (apply (partial mapv -) vecs))
 
 (defn mult-v [n vec]
   (mapv #(* n %) vec))
@@ -15,12 +10,9 @@
 (defn div-v [n vec]
   (mult-v (/ 1 n) vec))
 
-(defn sumsqs [vec]
-  (reduce #(+ %1 (* %2 %2)) 0 vec))
-
 (defn unit-vec [v]
   (if (= [0 0] v) [0 0]
-    (let [d2 (sumsqs v)
+    (let [d2 (mth/sumsqs v)
           norm (/ 1 (Math/sqrt d2))]
       (mult-v norm v))))
 
@@ -46,11 +38,6 @@
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
 
-(defn pts-dist [pt1 pt2]
-  (-> (v- pt1 pt2)
-      sumsqs
-      Math/sqrt))
-
 (defn det3x3
   "Constructs 3x3 matrix from 3 points and calculates determinant"
   [[[xa ya][xb yb][xc yc]]]
@@ -64,7 +51,7 @@
   [[lna lnb] point]
   (let [pts [lna lnb point]
         area (/ (Math/abs (det3x3 pts)) 2)
-        base (pts-dist lna lnb)]
+        base (mth/pts-dist lna lnb)]
     (* 2 (/ area base))))
 
 (defn perp-dot-prod
@@ -132,7 +119,7 @@
 
 (defmethod force-between :point [g el1 point]
   (let [force-dir (apply v- (map :pos [point el1]))
-        d2 (sumsqs force-dir)
+        d2 (mth/sumsqs force-dir)
         unit-force (unit-vec force-dir)
         gmm (apply * (cons g (map :mass [el1 point])))]
     (gravity-calc gmm d2 unit-force)))

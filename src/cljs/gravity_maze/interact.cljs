@@ -22,10 +22,10 @@
 
 (defn find-point
   "Returns point that is clicked, else nil"
-  [world pos]
+  [world {:keys [x y]}]
   (->> (:elements world)
       (filter #(= :point (:type %)))
-      (filter (partial clicked? click-range pos))
+      (filter (partial clicked? click-range [x y]))
       first))
 
 (defn launch-drag [ratom event]
@@ -34,7 +34,8 @@
 (defn launch-mouse-press [ratom event]
   (if-let [pos (find-point @ratom event)]
     (println "on point :)")
-    (println "not on point"))
+    (println "NOT on point")
+    )
   ratom
   )
 

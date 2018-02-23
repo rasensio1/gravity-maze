@@ -4,6 +4,7 @@
    [gravity-maze.state :as state]
    [gravity-maze.engine :as eng]
    [gravity-maze.draw :as drw]
+   [gravity-maze.interact :as int]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
@@ -28,6 +29,9 @@
   :draw drw/main
   :update update-state
   :host "host"
+  :mouse-dragged int/launch-drag
+  :mouse-pressed int/launch-mouse-press
+  :mouse-released int/launch-mouse-release
   :size [800 800]
   :middleware [m/fun-mode])
 

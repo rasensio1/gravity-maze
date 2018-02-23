@@ -1,4 +1,5 @@
-(ns gravity-maze.interact)
+(ns gravity-maze.interact
+  (:require [gravity-maze.math.helpers :as mth]))
 
 ;; future stuff...
 ;; for handling clicks in different modes...
@@ -14,11 +15,15 @@
 ;;          }
 ;;  }
 
+(def click-range 10)
+
+(defn clicked? [range click-pos {:keys [pos]}]
+  (>= range (mth/pts-dist click-pos pos)))
+
 (defn on-point
   "Returns point that is clicked, else nil"
   [world pos]
-  true
-
+  (filter (partial clicked? click-range ) (:elements world))
   )
 
 (defn launch-drag [ratom event]

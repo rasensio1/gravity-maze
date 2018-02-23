@@ -47,5 +47,6 @@
                        first
                        :drag-vec)))))
   (testing "Does nothing for no mousepress"
+    (is (= 1 0))
     )
   )

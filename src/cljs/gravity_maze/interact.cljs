@@ -1,5 +1,6 @@
 (ns gravity-maze.interact
-  (:require [gravity-maze.math.helpers :as mth]))
+  (:require [gravity-maze.math.helpers :as mth])
+  (:require-macros [gravity-maze.macros :as mac]))
 
 ;; future stuff...
 ;; for handling clicks in different modes...
@@ -25,29 +26,19 @@
   (if (:mousepress? elem) elem false))
 
 (defn find-point
-  "Returns point that is clicked, else nil.
-  Event comes in like: {:x 101, :y 100, ...}"
+  "Returns point based on filter-fn, else nil."
   [filter-fn world]
   (->> (:elements world)
        (filter #(= :point (:type %)))
        (some filter-fn)))
 
-(defn launch-mouse-press [ratom {:keys [x y]}]
-  (when-let [point (find-point (partial clicked? click-range [x y]) @ratom)]
-    (as-> (:elements @ratom) elems
-      ;;      <vec> JS requires this to be vector, not lazySeq
-      (update (vec elems) (:id point) #(assoc % :mousepress? true))
-      (swap! ratom assoc :elements elems))) ;; TODO swap!s to separate ns
-  ratom)
+(mac/defn-point-event launch-mouse-press
+  (partial clicked? click-range [x y])
+  (fn [el] (assoc el :mousepress? true)))
 
-(defn launch-drag [ratom {:keys [x y]}]
-  (when-let [point (find-point pressed? @ratom)] ;; get mousepressed point
-    (as-> (:elements @ratom) elems
-      (update (vec elems) (:id point)
-              #(assoc % :drag-vec (mth/v- (:pos point) [x y])))
-      (swap! ratom assoc :elements elems)))
-  ratom)
-
+(mac/defn-point-event launch-drag
+  pressed?
+  (fn [el] (assoc el :drag-vec (mth/v- (:pos point) [x y]))))
 
 (defn launch-mouse-release [ratom event]
   ;; if element has mousepress?

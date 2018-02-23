@@ -26,3 +26,13 @@
     (let [point {:type :point :pos [20 20]}
           world {:elements [{:type :point :pos [10 10]} point]}]
       (is (= nil (intr/find-point world [0 0]))))))
+
+(deftest launch-mouse-press-test
+  (testing "Sets element clicked value to true if clicked"
+    (let [point {:type :point :id 0 :mousepress? false}
+          myatm (atom {:elements [point]})]
+      (with-redefs [intr/find-point (fn [i j] point)]
+        (let [res (intr/launch-mouse-press myatm "event!")]
+          (is (= true (-> (:elements @res)
+                          first
+                          :mousepress?))))))))

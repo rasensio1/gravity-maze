@@ -29,16 +29,17 @@
       (filter #(= :point (:type %)))
       (some (partial clicked? click-range [x y]))))
 
+(defn launch-mouse-press [ratom event]
+  (if-let [point (find-point @ratom event)]
+    (as-> (:elements @ratom) elems
+      (update elems (:id point) #(assoc % :mousepress? true))
+      (swap! ratom assoc :elements elems)))
+  ratom
+  )
+
 (defn launch-drag [ratom event]
   ratom)
 
-(defn launch-mouse-press [ratom event]
-  (if-let [pos (find-point @ratom event)]
-    (println "on point :)")
-    (println "NOT on point")
-    )
-  ratom
-  )
 
 (defn launch-mouse-release [ratom event]
   (println "released")

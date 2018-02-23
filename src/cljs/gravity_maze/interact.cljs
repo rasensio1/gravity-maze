@@ -17,16 +17,17 @@
 
 (def click-range 10)
 
-(defn clicked? [range click-pos {:keys [pos]}]
-  (>= range (mth/pts-dist click-pos pos)))
+(defn clicked? [range click-pos {:keys [pos] :as elem}]
+  (if (>= range (mth/pts-dist click-pos pos))
+    elem false))
 
 (defn find-point
-  "Returns point that is clicked, else nil"
+  "Returns point that is clicked, else nil.
+  Event comes in like: {:x 101, :y 100, ...}"
   [world {:keys [x y]}]
   (->> (:elements world)
       (filter #(= :point (:type %)))
-      (filter (partial clicked? click-range [x y]))
-      first))
+      (some (partial clicked? click-range [x y]))))
 
 (defn launch-drag [ratom event]
   ratom)

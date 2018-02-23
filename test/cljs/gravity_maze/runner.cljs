@@ -8,5 +8,4 @@
 (doo-tests 'gravity-maze.core-test
            'gravity-maze.engine-test
            'gravity-maze.interact-test
-           'gravity-maze.interact-test
            'gravity-maze.math.helpers-test)

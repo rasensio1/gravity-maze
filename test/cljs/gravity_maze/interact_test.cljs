@@ -15,17 +15,17 @@
     (is (= false (intr/clicked? 10 [20 20] {:pos [35 20]})))))
 
 (deftest find-point-test
-  (testing "Returns point if clicked"
+  (testing "Returns point based on filter"
     (let [point {:type :point :pos [5 5]}
           world {:elements [point]}]
-      (is (= point (intr/find-point world [0 0]))))
-    (let [point {:type :point :pos [5 5]}
+      (is (= true (intr/find-point #(= [5 5] (:pos %)) world))))
+    (let [point {:type :point :pos [5 5] :id 1}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= point (intr/find-point world [0 0])))))
+      (is (= point (intr/find-point #(if (:id %) % nil) world)))))
   (testing "Returns nil if no point"
     (let [point {:type :point :pos [20 20]}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= nil (intr/find-point world [0 0]))))))
+      (is (= nil (intr/find-point #(= [0 0] (:pos %)) world))))))
 
 (deftest launch-mouse-press-test
   (testing "Sets element clicked value to true if clicked"
@@ -36,3 +36,16 @@
           (is (= true (-> (:elements @res)
                           first
                           :mousepress?))))))))
+
+(deftest launch-drag-test
+  (testing "Stores vector of drag when mousepressed"
+    (let [myatm (atom {:elements [{:type :point :id 0
+                                   :pos [0 0] :mousepress? true}]})
+          event {:x 1 :y 1}
+          res (intr/launch-drag myatm event)]
+      (is (= [-1 -1] (-> (:elements @res)
+                       first
+                       :drag-vec)))))
+  (testing "Does nothing for no mousepress"
+    )
+  )

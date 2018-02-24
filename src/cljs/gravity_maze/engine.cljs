@@ -1,82 +1,27 @@
 (ns gravity-maze.engine
   (:require [gravity-maze.math.helpers :as mth :refer [v+ v-]]))
 
-(defn sign-of [n]
-  (if (zero? n) 0 (/ n (Math/abs n))))
-
-(defn mult-v [n vec]
-  (mapv #(* n %) vec))
-
-(defn div-v [n vec]
-  (mult-v (/ 1 n) vec))
-
-(defn unit-vec [v]
-  (if (= [0 0] v) [0 0]
-    (let [d2 (mth/sumsqs v)
-          norm (/ 1 (Math/sqrt d2))]
-      (mult-v norm v))))
-
 (defn update-pos [dt {:keys [pos vel accel] :as el}]
-  (let [velocity-disp (mult-v dt vel)
-        accel-disp (mult-v (* 0.5 dt dt) accel)
+  (let [velocity-disp (mth/mult-v dt vel)
+        accel-disp (mth/mult-v (* 0.5 dt dt) accel)
         new-pos (v+ pos velocity-disp accel-disp)]
     (assoc el :pos new-pos)))
 
 (defn update-vel [dt new-accel {:keys [vel accel] :as el}]
-  (let [avg-accel (div-v 2 (v+ accel new-accel))
-        accel-dv (mult-v dt avg-accel)
+  (let [avg-accel (mth/div-v 2 (v+ accel new-accel))
+        accel-dv (mth/mult-v dt avg-accel)
         new-vel (v+ vel accel-dv)]
     (assoc el :vel new-vel)))
 
 (defn calc-accel [force {:keys [mass] :as el}]
-  (div-v mass force))
+  (mth/div-v mass force))
 
 (defn gravity-calc [gmm d2 vec]
   (if (zero? d2) [0 0]
-      (mult-v (/ gmm d2) vec)))
+      (mth/mult-v (/ gmm d2) vec)))
 
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
-
-(defn det3x3
-  "Constructs 3x3 matrix from 3 points and calculates determinant"
-  [[[xa ya][xb yb][xc yc]]]
-  (letfn [(add-prods [vec1 vec2] (apply + (map * vec1 vec2)))]
-    (- (add-prods [xa xb xc] [yb yc ya])
-       (add-prods [xa xc xb] [yc yb ya]))))
-
-(defn line-dist
-  "Calculates the distance between a point and line.
-  Finds area by creating a triangle out of line and point."
-  [[lna lnb] point]
-  (let [pts [lna lnb point]
-        area (/ (Math/abs (det3x3 pts)) 2)
-        base (mth/pts-dist lna lnb)]
-    (* 2 (/ area base))))
-
-(defn perp-dot-prod
-  "Perpendicular dot-product. Used to determine which 'side' of a line a point
-  resides on. Returns either -1 0 1"
-  [[[lnAX lnAY] [lnBX lnBY]] [ptX ptY]]
-  (letfn [(multminus [v1 v2] (apply * (v- v1 v2)))]
-   (-> (- (multminus [lnBX ptY] [lnAX lnAY])
-          (multminus [lnBY ptX] [lnAY lnAX]))
-       sign-of)))
-
-(defn unit-normal-vec
-  "Finds the normal vector of the line that points away from the point. Uses
-  perpendicular dot product to tell if point is 'above' or 'below' the line.
-  Second, uses the sign to chose the appropriate normal vector.
-  Third, makes the normal vector a unit vector "
-  [[lnA lnB :as line ] point]
-
-  (let [[lnx lny] (v- lnA lnB) ;; represent line as vector
-          sign (perp-dot-prod line point)
-        ;; the 2 normal vectors for a line '[x y]' are [-y x] & [y -x]
-          perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
-          vec (if (= 0 sign) [0 0] ;; sign is '0' if point is on the line.
-                (perpens (neg? sign)))]
-      (unit-vec vec)))
 
 (defn offset-line
   "Offsets each point in 'line' by offset vector"
@@ -93,7 +38,7 @@
   [line offset] (mapv #((juxt v+ v-) % offset) line))
 
 (defn sum-by-dot-prod [point lines]
-  (reduce #(+ %1 (perp-dot-prod %2 point)) 0 lines))
+  (reduce #(+ %1 (mth/perp-dot-prod %2 point)) 0 lines))
 
 (defn in-zone?
   "Checks if a point is in the 'zone' of the line. Determines bounds of 'zone'
@@ -101,7 +46,7 @@
   above and below one of each group of lines "
   [line point]
   (let [[line-pos pt-pos] (map :pos [line point])
-        offset (mult-v (:range line) (unit-normal-vec line-pos pt-pos))
+        offset (mth/mult-v (:range line) (mth/unit-normal-vec line-pos pt-pos))
         [b-lines s-lines] ((juxt base-sides other-sides) line-pos offset)
         [b-score s-score] (map (partial sum-by-dot-prod pt-pos)
                                        [b-lines s-lines])]
@@ -112,15 +57,15 @@
 (defmethod force-between :line [g el line]
   (if (not (in-zone? line el)) [0 0] ;; No force if point is outside of zone
       (let [inputs (map :pos [line el])
-            unit-force (apply unit-normal-vec inputs)
-            d2 (Math/pow (apply line-dist inputs) 2)
+            unit-force (apply mth/unit-normal-vec inputs)
+            d2 (Math/pow (apply mth/line-dist inputs) 2)
             gmm (apply * (cons g (map :mass [el line])))]
         (gravity-calc gmm d2 unit-force))))
 
 (defmethod force-between :point [g el1 point]
   (let [force-dir (apply v- (map :pos [point el1]))
         d2 (mth/sumsqs force-dir)
-        unit-force (unit-vec force-dir)
+        unit-force (mth/unit-vec force-dir)
         gmm (apply * (cons g (map :mass [el1 point])))]
     (gravity-calc gmm d2 unit-force)))
 

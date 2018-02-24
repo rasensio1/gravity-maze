@@ -5,14 +5,11 @@
    [gravity-maze.engine :as eng]
    [gravity-maze.draw :as drw]
    [gravity-maze.interact :as int]
+   [gravity-maze.views.core :as vw]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
 (def app-state (r/atom state/initial-state))
-
-(defn page [ratom]
-  [:div
-   [:div "Welcome to reagent-figwheel." ]])
 
 (defn update-state [ratom]
   (reset! ratom (eng/update-world @ratom))
@@ -37,7 +34,7 @@
   :middleware [m/fun-mode])
 
 (defn reload []
-  (r/render [page app-state]
+  (r/render [vw/page app-state]
             (.getElementById js/document "app")))
 
 (defn dev-setup []

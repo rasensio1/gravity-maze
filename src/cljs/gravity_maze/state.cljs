@@ -15,7 +15,8 @@
                                 :fixed true
                                 }
                                ]
-                     :g -500
-                     :dt 0.02
-                     :drag 0.1})
+                    :g -500
+                    :mode {:shooting true}
+                    :dt 0.02
+                    :drag 0.1})
 

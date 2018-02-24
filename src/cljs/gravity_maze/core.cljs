@@ -19,15 +19,17 @@
   (q/background 250)
   app-state)
 
+(defn mouse-handler [event-name]
+  (fn [ratom event] (int/handle-mouse event-name ratom event)))
 
 (q/defsketch hello
   :setup setup
   :draw drw/main
   :update update-state
   :host "host"
-  :mouse-dragged int/launch-drag
-  :mouse-pressed int/launch-mouse-press
-  :mouse-released int/launch-mouse-release
+  :mouse-dragged (mouse-handler :mouse-dragged)
+  :mouse-pressed (mouse-handler :mouse-pressed)
+  :mouse-released (mouse-handler :mouse-released)
   :size [600 600]
   :middleware [m/fun-mode]
 ;  :features [:no-start]       preventing from loading?

@@ -2,27 +2,6 @@
   (:require [gravity-maze.math.helpers :as mth])
   (:require-macros [gravity-maze.macros :as mac]))
 
-;; future stuff...
-;; for handling clicks in different modes...
-
-;; app-state
-;; {:mode {:building true}} -> drawing lines
-; TODO
-;; {:mode {:building :line}} -> lines
-;; {:mode {:building :point}} -> point
-
-
-;; {:launch {:handle-click "somefn"
-;;           :mouse-dragged "some"
-;;           ...}
-
-              ;nested modes [:build :add-line]
-;;  :building {:line {:handle-click "somethingelse"
-;;                     ...}
-  ;;          :point {:handle-click "lkjsf"}
-;;          }
-;;  }
-
 (def click-range 10)
 
 (defn clicked? [range click-pos {:keys [pos] :as elem}]
@@ -57,3 +36,23 @@
                (assoc point :fixed false)
                (dissoc point :mousepress? :drag-vec))))
 
+(def click-fns {:building {:line {:mouse-pressed (fn [r ev] "got me!")
+                                  :mouse-dragged "fn"
+                                  :mouse-released "fn"
+                                  }}
+
+                :shooting {:mouse-pressed launch-mouse-press
+                           :mouse-dragged launch-drag
+                           :mouse-released launch-mouse-release
+                           }})
+
+(defn get-kws
+  "Returns all keys that are keywords from map."
+  [tree]
+  (->> (tree-seq map? #(interleave (keys %) (vals %)) tree)
+       (filter keyword?)
+       vec))
+
+(defn handle-mouse [event-name ratom event]
+  (let [path (conj (get-kws (:mode @ratom)) event-name)]
+    ((get-in click-fns path) ratom event)))

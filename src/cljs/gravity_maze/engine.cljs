@@ -23,15 +23,11 @@
 (defn update-accel [new-accel el]
   (assoc el :accel new-accel))
 
-(defn offset-line
-  "Offsets each point in 'line' by offset vector"
-  [vfn offset line] (mapv #(vfn % offset) line))
-
 (defn base-sides
   "Returns base sides of zone by offsetting in both + and - dirs."
   [line offset]
-  ((juxt (partial offset-line v+ offset)
-       (partial offset-line v- offset)) line))
+  ((juxt (partial mth/offset-line v+ offset)
+       (partial mth/offset-line v- offset)) line))
 
 (defn other-sides
   "Returns sides of zone by doubling normal vectors at line ends."

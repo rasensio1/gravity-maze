@@ -18,6 +18,15 @@
 (defn sumsqs [vec]
   (reduce #(+ %1 (* %2 %2)) 0 vec))
 
+(defn normal-vectors
+  "Returns normal vectors of the given vector"
+  [[x y]]
+  [[(- 0 y) x] [y (- 0 x)]])
+
+(defn offset-line
+  "Offsets each point in 'line' by offset vector"
+  [vfn offset line] (mapv #(vfn % offset) line))
+
 (defn pts-dist [pt1 pt2]
   (-> (v- pt1 pt2)
       sumsqs
@@ -63,8 +72,6 @@
 
   (let [[lnx lny] (v- lnA lnB) ;; represent line as vector
         sign (perp-dot-prod line point)
-        ;; the 2 normal vectors for a line '[x y]' are [-y x] & [y -x]
-        perpens [[(- 0 lny) lnx] [lny (- 0 lnx)]]
         vec (if (= 0 sign) [0 0] ;; sign is '0' if point is on the line.
-                (perpens (neg? sign)))]
+                ((normal-vectors [lnx lny]) (neg? sign)))]
     (unit-vec vec)))

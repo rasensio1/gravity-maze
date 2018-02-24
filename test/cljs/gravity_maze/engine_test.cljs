@@ -37,17 +37,6 @@
   (if (apply = (map :pos [j k]))
     [0 0] [1 1]))
 
-(deftest offset-line-test
-  (testing "Creates offset lines"
-    (let [line [[0 0] [3 0]]
-          offset [0 1]]
-      (is (= [[0 1] [3 1]]
-             (eng/offset-line mth/v+ offset line))))
-    (let [line [[0 0] [2 2]]
-          offset [-1 1]]
-      (is (= [[-1 1] [1 3]]
-             (eng/offset-line mth/v+ offset line))))))
-
 (deftest base-sides-test
   (testing "returns base sides"
     (is (= [[[0 1] [1 1]] [[0 -1] [1 -1]]]

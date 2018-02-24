@@ -14,6 +14,17 @@
   (testing "can do non-right triangles"
     (is (= "8.06" (roundme 2 (mth/pts-dist [1 1] [2 9]))))))
 
+(deftest offset-line-test
+  (testing "Creates offset lines"
+    (let [line [[0 0] [3 0]]
+          offset [0 1]]
+      (is (= [[0 1] [3 1]]
+             (mth/offset-line mth/v+ offset line))))
+    (let [line [[0 0] [2 2]]
+          offset [-1 1]]
+      (is (= [[-1 1] [1 3]]
+             (mth/offset-line mth/v+ offset line))))))
+
 (deftest unit-normal-vec-test
   (testing "can find the normal vector of a line"
     (let [res (mth/unit-normal-vec [[0 0] [2 20]] [1 12])]

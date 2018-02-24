@@ -6,7 +6,15 @@
                                  :pos [200 200]
                                  :vel [0 0]
                                  :accel [0 0]
-                                 :fixed true}]
+                                :fixed true}
+
+                               {:type :line
+                                :mass 50
+                                :range 300
+                                :pos [[0 500] [500 500]]
+                                :fixed true
+                                }
+                               ]
                      :g -500
                      :dt 0.02
                      :drag 0.1})

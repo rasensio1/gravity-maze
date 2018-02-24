@@ -10,8 +10,6 @@ EXTREME GAMES OF CATCH!
 
  - Launch a ball
    - Click on ball, and drag back to launch.
+   - draw launch vector
  
- - Continuous collision detection?
-    - balls sometimes hop over lines at high speeds
- 
- - Simplify fixed masses by averaging?
+  - Fix balls hopping over lines at high speeds

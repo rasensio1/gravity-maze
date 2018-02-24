@@ -12,8 +12,7 @@
 (def app-state (r/atom state/initial-state))
 
 (defn update-state [ratom]
-  (reset! ratom (eng/update-world @ratom))
-  ratom)
+  (reset! ratom (eng/update-world @ratom)) ratom)
 
 (defn setup []
   (q/frame-rate 100)
@@ -23,7 +22,6 @@
 
 (q/defsketch hello
   :setup setup
-  :features [:no-start]
   :draw drw/main
   :update update-state
   :host "host"
@@ -31,7 +29,9 @@
   :mouse-pressed int/launch-mouse-press
   :mouse-released int/launch-mouse-release
   :size [600 600]
-  :middleware [m/fun-mode])
+  :middleware [m/fun-mode]
+;  :features [:no-start]       preventing from loading?
+  )
 
 (defn reload []
   (r/render [vw/page app-state]
@@ -44,5 +44,3 @@
 (defn ^:export main []
   (dev-setup)
   (reload))
-
-(hello)

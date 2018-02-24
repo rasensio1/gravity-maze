@@ -5,14 +5,21 @@
 ;; future stuff...
 ;; for handling clicks in different modes...
 
+;; app-state
+;; {:mode {:building true}} -> drawing lines
+; TODO
+;; {:mode {:building :line}} -> lines
+;; {:mode {:building :point}} -> point
+
+
 ;; {:launch {:handle-click "somefn"
 ;;           :mouse-dragged "some"
 ;;           ...}
 
               ;nested modes [:build :add-line]
-;;  :build {:add-line {:handle-click "somethingelse"
+;;  :building {:line {:handle-click "somethingelse"
 ;;                     ...}
-;;          :add-end {:handle-click "lkjsf"}
+  ;;          :point {:handle-click "lkjsf"}
 ;;          }
 ;;  }
 

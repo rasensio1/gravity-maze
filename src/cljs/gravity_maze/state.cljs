@@ -9,8 +9,8 @@
                                 :fixed true}
 
                                {:type :line
-                                :mass 50
-                                :range 300
+                                :mass 800
+                                :range 50
                                 :pos [[0 500] [500 500]]
                                 :fixed true
                                 }

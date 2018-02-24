@@ -7,9 +7,6 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-
- - Launch a ball
-   - Click on ball, and drag back to launch.
-   - draw launch vector
- 
   - Fix balls hopping over lines at high speeds
+    - Seems to not be an issue with higher wall mass.
+    we'll wait to do this if it becomes necessary

@@ -38,6 +38,13 @@
             norm (/ 1 (Math/sqrt d2))]
         (mult-v norm v))))
 
+(defn det3x3
+  "Constructs 3x3 matrix from 3 points and calculates determinant"
+  [[[xa ya][xb yb][xc yc]]]
+  (letfn [(add-prods [vec1 vec2] (apply + (map * vec1 vec2)))]
+    (- (add-prods [xa xb xc] [yb yc ya])
+       (add-prods [xa xc xb] [yc yb ya]))))
+
 (defn line-dist
   "Calculates the distance between a point and line.
   Finds area by creating a triangle out of line and point."
@@ -46,13 +53,6 @@
         area (/ (Math/abs (det3x3 pts)) 2)
         base (pts-dist lna lnb)]
     (* 2 (/ area base))))
-
-(defn det3x3
-  "Constructs 3x3 matrix from 3 points and calculates determinant"
-  [[[xa ya][xb yb][xc yc]]]
-  (letfn [(add-prods [vec1 vec2] (apply + (map * vec1 vec2)))]
-    (- (add-prods [xa xb xc] [yb yc ya])
-       (add-prods [xa xc xb] [yc yb ya]))))
 
 (defn perp-dot-prod
   "Perpendicular dot-product. Used to determine which 'side' of a line a point

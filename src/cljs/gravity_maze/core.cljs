@@ -8,7 +8,7 @@
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))
 
-(defonce app-state (r/atom state/initial-state))
+(def app-state (r/atom state/initial-state))
 
 (defn page [ratom]
   [:div
@@ -26,13 +26,14 @@
 
 (q/defsketch hello
   :setup setup
+  :features [:no-start]
   :draw drw/main
   :update update-state
   :host "host"
   :mouse-dragged int/launch-drag
   :mouse-pressed int/launch-mouse-press
   :mouse-released int/launch-mouse-release
-  :size [800 800]
+  :size [600 600]
   :middleware [m/fun-mode])
 
 (defn reload []
@@ -46,3 +47,5 @@
 (defn ^:export main []
   (dev-setup)
   (reload))
+
+(hello)

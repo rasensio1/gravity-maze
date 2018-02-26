@@ -1,5 +1,6 @@
 (ns gravity-maze.interact
-  (:require [gravity-maze.math.helpers :as mth])
+  (:require [gravity-maze.math.helpers :as mth]
+            [gravity-maze.state :as state])
   (:require-macros [gravity-maze.macros :as mac]))
 
 (def click-range 10)
@@ -45,6 +46,13 @@
                            :mouse-dragged launch-drag
                            :mouse-released launch-mouse-release
                            }})
+
+(defn build-line-mouse-press [ratom {:keys [x y]}]
+  (let [id (count (:elements @ratom))
+        new-line (-> (assoc state/default-line :id id :mousepress? true)
+                     (assoc-in [:pos 0] [x y]))]
+    (swap! ratom update :elements #(conj % new-line)))
+  ratom)
 
 (defn get-kws
   "Returns all keys that are keywords from map."

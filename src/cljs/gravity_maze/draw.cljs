@@ -13,7 +13,7 @@
           flatten
           (apply q/triangle)))))
 
-(defmulti draw-elem (fn [x] (x :type)))
+(defmulti draw-elem :type)
 (defmethod draw-elem :point [{:keys [pos r drag-vec] :or {r 10}}]
   (q/fill 0)
   (q/ellipse (pos 0) (pos 1) r r)

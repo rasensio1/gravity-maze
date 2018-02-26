@@ -1,5 +1,13 @@
 (ns gravity-maze.state)
 
+(def default-line {:type :line
+                   :mass 800
+                   :range 50
+                   :pos [nil nil]
+                   :fixed true
+                   :id nil
+                   })
+
 (def initial-state {:elements [{:type :point
                                  :mass 30
                                  :id 0

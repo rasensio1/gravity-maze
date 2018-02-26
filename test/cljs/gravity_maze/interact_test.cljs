@@ -64,3 +64,13 @@
       (is (= [10 10] (:vel elem)))
       (is (= nil (:mousepress? elem)))
       (is (= nil (:drag-vec elem))))))
+
+(deftest build-line-mouse-press-test
+  (testing "Adds a new line with correct parameters"
+    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]})
+          event {:x 100 :y 100}
+          res (intr/build-line-mouse-press myatm event)]
+      (is (= 2 (count (:elements @myatm))))
+      (is (= [[100 100] nil] (get-in @myatm [:elements 1 :pos])))
+      (is (= true (get-in @myatm [:elements 1 :mousepress?])))
+      (is (= 1 (get-in @myatm [:elements 1 :id]))))))

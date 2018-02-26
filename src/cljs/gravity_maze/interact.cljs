@@ -21,15 +21,15 @@
   (->> (:elements world)
        (some filter-fn)))
 
-(mac/defn-point-event launch-mouse-press
+(mac/defn-elem-update launch-mouse-press
   (partial clicked? click-range [x y])
   (fn [el] (assoc el :mousepress? true)))
 
-(mac/defn-point-event launch-drag
+(mac/defn-elem-update launch-drag
   pressed?
   (fn [el] (assoc el :drag-vec (mth/v- (:pos point) [x y]))))
 
-(mac/defn-point-event launch-mouse-release
+(mac/defn-elem-update launch-mouse-release
   drag-vec?
   (fn [el] (as-> el point
                (assoc point :vel (:drag-vec el))
@@ -40,23 +40,16 @@
   (let [id (count (:elements @ratom))
         new-line (-> (assoc state/default-line :id id :mousepress? true)
                      (assoc-in [:pos] [[x y] [x y]]))]
-    (swap! ratom update :elements #(conj (vec %) new-line)))
+    (swap! ratom update :elements #(conj % new-line)))
   ratom)
 
-(defn build-line-mouse-drag [ratom {:keys [x y]}]
-  (let [line (find-elem pressed? @ratom)]
-    (as-> (:elements @ratom) elems
-      ;; TODO refactor into one swap! ?
-      (update (vec elems) (:id line) #(assoc-in % [:pos 1] [x y]))
-      (swap! ratom assoc :elements elems)))
-  ratom)
+(mac/defn-elem-update build-line-mouse-drag
+  pressed?
+  (fn [el] (assoc-in el [:pos 1] [x y])))
 
-(defn build-line-mouse-release [ratom _]
-  (let [line (find-elem pressed? @ratom)]
-    (as-> (:elements @ratom) elems
-      (update (vec elems) (:id line) #(dissoc % :mousepress?))
-      (swap! ratom assoc :elements elems)))
-  ratom)
+(mac/defn-elem-update build-line-mouse-release
+  pressed?
+  (fn [el] (dissoc el :mousepress?)))
 
 (def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
                                   :mouse-dragged build-line-mouse-drag

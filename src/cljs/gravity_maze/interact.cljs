@@ -36,26 +36,29 @@
                (assoc point :fixed false)
                (dissoc point :mousepress? :drag-vec))))
 
-(def click-fns {:building {:line {:mouse-pressed (fn [r ev] "got me!")
-                                  :mouse-dragged "fn"
-                                  :mouse-released "fn"
+(defn build-line-mouse-press [ratom {:keys [x y]}]
+  (let [id (count (:elements @ratom))
+        new-line (-> (assoc state/default-line :id id :mousepress? true)
+                     (assoc-in [:pos] [[x y] [x y]]))]
+    (swap! ratom update :elements #(conj (vec %) new-line)))
+  ratom)
+
+(defn build-line-mouse-drag [ratom {:keys [x y]}]
+  (let [line (find-elem pressed? @ratom)]
+    (as-> (:elements @ratom) elems
+      (update (vec elems) (:id line) #(assoc-in % [:pos 1] [x y]))
+      (swap! ratom assoc :elements elems)))
+  ratom)
+
+(def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
+                                  :mouse-dragged build-line-mouse-drag
+                                  :mouse-released (fn [x y] (println x y))
                                   }}
 
                 :shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag
                            :mouse-released launch-mouse-release
                            }})
-
-(defn build-line-mouse-press [ratom {:keys [x y]}]
-  (let [id (count (:elements @ratom))
-        new-line (-> (assoc state/default-line :id id :mousepress? true)
-                     (assoc-in [:pos 0] [x y]))]
-    (swap! ratom update :elements #(conj % new-line)))
-  ratom)
-
-;; (defn build-line-mouse-drag [ratom {:keys [x y]}]
-;;   (let [line (filter pressed? (:elements @ratom))]))
-
 
 (defn get-kws
   "Returns all keys that are keywords from map."

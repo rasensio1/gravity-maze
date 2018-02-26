@@ -15,13 +15,16 @@
     (is (= false (intr/clicked? 10 [20 20] {:pos [35 20]})))))
 
 (deftest find-elem-test
-  (testing "Returns point based on filter"
+  (testing "Returns elem based on filter"
     (let [point {:type :point :pos [5 5]}
           world {:elements [point]}]
       (is (= true (intr/find-elem #(= [5 5] (:pos %)) world))))
     (let [point {:type :point :pos [5 5] :id 1}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= point (intr/find-elem #(if (:id %) % nil) world)))))
+      (is (= point (intr/find-elem #(if (:id %) % nil) world))))
+    (let [line {:type :line :pos [[5 5] [10 10]] :id 1}
+          world {:elements [{:type :point :pos [[10 10]]} line]}]
+      (is (= line (intr/find-elem #(if (= :line (:type %)) % nil) world)))))
   (testing "Returns nil if no point"
     (let [point {:type :point :pos [20 20]}
           world {:elements [{:type :point :pos [10 10]} point]}]
@@ -71,16 +74,16 @@
           event {:x 100 :y 100}
           res (intr/build-line-mouse-press myatm event)]
       (is (= 2 (count (:elements @myatm))))
-      (is (= [[100 100] nil] (get-in @myatm [:elements 1 :pos])))
+      (is (= [[100 100] [100 100]] (get-in @myatm [:elements 1 :pos])))
       (is (= true (get-in @myatm [:elements 1 :mousepress?])))
       (is (= 1 (get-in @myatm [:elements 1 :id]))))))
 
-;; (deftest build-line-mouse-drag-test
-;;   (testing "Adds end position to mousepressed line"
-;;     (let [myatm (atom {:elements [{:type :point :id 0}
-;;                                   {:type :line :mousepressed? true
-;;                                    :pos [[1 1] nil] :id 1}]})
-;;           event {:x 10 :y 10}
-;;           res (intr/build-line-mouse-drag myatm event)]
-;;       (is (= [[1 1] [10 10]] (get-in myatm [:elements 1 :pos])))
-;;       )))
+(deftest build-line-mouse-drag-test
+  (testing "Adds end position to mousepressed line"
+    (let [myatm (atom {:elements [{:type :point :id 0}
+                                  {:type :line :mousepress? true
+                                   :pos [[1 1] [1 1]] :id 1}]})
+          event {:x 10 :y 10}
+          res (intr/build-line-mouse-drag myatm event)]
+      (is (= [[1 1] [10 10]] (get-in @myatm [:elements 1 :pos])))
+      )))

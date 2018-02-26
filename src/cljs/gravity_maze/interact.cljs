@@ -46,13 +46,21 @@
 (defn build-line-mouse-drag [ratom {:keys [x y]}]
   (let [line (find-elem pressed? @ratom)]
     (as-> (:elements @ratom) elems
+      ;; TODO refactor into one swap! ?
       (update (vec elems) (:id line) #(assoc-in % [:pos 1] [x y]))
+      (swap! ratom assoc :elements elems)))
+  ratom)
+
+(defn build-line-mouse-release [ratom _]
+  (let [line (find-elem pressed? @ratom)]
+    (as-> (:elements @ratom) elems
+      (update (vec elems) (:id line) #(dissoc % :mousepress?))
       (swap! ratom assoc :elements elems)))
   ratom)
 
 (def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
                                   :mouse-dragged build-line-mouse-drag
-                                  :mouse-released (fn [x y] (println x y))
+                                  :mouse-released build-line-mouse-release
                                   }}
 
                 :shooting {:mouse-pressed launch-mouse-press

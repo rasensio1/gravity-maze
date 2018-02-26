@@ -83,7 +83,14 @@
     (let [myatm (atom {:elements [{:type :point :id 0}
                                   {:type :line :mousepress? true
                                    :pos [[1 1] [1 1]] :id 1}]})
-          event {:x 10 :y 10}
-          res (intr/build-line-mouse-drag myatm event)]
-      (is (= [[1 1] [10 10]] (get-in @myatm [:elements 1 :pos])))
-      )))
+          event {:x 10 :y 10}]
+      (intr/build-line-mouse-drag myatm event)
+      (is (= [[1 1] [10 10]] (get-in @myatm [:elements 1 :pos]))))))
+
+(deftest build-line-mouse-release-test
+  (testing "dissocs mouspress? on line"
+    (let [line {:type :line :pos [[0 0 ] [10 10]] :mousepress? true :id 2}
+          myatm (atom {:elements [{:type :point} {:type :line} line]})]
+      (intr/build-line-mouse-release myatm {})
+      (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
+      (is (= 3 (count (:elements @myatm)))))))

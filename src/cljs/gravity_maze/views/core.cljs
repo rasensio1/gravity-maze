@@ -10,7 +10,7 @@
     [:button.btn.btn-default
      {:key {:shooting true}} "Shooting"]
     [:button.btn.btn-default
-     {:key {:building true} } "Building"]]])
+     {:key {:building true}} "Building"]]])
 
 (def title
   [:div [:h2 "GRAVITY MAZE"]])

@@ -32,7 +32,6 @@
   :mouse-released (mouse-handler :mouse-released)
   :size [600 600]
   :middleware [m/fun-mode]
-;  :features [:no-start]       preventing from loading?
   )
 
 (defn reload []

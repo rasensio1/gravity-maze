@@ -1,6 +1,7 @@
 (ns gravity-maze.views.core
   (:require [reagent.core :as r]
             [reagent-forms.core :refer [bind-fields]]
+            [gravity-maze.views.build :as build]
             ))
 
 (def mode-btns
@@ -11,24 +12,16 @@
     [:button.btn.btn-default
      {:key {:building true} } "Building"]]])
 
-;; later put this in the "building" dashboard page, for selecting sub-modes
+(def title
+  [:div [:h2 "GRAVITY MAZE"]])
 
-(def build-mode-opts
-   [:div
-   [:div.btn-group {:field :single-select :id :mode.building}
-    [:button.btn.btn-default
-     {:key {:line true}} "Add a line"]
-    [:button.btn.btn-default
-     {:key {:point true}} "Add a point"]]])
-
-(defn page [ratom]
+(defn dash [ratom]
   (fn []
     [:div
-      [:div [:h2 "GRAVITY MAZE"] ]
       [:h3 "Mode"]
       [:p (str @ratom)]
      [bind-fields mode-btns ratom]
-     [bind-fields build-mode-opts ratom]
-     ]))
+     (when (build/building-mode? @ratom)
+       [bind-fields build/build-mode-opts ratom])]))
 
 

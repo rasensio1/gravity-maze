@@ -1,0 +1,13 @@
+#main {
+    display: flex;
+}
+
+#quil-host {
+    order: 1;
+    flex-basis: 70%;
+}
+
+#dash{
+    order: 2;
+    flex-basiz: 30%
+}

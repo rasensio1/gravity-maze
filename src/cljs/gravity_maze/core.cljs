@@ -36,8 +36,11 @@
   )
 
 (defn reload []
-  (r/render [vw/page app-state]
-            (.getElementById js/document "app")))
+  (r/render vw/title
+            (.getElementById js/document "title"))
+
+  (r/render [vw/dash app-state]
+            (.getElementById js/document "dash")))
 
 (defn dev-setup []
   (when ^boolean js/goog.DEBUG

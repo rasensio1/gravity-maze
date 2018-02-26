@@ -15,11 +15,10 @@
 (defn drag-vec? [elem]
   (if (:drag-vec elem) elem false))
 
-(defn find-point
-  "Returns point based on filter-fn, else nil."
+(defn find-elem
+  "Returns element based on filter-fn, else nil."
   [filter-fn world]
   (->> (:elements world)
-       (filter #(= :point (:type %)))
        (some filter-fn)))
 
 (mac/defn-point-event launch-mouse-press
@@ -53,6 +52,10 @@
                      (assoc-in [:pos 0] [x y]))]
     (swap! ratom update :elements #(conj % new-line)))
   ratom)
+
+;; (defn build-line-mouse-drag [ratom {:keys [x y]}]
+;;   (let [line (filter pressed? (:elements @ratom))]))
+
 
 (defn get-kws
   "Returns all keys that are keywords from map."

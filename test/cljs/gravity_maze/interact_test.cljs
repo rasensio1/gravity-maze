@@ -14,24 +14,24 @@
     (is (= false (intr/clicked? 5 [0 0] {:pos [10 10]})))
     (is (= false (intr/clicked? 10 [20 20] {:pos [35 20]})))))
 
-(deftest find-point-test
+(deftest find-elem-test
   (testing "Returns point based on filter"
     (let [point {:type :point :pos [5 5]}
           world {:elements [point]}]
-      (is (= true (intr/find-point #(= [5 5] (:pos %)) world))))
+      (is (= true (intr/find-elem #(= [5 5] (:pos %)) world))))
     (let [point {:type :point :pos [5 5] :id 1}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= point (intr/find-point #(if (:id %) % nil) world)))))
+      (is (= point (intr/find-elem #(if (:id %) % nil) world)))))
   (testing "Returns nil if no point"
     (let [point {:type :point :pos [20 20]}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= nil (intr/find-point #(= [0 0] (:pos %)) world))))))
+      (is (= nil (intr/find-elem #(= [0 0] (:pos %)) world))))))
 
 (deftest launch-mouse-press-test
   (testing "Sets element clicked value to true if clicked"
     (let [point {:type :point :id 0 :mousepress? false}
           myatm (atom {:elements [point]})]
-      (with-redefs [intr/find-point (fn [i j] point)]
+      (with-redefs [intr/find-elem (fn [i j] point)]
         (let [res (intr/launch-mouse-press myatm "event!")]
           (is (= true (-> (:elements @res)
                           first
@@ -74,3 +74,13 @@
       (is (= [[100 100] nil] (get-in @myatm [:elements 1 :pos])))
       (is (= true (get-in @myatm [:elements 1 :mousepress?])))
       (is (= 1 (get-in @myatm [:elements 1 :id]))))))
+
+;; (deftest build-line-mouse-drag-test
+;;   (testing "Adds end position to mousepressed line"
+;;     (let [myatm (atom {:elements [{:type :point :id 0}
+;;                                   {:type :line :mousepressed? true
+;;                                    :pos [[1 1] nil] :id 1}]})
+;;           event {:x 10 :y 10}
+;;           res (intr/build-line-mouse-drag myatm event)]
+;;       (is (= [[1 1] [10 10]] (get-in myatm [:elements 1 :pos])))
+;;       )))

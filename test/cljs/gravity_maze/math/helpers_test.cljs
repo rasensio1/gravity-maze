@@ -12,7 +12,7 @@
     (is (= 5 (mth/pts-dist [0 0] [3 4])))
     (is (= 5 (mth/pts-dist [1 1] [4 5]))))
   (testing "can do non-right triangles"
-    (is (= "8.06" (roundme 2 (mth/pts-dist [1 1] [2 9]))))))
+    (is (= 8.06 (roundme 2 (mth/pts-dist [1 1] [2 9]))))))
 
 (deftest offset-line-test
   (testing "Creates offset lines"
@@ -28,9 +28,9 @@
 (deftest unit-normal-vec-test
   (testing "can find the normal vector of a line"
     (let [res (mth/unit-normal-vec [[0 0] [2 20]] [1 12])]
-      (is (= ["0.995" "-0.100"] (mapv (partial roundme 3) res))))
+      (is (= [0.995 -0.100] (mapv (partial roundme 3) res))))
     (let [res (mth/unit-normal-vec [[3 7] [7 3]] [6 6])]
-      (is (= ["-0.7" "-0.7"] (mapv (partial roundme 1) res)))))
+      (is (= [-0.7 -0.7] (mapv (partial roundme 1) res)))))
   (testing "point on line returns [0 0]"
     (is (= [0 0] (mth/unit-normal-vec [[0 0] [3 3]] [2 2])))))
 
@@ -63,4 +63,4 @@
     (is (= 2 (mth/line-dist [[0 0] [5 0]] [0 2])))
     (is (= 5 (mth/line-dist [[0 0] [5 0]] [0 5]))))
   (testing "can find non-simple distances"
-    (is (= "4.95" (roundme 2 (mth/line-dist [[0 0] [10 10]] [2 9]))))))
+    (is (= 4.95 (roundme 2 (mth/line-dist [[0 0] [10 10]] [2 9]))))))

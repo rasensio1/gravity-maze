@@ -57,8 +57,11 @@
 
 (defn build-start-mouse-press [ratom {:keys [x y]}]
   (let [id (count (:elements @ratom))
-        new-point (-> (assoc state/default-point :id id :mousepress? true)
-                      (assoc-in [:pos] [x y] ))]
+        new-point (assoc state/default-point
+                         :id id
+                         :mousepress? true
+                         :pos [x y]
+                         :mass (get-in @ratom [:tmp :build :start :mass]))]
     (swap! ratom update :elements #(conj % new-point)))
   ratom)
 

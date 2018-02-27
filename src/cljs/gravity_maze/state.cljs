@@ -21,5 +21,6 @@
                     :dt 0.02
                     :drag 0.1
                     ;; defaults for building a line
-                    :tmp {:build {:line {:mass 100 :range 50}}}})
+                    :tmp {:build {:line {:mass 100 :range 50}
+                                  :start {:mass 20}}}})
 

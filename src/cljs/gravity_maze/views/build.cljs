@@ -19,6 +19,10 @@
    (build-param "Mass" :tmp.build.line.mass)
    (build-param "Range" :tmp.build.line.range)])
 
+(def start-opts
+  [:div [:h3 "start-opts"]
+   (build-param "Mass" :tmp.build.start.mass)])
+
 (def build-mode-opts
   [:div
    [:div.btn-group {:field :single-select :id :mode.building}
@@ -27,5 +31,6 @@
     [:button.btn.btn-default
      {:key {:start true}} "Add the start"]]
    [:div.sub-options
-    line-opts]])
+    line-opts
+    start-opts]])
 

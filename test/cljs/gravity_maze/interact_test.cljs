@@ -101,15 +101,18 @@
 
 (deftest build-start-mouse-press-test
   (testing "Adds a new point with correct params"
-    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]})
+    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
+                       :tmp {:build {:start {:mass 55}}}})
           event {:x 100 :y 100}
-          res (intr/build-start-mouse-press myatm event)]
+          res (intr/build-start-mouse-press myatm event)
+          my-point (get-in @myatm [:elements 1])]
       (is (= 2 (count (:elements @myatm))))
-      (is (= [100 100] (get-in @myatm [:elements 1 :pos])))
-      (is (= [0 0] (get-in @myatm [:elements 1 :vel])))
-      (is (= [0 0] (get-in @myatm [:elements 1 :accel])))
-      (is (= true (get-in @myatm [:elements 1 :mousepress?])))
-      (is (= 1 (get-in @myatm [:elements 1 :id]))))))
+      (is (= [100 100] (:pos my-point)))
+      (is (= [0 0] (:vel my-point)))
+      (is (= 55 (:mass my-point)))
+      (is (= [0 0] (:accel my-point)))
+      (is (= true (:mousepress? my-point)))
+      (is (= 1 (:id my-point))))))
 
 (deftest build-start-mouse-drag-test
   (testing "Changes position on drag"

@@ -15,16 +15,21 @@
           {:field :numeric :id id}]]])
 
 (def line-opts
-  [:div [:h3 "line-opts"]
+  [:div {:field :container
+         :visible? #(get-in % [:mode :building :line])}
+   [:h3 "line-opts"]
    (build-param "Mass" :tmp.build.line.mass)
    (build-param "Range" :tmp.build.line.range)])
 
 (def start-opts
-  [:div [:h3 "start-opts"]
+  [:div {:field :container
+         :visible? #(get-in % [:mode :building :start])}
+   [:h3 "start-opts"]
    (build-param "Mass" :tmp.build.start.mass)])
 
 (def build-mode-opts
-  [:div
+  [:div {:field :container
+        :visible? #(contains? (:mode %) :building)}
    [:div.btn-group {:field :single-select :id :mode.building}
     [:button.btn.btn-default
      {:key {:line true}} "Add a line"]

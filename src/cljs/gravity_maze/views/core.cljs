@@ -8,9 +8,14 @@
   [:div
    [:div.btn-group {:field :single-select :id :mode}
     [:button.btn.btn-default
-     {:key {:shooting true}} "Shooting"]
+     {:key {:shooting {}}} "Shooting"]
     [:button.btn.btn-default
-     {:key {:building true}} "Building"]]])
+     {:key {:building {}}} "Building"]]])
+
+(def mode-form
+  [:div.mode-form 
+   mode-btns
+   build/build-mode-opts])
 
 (def title
   [:div [:h2 "GRAVITY MAZE"]])
@@ -20,8 +25,6 @@
     [:div
       [:h3 "Mode"]
       [:p (str @ratom)]
-     [bind-fields mode-btns ratom]
-     (when (build/building-mode? @ratom)
-       [bind-fields build/build-mode-opts ratom])]))
+     [bind-fields mode-form ratom]]))
 
 

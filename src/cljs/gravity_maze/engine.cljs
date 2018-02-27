@@ -70,15 +70,15 @@
 
           pos2 (v+ pos (mult-v (* 0.5 dt) vel))
           v2 (v+ vel (mult-v (* 0.5 dt) a1))
-          a2 (accel (assoc el :pos pos2 :vel v2) world2)
+          a2 (accel (assoc el :pos pos2) world2)
 
           pos3 (v+ pos (mult-v (* 0.5 dt) v2))
           v3 (v+ vel (mult-v (* 0.5 dt) a2))
-          a3 (accel (assoc el :pos pos3 :vel v3) world2)
+          a3 (accel (assoc el :pos pos3) world2)
 
           pos4 (v+ pos (mult-v dt v3))
           v4 (v+ vel (mult-v dt a3))
-          a4 (accel (assoc el :pos pos4 :vel v4) world2)
+          a4 (accel (assoc el :pos pos4) world2)
 
           posf (v+ pos (mult-v (/ dt 6) (v+ vel (mult-v 2 v2)
                                             (mult-v 2 v3) v4)))

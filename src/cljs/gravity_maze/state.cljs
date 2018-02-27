@@ -5,8 +5,13 @@
                    :range 50
                    :pos [nil nil]
                    :fixed true
-                   :id nil
-                   })
+                   :id nil})
+
+(def default-point {:type :point
+                    :mass 50
+                    :pos [nil nil]
+                    :fixed true
+                    :id nil})
 
 (def initial-state {:elements [{:type :point
                                  :mass 30

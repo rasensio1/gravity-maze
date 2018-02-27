@@ -25,7 +25,7 @@
     [:button.btn.btn-default
      {:key {:line true}} "Add a line"]
     [:button.btn.btn-default
-     {:key {:point true}} "Add a point"]]
+     {:key {:start true}} "Add the start"]]
    [:div.sub-options
     line-opts]])
 

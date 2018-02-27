@@ -94,3 +94,13 @@
       (intr/build-line-mouse-release myatm {})
       (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
       (is (= 3 (count (:elements @myatm)))))))
+
+(deftest build-start-mouse-press-test
+  (testing "Adds a new point with correct params"
+    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]})
+          event {:x 100 :y 100}
+          res (intr/build-start-mouse-press myatm event)]
+      (is (= 2 (count (:elements @myatm))))
+      (is (= [100 100] (get-in @myatm [:elements 1 :pos])))
+      (is (= true (get-in @myatm [:elements 1 :mousepress?])))
+      (is (= 1 (get-in @myatm [:elements 1 :id]))))))

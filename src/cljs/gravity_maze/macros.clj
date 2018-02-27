@@ -6,3 +6,8 @@
        (swap! ~'atm update-in [:elements (:id ~'point)] ~updater))
      ~'atm))
 
+(defmacro defn-elem-create [name new-el]
+  `(defn ~name [~'atm {:keys [~'x ~'y]}]
+       (swap! ~'atm update :elements (fn [~'elems] (conj ~'elems ~new-el)))
+     ~'atm))
+

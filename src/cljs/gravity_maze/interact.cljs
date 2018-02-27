@@ -31,21 +31,17 @@
 
 (mac/defn-elem-update launch-mouse-release
   drag-vec?
-  (fn [el] (as-> el point
-               (assoc point :vel (:drag-vec el))
-               (assoc point :fixed false)
-               (dissoc point :mousepress? :drag-vec))))
+  (fn [el] (-> (assoc el :vel (:drag-vec el))
+               (assoc :fixed false)
+               (dissoc :mousepress? :drag-vec))))
 
-(defn build-line-mouse-press [ratom {:keys [x y]}]
-  (let [new-line (assoc state/default-line
-                        :id (count (:elements @ratom))
-                        :mousepress? true
-                        :pos [[x y] [x y]]
-                        :mass (get-in @ratom [:tmp :build :line :mass])
-                        :range (get-in @ratom [:tmp :build :line :range])
-                        )]
-    (swap! ratom update :elements #(conj % new-line)))
-  ratom)
+(mac/defn-elem-create build-line-mouse-press
+  (assoc state/default-line
+         :id (count (:elements @atm))
+         :mousepress? true
+         :pos [[x y] [x y]]
+         :mass (get-in @atm [:tmp :build :line :mass])
+         :range (get-in @atm [:tmp :build :line :range])))
 
 (mac/defn-elem-update build-line-mouse-drag
   pressed?
@@ -55,15 +51,12 @@
   pressed?
   (fn [el] (dissoc el :mousepress?)))
 
-(defn build-start-mouse-press [ratom {:keys [x y]}]
-  (let [id (count (:elements @ratom))
-        new-point (assoc state/default-point
-                         :id id
-                         :mousepress? true
-                         :pos [x y]
-                         :mass (get-in @ratom [:tmp :build :start :mass]))]
-    (swap! ratom update :elements #(conj % new-point)))
-  ratom)
+(mac/defn-elem-create build-start-mouse-press
+  (assoc state/default-point
+         :id (count (:elements @atm))
+         :mousepress? true
+         :pos [x y]
+         :mass (get-in @atm [:tmp :build :start :mass])))
 
 (mac/defn-elem-update build-start-mouse-drag
   pressed?

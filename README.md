@@ -14,13 +14,16 @@ EXTREME GAMES OF CATCH!
 
     - Add finish point
     - Add start point
+      - diff between just any points and the start point 
+        (only allow starting from start)
+
     - display element information
     
   - Undo/Redo build actions
   - Retry (reset start)
   
   - build-mode path simulator
-
+  
   - Fix ball speeding up on bounces
     - energy balance? 
       - calculate initial energy, and store it. set kinetic eng (velocity) 
@@ -33,3 +36,9 @@ EXTREME GAMES OF CATCH!
   - Fix balls hopping over lines at high speeds
     - Seems to not be an issue with higher wall mass.
     we'll wait to do this if it becomes necessary
+
+### Other Ideas
+
+  - Would be fun to play on a BIG screen. More like a maze that way.
+
+  - New element: "Tarpit" something that slows down the ball

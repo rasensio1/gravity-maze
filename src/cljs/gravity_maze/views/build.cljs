@@ -12,12 +12,12 @@
   [:div.param-group
    [:div [:p label]]
    [:div [:input.form-control
-          {:field :numeric :id :build.mass}]]])
+          {:field :numeric :id id}]]])
 
 (def line-opts
   [:div [:h3 "line-opts"]
-   (build-param "Mass" :build.mass)
-   (build-param "Range" :build.range)])
+   (build-param "Mass" :tmp.build.line.mass)
+   (build-param "Range" :tmp.build.line.range)])
 
 (def build-mode-opts
   [:div

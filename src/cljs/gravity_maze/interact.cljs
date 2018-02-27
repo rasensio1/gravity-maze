@@ -40,7 +40,10 @@
   (let [new-line (assoc state/default-line
                         :id (count (:elements @ratom))
                         :mousepress? true
-                        :pos [[x y] [x y]])]
+                        :pos [[x y] [x y]]
+                        :mass (get-in @ratom [:tmp :build :line :mass])
+                        :range (get-in @ratom [:tmp :build :line :range])
+                        )]
     (swap! ratom update :elements #(conj % new-line)))
   ratom)
 
@@ -75,8 +78,7 @@
                            :start {:mouse-pressed build-start-mouse-press
                                    :mouse-dragged build-start-mouse-drag
                                    :mouse-released build-start-mouse-release
-                                   }
-                           }
+                                   }}
 
                 :shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag

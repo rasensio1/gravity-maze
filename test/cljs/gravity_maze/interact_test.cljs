@@ -70,13 +70,17 @@
 
 (deftest build-line-mouse-press-test
   (testing "Adds a new line with correct parameters"
-    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]})
+    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
+                       :tmp {:build {:line {:mass 99 :range 22}}}})
           event {:x 100 :y 100}
-          res (intr/build-line-mouse-press myatm event)]
+          res (intr/build-line-mouse-press myatm event)
+          my-line (get-in @myatm [:elements 1])]
       (is (= 2 (count (:elements @myatm))))
-      (is (= [[100 100] [100 100]] (get-in @myatm [:elements 1 :pos])))
-      (is (= true (get-in @myatm [:elements 1 :mousepress?])))
-      (is (= 1 (get-in @myatm [:elements 1 :id]))))))
+      (is (= [[100 100] [100 100]] (:pos my-line)))
+      (is (= true (:mousepress? my-line)))
+      (is (= 22 (:range my-line)))
+      (is (= 99 (:mass my-line)))
+      (is (= 1 (:id my-line))))))
 
 (deftest build-line-mouse-drag-test
   (testing "Adds end position to mousepressed line"

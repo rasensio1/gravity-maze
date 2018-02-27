@@ -15,23 +15,11 @@
                     :fixed true
                     :id nil})
 
-(def initial-state {:elements [{:type :point
-                                 :mass 30
-                                 :id 0
-                                 :pos [200 200]
-                                 :vel [0 0]
-                                 :accel [0 0]
-                                :fixed true}
-
-                               {:type :line
-                                :mass 800
-                                :range 50
-                                :pos [[0 500] [500 500]]
-                                :fixed true
-                                }
-                               ]
+(def initial-state {:elements []
                     :g -500
                     :mode {:shooting true}
                     :dt 0.02
-                    :drag 0.1})
+                    :drag 0.1
+                    ;; defaults for building a line
+                    :tmp {:build {:line {:mass 100 :range 50}}}})
 

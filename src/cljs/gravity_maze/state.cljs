@@ -10,6 +10,8 @@
 (def default-point {:type :point
                     :mass 50
                     :pos [nil nil]
+                    :vel [0 0]
+                    :accel [0 0]
                     :fixed true
                     :id nil})
 

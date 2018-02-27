@@ -102,5 +102,16 @@
           res (intr/build-start-mouse-press myatm event)]
       (is (= 2 (count (:elements @myatm))))
       (is (= [100 100] (get-in @myatm [:elements 1 :pos])))
+      (is (= [0 0] (get-in @myatm [:elements 1 :vel])))
+      (is (= [0 0] (get-in @myatm [:elements 1 :accel])))
       (is (= true (get-in @myatm [:elements 1 :mousepress?])))
       (is (= 1 (get-in @myatm [:elements 1 :id]))))))
+
+(deftest build-start-mouse-drag-test
+  (testing "Changes position on drag"
+    (let [myatm (atom {:elements [{:type :point :id 0}
+                                  {:type :point :mousepress? true
+                                   :pos [1 1] :id 1}]})
+          event {:x 10 :y 10}]
+      (intr/build-start-mouse-drag myatm event)
+      (is (= [10 10] (get-in @myatm [:elements 1 :pos]))))))

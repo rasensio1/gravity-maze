@@ -44,13 +44,6 @@
     (swap! ratom update :elements #(conj % new-line)))
   ratom)
 
-(defn build-start-mouse-press [ratom {:keys [x y]}]
-  (let [id (count (:elements @ratom))
-        new-point (-> (assoc state/default-point :id id :mousepress? true)
-                      (assoc-in [:pos] [x y] ))]
-    (swap! ratom update :elements #(conj % new-point)))
-  ratom)
-
 (mac/defn-elem-update build-line-mouse-drag
   pressed?
   (fn [el] (assoc-in el [:pos 1] [x y])))
@@ -59,12 +52,24 @@
   pressed?
   (fn [el] (dissoc el :mousepress?)))
 
+(defn build-start-mouse-press [ratom {:keys [x y]}]
+  (let [id (count (:elements @ratom))
+        new-point (-> (assoc state/default-point :id id :mousepress? true)
+                      (assoc-in [:pos] [x y] ))]
+    (swap! ratom update :elements #(conj % new-point)))
+  ratom)
+
+(mac/defn-elem-update build-start-mouse-drag
+  pressed?
+  (fn [el] (assoc el :pos [x y])))
+
+
 (def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
                                   :mouse-dragged build-line-mouse-drag
                                   :mouse-released build-line-mouse-release
                                   }
                            :start {:mouse-pressed build-start-mouse-press
-                           ;;         :mouse-dragged build-start-mouse-drag
+                                   :mouse-dragged build-start-mouse-drag
                            ;;         :mouse-released build-start-mouse-release
                                    }
                            }

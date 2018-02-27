@@ -6,10 +6,11 @@ EXTREME GAMES OF CATCH!
 
 
 ### TODO
+  - REFACTOR
+     - remove :accel from all tests
 
   - Building
     - add line
-      - modify mass, range
       - display range
 
     - Add finish point

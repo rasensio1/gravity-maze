@@ -5,6 +5,7 @@
             [cljs.test :refer-macros [deftest testing is]]))
 
 (def zero-point {:type :point
+                 :id 0
                  :mass 1
                  :pos [0 0]
                  :vel [0 0]
@@ -12,6 +13,7 @@
                  :fixed false})
 
 (def zero-x-line {:type :line
+                  :id 1
                   :mass 1
                   :range 3
                   :pos [[0 0] [0 10]]
@@ -29,6 +31,7 @@
 (def simple-point-world {:elements [zero-point
                                     (assoc zero-point
                                            :pos [1 1]
+                                           :id 2
                                            :fixed true)]
                          :g 1
                          :dt 1})
@@ -62,22 +65,6 @@
           point {:pos [1 4]}]
       (is (= false (eng/in-zone? line point))))))
 
-(deftest update-pos-test
-  (testing "Updates a position with velocity and acceleration"
-    (is (= zero-point (eng/update-pos 1 zero-point)))
-    (let [init (assoc zero-point :vel [0 1])
-          res (assoc zero-point :pos [0 1] :vel [0 1])]
-      (is (= res (eng/update-pos 1 init))))
-    (let [init (assoc zero-point :vel [1 1] :accel [1 1])
-          res (assoc zero-point :pos [1.5 1.5] :vel [1 1] :accel [1 1])]
-      (is (= res (eng/update-pos 1 init))))))
-
-(deftest update-vel-test
-  (testing "updates the velocity with acceleration"
-    (is (= zero-point (eng/update-vel 1 [0 0] zero-point)))
-    (is (= {:vel [1 1] :accel [2 2]}
-           (eng/update-vel 1 [0 0] {:vel [0 0 ] :accel [2 2]})))))
-
 (deftest calc-accel-test
   (testing "calculates acceleration given force and element"
     (is (= [0 0] (eng/calc-accel [0 0] zero-point)))
@@ -96,11 +83,11 @@
   (testing "Force in x=y direction"
     (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [1 1]))
           fmt-res (mapv (partial roundme 2) res)]
-      (is (= ["0.35" "0.35"] fmt-res))))
+      (is (= [0.35 0.35] fmt-res))))
   (testing "Force in x-direction mainly"
     (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [10 1]))
           fmt-res (mapv (partial roundme 3) res)]
-      (is (= ["0.010" "0.001"] fmt-res))))
+      (is (= [0.010 0.001] fmt-res))))
 
   ;; Point - line
   (testing "Calculates force"
@@ -125,20 +112,18 @@
 (deftest update-elem-test
   (with-redefs [eng/force-between simple-forces]
     (testing "updates element attrs given a point world"
-    (let [res (select-keys (eng/update-elem zero-point simple-point-world)
-                           [:vel :accel])]
-      (is (= {:vel [0.5 0.5] :accel [1 1]} res)))
+    (let [res (eng/update-elem zero-point simple-point-world)]
+      (is (= [1 1] (:vel res))))
 
     (let [res (->> (iterate #(eng/update-elem % simple-point-world) zero-point)
                    (take 3)
                    last)]
-      (is (= [1 1] (:pos res)))))))
+      (is (= [1.83 1.83] (map (partial roundme 2) (:pos res))))))))
 
 (deftest update-world-test
   (with-redefs [eng/force-between simple-forces]
     (testing "updates all non-fixed elements in state"
       (let [new-world (eng/update-world simple-point-world)]
-        (is (= (set [[1 1] [0 0]]) (set (mapv :pos (:elements new-world)))))
-        (is (= (set [[1 1] [0 0]]) (set (mapv :accel (:elements new-world)))))
-        (is (= (set [[0.5 0.5] [0 0]]) (set (mapv :vel (:elements new-world)))))))))
+        (is (= (set [[1 1] [0.5 0.5]]) (set (mapv :pos (:elements new-world)))))
+        (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))))
 

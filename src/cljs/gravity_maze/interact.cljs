@@ -63,6 +63,10 @@
   pressed?
   (fn [el] (assoc el :pos [x y])))
 
+(mac/defn-elem-update build-start-mouse-release
+  pressed?
+  (fn [el] (dissoc el :mousepress?)))
+
 
 (def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
                                   :mouse-dragged build-line-mouse-drag
@@ -70,7 +74,7 @@
                                   }
                            :start {:mouse-pressed build-start-mouse-press
                                    :mouse-dragged build-start-mouse-drag
-                           ;;         :mouse-released build-start-mouse-release
+                                   :mouse-released build-start-mouse-release
                                    }
                            }
 

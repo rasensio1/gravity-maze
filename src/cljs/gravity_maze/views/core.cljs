@@ -13,9 +13,9 @@
      {:key {:building {}}} "Building"]]])
 
 (def mode-form
-  [:div.mode-form 
+  [:div.mode-form
    mode-btns
-   build/build-mode-opts])
+   build/build-mode-form])
 
 (def title
   [:div [:h2 "GRAVITY MAZE"]])

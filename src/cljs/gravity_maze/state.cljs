@@ -16,17 +16,15 @@
 
 (def initial-state {:elements []
                     :g -500
-                    :mode {:shooting true}
-                    ;; :mode {:name :building
-                    ;;        :options []
-                    ;;        :sub-mode {:name :line
-                    ;;                   :sub-mode {}
-                    ;;                   :options []
-                    ;;                   :range 50
-                    ;;                   :mass 100}}
+                    :mode {:building {:line true}}
                     :dt 0.02
                     :drag 0.1
-                    ;; defaults for building a line
+
+                    ;; defaults for building
+                    ;; need to keep this separate from the :mode
+                    ;; because reagent-forms is a bit brittle in this regard
                     :tmp {:build {:line {:mass 100 :range 50}
-                                  :start {:mass 20}}}})
+                                  :start {:mass 20}
+                                  :options [:show-line-range]
+                                  }}})
 

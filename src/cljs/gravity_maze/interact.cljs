@@ -41,8 +41,8 @@
          :id (count (:elements @atm))
          :mousepress? true
          :pos [[x y] [x y]]
-         :mass (get-in @atm [:tmp :build :line :mass])
-         :range (get-in @atm [:tmp :build :line :range])))
+         :mass (get-in @atm [:tmp :building :line :mass])
+         :range (get-in @atm [:tmp :building :line :range])))
 
 (mac/defn-elem-update build-line-mouse-drag
   pressed?
@@ -57,7 +57,7 @@
          :id (count (:elements @atm))
          :mousepress? true
          :pos [x y]
-         :mass (get-in @atm [:tmp :build :start :mass])))
+         :mass (get-in @atm [:tmp :building :start :mass])))
 
 (mac/defn-elem-update build-start-mouse-drag
   pressed?

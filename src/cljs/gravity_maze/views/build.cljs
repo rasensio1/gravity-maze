@@ -18,19 +18,19 @@
   [:div {:field :container
          :visible? #(get-in % [:mode :building :line])}
    [:h3 "line-opts"]
-   (build-param "Mass" :tmp.build.line.mass)
-   (build-param "Range" :tmp.build.line.range)])
+   (build-param "Mass" :tmp.building.line.mass)
+   (build-param "Range" :tmp.building.line.range)])
 
 (def start-params
   [:div {:field :container
          :visible? #(get-in % [:mode :building :start])}
    [:h3 "start-opts"]
-   (build-param "Mass" :tmp.build.start.mass)])
+   (build-param "Mass" :tmp.building.start.mass)])
 
 (def build-opts
   [:div.build-opts
    [:h3 "Options"]
-   [:div.btn-group {:field :multi-select :id :tmp.build.options}
+   [:div.btn-group {:field :multi-select :id :tmp.building.options}
     [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]
    ]])
 

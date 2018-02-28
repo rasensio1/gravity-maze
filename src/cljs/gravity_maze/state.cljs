@@ -23,7 +23,7 @@
                     ;; defaults for building
                     ;; need to keep this separate from the :mode
                     ;; because reagent-forms is a bit brittle in this regard
-                    :tmp {:build {:line {:mass 100 :range 50}
+                    :tmp {:building {:line {:mass 100 :range 50}
                                   :start {:mass 20}
                                   :options [:show-line-range]
                                   }}})

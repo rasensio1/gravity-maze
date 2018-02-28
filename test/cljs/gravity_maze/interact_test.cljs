@@ -71,7 +71,7 @@
 (deftest build-line-mouse-press-test
   (testing "Adds a new line with correct parameters"
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
-                       :tmp {:build {:line {:mass 99 :range 22}}}})
+                       :tmp {:building {:line {:mass 99 :range 22}}}})
           event {:x 100 :y 100}
           res (intr/build-line-mouse-press myatm event)
           my-line (get-in @myatm [:elements 1])]
@@ -102,7 +102,7 @@
 (deftest build-start-mouse-press-test
   (testing "Adds a new point with correct params"
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
-                       :tmp {:build {:start {:mass 55}}}})
+                       :tmp {:building {:start {:mass 55}}}})
           event {:x 100 :y 100}
           res (intr/build-start-mouse-press myatm event)
           my-point (get-in @myatm [:elements 1])]

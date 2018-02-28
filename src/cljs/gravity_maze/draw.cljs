@@ -20,10 +20,15 @@
   (draw-arrow pos drag-vec))
 
 (defmethod draw-elem :line [{:keys [pos]}]
-  (let [[a b] pos] (q/line a b)))
+  (let [[a b] pos] (q/line a b))
+  )
+
+(defn options [tree]
+  ;; get all ":options {stuff}" from along the "mode" path.
+  )
 
 (defn main [state]
  (q/background 250)
   (doseq [el (:elements @state)]
-    (draw-elem el)))
+    (draw-elem el (options (:tmp @state)))))
 

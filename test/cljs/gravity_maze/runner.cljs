@@ -5,6 +5,7 @@
               [gravity-maze.interact-test]
               [gravity-maze.math.helpers-test]
               [gravity-maze.math.draw-test]
+              [gravity-maze.helpers-test]
               ))
 
 (doo-tests 'gravity-maze.core-test
@@ -12,4 +13,5 @@
            'gravity-maze.interact-test
            'gravity-maze.math.helpers-test
            'gravity-maze.math.draw-test
+           'gravity-maze.helpers-test
            )

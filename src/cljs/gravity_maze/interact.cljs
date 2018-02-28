@@ -1,5 +1,6 @@
 (ns gravity-maze.interact
   (:require [gravity-maze.math.helpers :as mth]
+            [gravity-maze.helpers :refer [get-kws]]
             [gravity-maze.state :as state])
   (:require-macros [gravity-maze.macros :as mac]))
 
@@ -80,13 +81,6 @@
                            :mouse-dragged launch-drag
                            :mouse-released launch-mouse-release
                            }})
-
-(defn get-kws
-  "Returns all keys that are keywords from map."
-  [tree]
-  (->> (tree-seq map? #(interleave (keys %) (vals %)) tree)
-       (filter keyword?)
-       vec))
 
 (defn handle-mouse [event-name ratom event]
   (let [path (conj (get-kws (:mode @ratom)) event-name)]

@@ -110,7 +110,6 @@
       (is (= [100 100] (:pos my-point)))
       (is (= [0 0] (:vel my-point)))
       (is (= 55 (:mass my-point)))
-      (is (= [0 0] (:accel my-point)))
       (is (= true (:mousepress? my-point)))
       (is (= 1 (:id my-point))))))
 

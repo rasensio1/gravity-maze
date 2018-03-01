@@ -6,9 +6,10 @@ EXTREME GAMES OF CATCH!
 
 
 ### TODO
-  - Building
-    - add line
-      - display range
+
+  - Fix one-point lines breaking game
+  - Fix bug breaking everything... make sure to get rid of mousepress?
+  - option for bigger 'start' and click radius 
 
     - Add finish point
     - Add start point

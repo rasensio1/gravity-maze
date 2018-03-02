@@ -27,7 +27,9 @@
   "Offsets each point in 'line' by offset vector"
   [vfn offset line] (mapv #(vfn % offset) line))
 
-(defn pts-dist [pt1 pt2]
+(defn pts-dist
+  "Distance between to points"
+  [pt1 pt2]
   (-> (v- pt1 pt2)
       sumsqs
       Math/sqrt))

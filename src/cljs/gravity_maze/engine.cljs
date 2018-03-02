@@ -33,6 +33,19 @@
                                        [b-lines s-lines])]
     (= [0.0 0.0] [b-score s-score])))
 
+(defn in-finish? [{:keys [range] :as fin} pt]
+  (> range (apply mth/pts-dist (map :pos [fin pt]))))
+
+(defn is-finished?
+  "Checks if a non-fixed point is within the range of a ':finish' element."
+  [world]
+  (let [finish-pts (filter #(= :finish (:type %)) (:elements world))
+        moving-pts (filter #(and (= :point (:type %))
+                                 (not (:fixed %)))
+                           (:elements world))]
+    (boolean (some true? (for [f finish-pts
+                      m moving-pts] (in-finish? f m))))))
+
 (defmulti force-between (fn [g e1 e2] (e2 :type)))
 
 (defmethod force-between :line [g el line]

@@ -126,3 +126,35 @@
         (is (= (set [[1 1] [0.5 0.5]]) (set (mapv :pos (:elements new-world)))))
         (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))))
 
+(deftest in-finish?-test
+  (testing "Knows when true"
+    (let [fin {:pos [0 0] :range 5}
+          pt {:pos [3 3]}]
+      (is (= true (eng/in-finish? fin pt)))))
+  (testing "Knows when false"
+    (let [fin {:pos [0 0] :range 5}
+          pt {:pos [3 6]}]
+      (is (= false (eng/in-finish? fin pt))))))
+
+(deftest is-finished?-test
+  (testing "Can tell when a game is finished"
+    (let [world {:elements [{:type :point :pos [10 10] :fixed false}
+                            {:type :finish :pos [20 20] :range 15}]}]
+      (is (= true (eng/is-finished? world))))
+    (let [world {:elements [{:type :point :pos [10 10] :fixed true}
+                            {:type :point :pos [20 30] :fixed false}
+                            {:type :finish :pos [20 20] :range 15}]}]
+      (is (= true (eng/is-finished? world))))
+    (let [world {:elements [{:type :point :pos [10 10] :fixed true}
+                            {:type :point :pos [20 30] :fixed false}
+                            {:type :point :pos [85 85] :fixed false}
+                            {:type :finish :pos [20 20] :range 1}
+                            {:type :finish :pos [80 80] :range 10}]}]
+      (is (= true (eng/is-finished? world)))))
+  (testing "Knows when a game is not finished"
+    (let [world {:elements [{:type :point :pos [10 10] :fixed true}
+                            {:type :point :pos [20 30] :fixed false}
+                            {:type :finish :pos [20 20] :range 1}
+                            {:type :finish :pos [80 80] :range 10}]}]
+      (is (= false (eng/is-finished? world))))))
+

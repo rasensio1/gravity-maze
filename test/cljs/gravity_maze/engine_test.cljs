@@ -92,15 +92,20 @@
   (testing "Calculates force"
     (let [point (assoc zero-point :pos [1 1])]
       (is (= [-1 0] (eng/force-between 1 point zero-x-line)))))
-
-  (comment (testing "Zero force if on line"
+  (testing "Zero force if on line"
     (let [point {:type :point :mass 30 :fixed false}
-          line {:type :line :mass 30 :pos [[0 0] [0 200] :fixed true]}]
-      (is (= [0 0] (eng/force-between 1 point line))))))
-  (comment (testing "Zero force if not in 'zone' of line"
+          line {:type :line :mass 30 :pos [[0 0] [0 200]] :fixed true}]
+      (is (= [0 0] (eng/force-between 1 point line)))))
+  (testing "Zero force if not in 'zone' of line"
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
-          line {:type :line :mass 30 :pos [[0 20] [0 200] :fixed true]}]
-      (is (= [0 0] (eng/force-between 1 point line)))))))
+          line {:type :line :mass 30 :pos [[0 20] [0 200]] :fixed true}]
+      (is (= [0 0] (eng/force-between 1 point line)))))
+
+  ;; :finish
+  (testing "Always returns zero"
+    (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
+          finish {:type :finish :pos [0 20] :fixed true}]
+      (is (= [0 0] (eng/force-between 1 point finish))))))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

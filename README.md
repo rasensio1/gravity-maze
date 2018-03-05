@@ -8,6 +8,10 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - Fix one-point lines breaking game
+     - Create validators for creating new elements... (point-lines, zero mass, etc)
+       - stores temporary elemtns in :tmp-elements [el]
+       - Swaps into :elements on mouse-release after validating
+
   - Fix bug breaking everything... make sure to get rid of mousepress?
   - option for bigger 'start' and click radius 
 

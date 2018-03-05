@@ -23,8 +23,12 @@
           world {:elements [{:type :point :pos [10 10]} point]}]
       (is (= point (intr/find-elem #(if (:id %) % nil) world))))
     (let [line {:type :line :pos [[5 5] [10 10]] :id 1}
-          world {:elements [{:type :point :pos [[10 10]]} line]}]
-      (is (= line (intr/find-elem #(if (= :line (:type %)) % nil) world)))))
+          world {:elements [{:type :point :pos [10 10]} line]}]
+      (is (= line (intr/find-elem #(if (= :line (:type %)) % nil) world))))
+    (let [point {:type :point :pos [0 0] :id 0 :mousepress? true}
+          world {:elements [{:type :point :pos [10 10]} point]}]
+      (is (= point (intr/find-elem intr/pressed? world)))))
+
   (testing "Returns nil if no point"
     (let [point {:type :point :pos [20 20]}
           world {:elements [{:type :point :pos [10 10]} point]}]
@@ -121,6 +125,5 @@
       (is (= [100 100] (:pos my-point)))
       (is (= [0 0] (:vel my-point)))
       (is (= 55 (:mass my-point)))
-      (is (= true (:mousepress? my-point)))
       (is (= 1 (:id my-point))))))
 

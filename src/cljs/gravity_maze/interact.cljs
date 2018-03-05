@@ -31,9 +31,9 @@
   (fn [el] (assoc el :drag-vec (mth/v- (:pos point) [x y]))))
 
 (mac/defn-elem-update launch-mouse-release
-  drag-vec?
-  (fn [el] (-> (assoc el :vel (:drag-vec el))
-               (assoc :fixed false)
+  pressed?
+  (fn [el] (-> (if-let [new-vel (:drag-vec el)]
+                 (assoc el :vel new-vel :fixed false) el)
                (dissoc :mousepress? :drag-vec))))
 
 (mac/defn-elem-create build-line-mouse-press
@@ -61,7 +61,6 @@
 (mac/defn-elem-create build-start-mouse-press
   (assoc state/default-point
          :id (count (:elements @atm))
-         :mousepress? true
          :pos [x y]
          :mass (get-in @atm [:tmp :building :start :mass])))
 

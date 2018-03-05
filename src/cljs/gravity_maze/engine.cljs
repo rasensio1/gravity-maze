@@ -62,8 +62,7 @@
         gmm (apply * (cons g (map :mass [el1 point])))]
     (gravity-calc gmm d2 unit-force)))
 
-(defmethod force-between :finish [g el fin]
-  [0 0])
+(defmethod force-between :finish [g el fin] [0 0])
 
 (defn sum-interactions [interaction el {:keys [elements g]}]
   (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))
@@ -108,5 +107,8 @@
         to-update (filter (complement :fixed) elems)
         updated (map update-elem to-update (repeat world))]
     (assoc world
-           :elements (vec (concat updated fixed))
+           ;; needs to be sorted, because we do some updates based
+           ;; on index
+           :elements (vec (sort-by :id (concat updated fixed)))
            :finished? (is-finished? world))))
+

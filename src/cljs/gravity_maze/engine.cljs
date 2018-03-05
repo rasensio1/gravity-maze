@@ -104,4 +104,6 @@
         fixed (filter :fixed elems)
         to-update (filter (complement :fixed) elems)
         updated (map update-elem to-update (repeat world))]
-    (assoc world :elements (vec (concat updated fixed)))))
+    (assoc world
+           :elements (vec (concat updated fixed))
+           :finished? (is-finished? world))))

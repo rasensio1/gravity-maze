@@ -124,7 +124,15 @@
     (testing "updates all non-fixed elements in state"
       (let [new-world (eng/update-world simple-point-world)]
         (is (= (set [[1 1] [0.5 0.5]]) (set (mapv :pos (:elements new-world)))))
-        (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))))
+        (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))
+    (testing "updates :finished attr when appropriate"
+      (with-redefs [eng/update-elem (fn [x] x)
+                    eng/is-finished? (fn [x] true)]
+        (let [world {:elements [{:type :point}
+                                {:type :finish}]
+                     :finished? false}
+              res (eng/update-world world)]
+          (is (= true (:finished? res))))))))
 
 (deftest in-finish?-test
   (testing "Knows when true"

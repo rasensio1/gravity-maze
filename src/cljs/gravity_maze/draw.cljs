@@ -55,6 +55,10 @@
     ((draw-line-opts opt) ln))
   (let [[a b] pos] (q/line a b)))
 
+(defmethod draw-elem :finish [{:keys [pos range] :as fin} opts]
+  (q/fill 100)
+  (q/ellipse (pos 0) (pos 1) range range))
+
 (defn main [state]
  (q/background 250)
   (let [opts (options (:tmp @state) (get-kws (:mode @state)))]

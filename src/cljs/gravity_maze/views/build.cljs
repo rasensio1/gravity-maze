@@ -27,12 +27,17 @@
    [:h3 "start-opts"]
    (build-param "Mass" :tmp.building.start.mass)])
 
+(def finish-params
+  [:div {:field :container
+         :visible? #(get-in % [:mode :building :finish])}
+   [:h3 "start-opts"]
+   (build-param "Range" :tmp.building.finish.range)])
+
 (def build-opts
   [:div.build-opts
    [:h3 "Options"]
    [:div.btn-group {:field :multi-select :id :tmp.building.options}
-    [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]
-   ]])
+    [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]]])
 
 (def build-mode-form
   [:div {:field :container
@@ -41,9 +46,12 @@
     [:button.btn.btn-default
      {:key {:line true}} "Add a line"]
     [:button.btn.btn-default
-     {:key {:start true}} "Add the start"]]
+     {:key {:start true}} "Add the start"]
+    [:button.btn.btn-default
+     {:key {:finish true}} "Add the finish"]]
    build-opts
    [:div.sub-options
     line-params
-    start-params]])
+    start-params
+    finish-params]])
 

@@ -81,7 +81,10 @@
                            :start {:mouse-pressed build-start-mouse-press
                                    :mouse-dragged build-start-mouse-drag
                                    :mouse-released build-start-mouse-release
-                                   }}
+                                   }
+                           :finish {:mouse-pressed build-finish-mouse-press
+                                    :mouse-dragged (fn [x y] x)
+                                    :mouse-released (fn [x y] x)}}
 
                 :shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag

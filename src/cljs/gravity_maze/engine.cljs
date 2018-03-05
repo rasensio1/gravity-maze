@@ -40,8 +40,7 @@
   "Checks if a non-fixed point is within the range of a ':finish' element."
   [world]
   (let [finish-pts (filter #(= :finish (:type %)) (:elements world))
-        moving-pts (filter #(and (= :point (:type %))
-                                 (not (:fixed %)))
+        moving-pts (filter #(not (:fixed %))
                            (:elements world))]
     (boolean (some true? (for [f finish-pts
                       m moving-pts] (in-finish? f m))))))

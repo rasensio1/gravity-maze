@@ -154,7 +154,7 @@
   (testing "Knows when a game is not finished"
     (let [world {:elements [{:type :point :pos [10 10] :fixed true}
                             {:type :point :pos [20 30] :fixed false}
-                            {:type :finish :pos [20 20] :range 1}
-                            {:type :finish :pos [80 80] :range 10}]}]
+                            {:type :finish :pos [20 20] :range 1 :fixed true}
+                            {:type :finish :pos [80 80] :range 10 :fixed true}]}]
       (is (= false (eng/is-finished? world))))))
 

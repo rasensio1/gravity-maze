@@ -52,6 +52,12 @@
   pressed?
   (fn [el] (dissoc el :mousepress?)))
 
+(mac/defn-elem-create build-finish-mouse-press
+  (assoc state/default-finish
+         :id (count (:elements @atm))
+         :pos [x y]
+         :range (get-in @atm [:tmp :building :finish :range])))
+
 (mac/defn-elem-create build-start-mouse-press
   (assoc state/default-point
          :id (count (:elements @atm))

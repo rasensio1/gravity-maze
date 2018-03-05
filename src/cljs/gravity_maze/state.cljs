@@ -14,6 +14,12 @@
                     :fixed true
                     :id nil})
 
+(def default-finish {:type :finish
+                     :range nil
+                     :pos [nil nil]
+                     :fixed true
+                     :id nil})
+
 (def initial-state {:elements []
                     :g -500
                     :mode {:building {:line true}}

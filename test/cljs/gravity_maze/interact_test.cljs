@@ -99,6 +99,17 @@
       (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
       (is (= 3 (count (:elements @myatm)))))))
 
+(deftest build-finish-mouse-test
+  (testing "Adds a new finish spot"
+    (let [myatm (atom {:elements []
+                       :tmp {:building {:finish {:range 20}}}})
+          event {:x 100 :y 100}
+          res (intr/build-finish-mouse-press myatm event)
+          my-fin (get-in @myatm [:elements 0])]
+      (is (= 1 (count (:elements @myatm))))
+      (is (= [100 100] (:pos my-fin)))
+      (is (= 20 (:range my-fin))))))
+
 (deftest build-start-mouse-press-test
   (testing "Adds a new point with correct params"
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]

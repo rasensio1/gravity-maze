@@ -99,7 +99,7 @@
       (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
       (is (= 3 (count (:elements @myatm)))))))
 
-(deftest build-finish-mouse-test
+(deftest build-finish-mouse-press-test
   (testing "Adds a new finish spot"
     (let [myatm (atom {:elements []
                        :tmp {:building {:finish {:range 20}}}})
@@ -124,19 +124,3 @@
       (is (= true (:mousepress? my-point)))
       (is (= 1 (:id my-point))))))
 
-(deftest build-start-mouse-drag-test
-  (testing "Changes position on drag"
-    (let [myatm (atom {:elements [{:type :point :id 0}
-                                  {:type :point :mousepress? true
-                                   :pos [1 1] :id 1}]})
-          event {:x 10 :y 10}]
-      (intr/build-start-mouse-drag myatm event)
-      (is (= [10 10] (get-in @myatm [:elements 1 :pos]))))))
-
-(deftest build-start-mouse-release-test
-  (testing "dissocs mouspress? on line"
-    (let [point {:type :point :pos [10 10] :mousepress? true :id 2}
-          myatm (atom {:elements [{:type :point} {:type :line} point]})]
-      (intr/build-start-mouse-release myatm {})
-      (is (= (dissoc point :mousepress?) (last (:elements @myatm))))
-      (is (= 3 (count (:elements @myatm)))))))

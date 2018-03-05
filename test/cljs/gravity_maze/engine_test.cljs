@@ -105,7 +105,8 @@
   (testing "Always returns zero"
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
           finish {:type :finish :pos [0 20] :fixed true}]
-      (is (= [0 0] (eng/force-between 1 point finish))))))
+      (is (= [0 0] (eng/force-between 1 point finislh)))))
+  )
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

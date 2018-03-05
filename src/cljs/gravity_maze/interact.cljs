@@ -65,13 +65,7 @@
          :pos [x y]
          :mass (get-in @atm [:tmp :building :start :mass])))
 
-(mac/defn-elem-update build-start-mouse-drag
-  pressed?
-  (fn [el] (assoc el :pos [x y])))
-
-(mac/defn-elem-update build-start-mouse-release
-  pressed?
-  (fn [el] (dissoc el :mousepress?)))
+(defn nothing [atm _] atm)
 
 
 (def click-fns {:building {:line {:mouse-pressed build-line-mouse-press
@@ -79,12 +73,12 @@
                                   :mouse-released build-line-mouse-release
                                   }
                            :start {:mouse-pressed build-start-mouse-press
-                                   :mouse-dragged build-start-mouse-drag
-                                   :mouse-released build-start-mouse-release
+                                   :mouse-dragged nothing
+                                   :mouse-released nothing
                                    }
                            :finish {:mouse-pressed build-finish-mouse-press
-                                    :mouse-dragged (fn [x y] x)
-                                    :mouse-released (fn [x y] x)}}
+                                    :mouse-dragged nothing
+                                    :mouse-released nothing}}
 
                 :shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag

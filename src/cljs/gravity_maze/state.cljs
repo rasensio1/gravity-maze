@@ -21,16 +21,15 @@
                      :id nil})
 
 (def initial-state
-  { :elements []
-    :g -500
-    :mode {:building {:line true}}
-    :dt 0.02
-    :drag 0.1
+  {:elements []
+   :g -500
+   :mode {:building {:line true}}
+   :dt 0.02
+   :drag 0.1
+   :finished? false
 
     ;; defaults for building
-    :tmp {:building
-            {:line {:mass 100 :range 50}
-              :start {:mass 20}
-              :finish {:range 20}
-              :options [:show-line-range]}}})
-
+   :tmp {:building {:line {:mass 100 :range 50}
+                    :start {:mass 20}
+                    :finish {:range 20}
+                    :options [:show-line-range]}}})

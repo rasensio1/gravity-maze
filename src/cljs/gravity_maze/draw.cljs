@@ -57,7 +57,7 @@
 
 (defmethod draw-elem :finish [{:keys [pos range] :as fin} opts]
   (q/fill 100)
-  (q/ellipse (pos 0) (pos 1) range range))
+  (q/ellipse (pos 0) (pos 1) (* 2 range) (* 2 range)))
 
 (defn main [state]
  (q/background 250)

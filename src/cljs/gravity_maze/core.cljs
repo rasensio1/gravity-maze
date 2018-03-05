@@ -12,7 +12,8 @@
 (def app-state (r/atom state/initial-state))
 
 (defn update-state [ratom]
-  (reset! ratom (eng/update-world @ratom)) ratom)
+  (when-not (:finished? @ratom)
+    (reset! ratom (eng/update-world @ratom))) ratom)
 
 (defn setup []
   (q/frame-rate 100)

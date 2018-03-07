@@ -1,5 +1,5 @@
-(ns gravity-maze.interact.core-test
-  (:require [gravity-maze.interact.core :as intr]
+(ns gravity-maze.interact.building-test
+  (:require [gravity-maze.interact.building :as build]
             [cljs.test :refer-macros [deftest testing is]]))
 
 (deftest build-line-mouse-press-test
@@ -7,7 +7,7 @@
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
                        :tmp {:building {:line {:mass 99 :range 22}}}})
           event {:x 100 :y 100}
-          res (intr/build-line-mouse-press myatm event)
+          res (build/build-line-mouse-press myatm event)
           my-line (get-in @myatm [:elements 1])]
       (is (= 2 (count (:elements @myatm))))
       (is (= [[100 100] [100 100]] (:pos my-line)))
@@ -22,14 +22,14 @@
                                   {:type :line :mousepress? true
                                    :pos [[1 1] [1 1]] :id 1}]})
           event {:x 10 :y 10}]
-      (intr/build-line-mouse-drag myatm event)
+      (build/build-line-mouse-drag myatm event)
       (is (= [[1 1] [10 10]] (get-in @myatm [:elements 1 :pos]))))))
 
 (deftest build-line-mouse-release-test
   (testing "dissocs mouspress? on line"
     (let [line {:type :line :pos [[0 0 ] [10 10]] :mousepress? true :id 2}
           myatm (atom {:elements [{:type :point} {:type :line} line]})]
-      (intr/build-line-mouse-release myatm {})
+      (build/build-line-mouse-release myatm {})
       (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
       (is (= 3 (count (:elements @myatm)))))))
 
@@ -38,7 +38,7 @@
     (let [myatm (atom {:elements []
                        :tmp {:building {:finish {:range 20}}}})
           event {:x 100 :y 100}
-          res (intr/build-finish-mouse-press myatm event)
+          res (build/build-finish-mouse-press myatm event)
           my-fin (get-in @myatm [:elements 0])]
       (is (= 1 (count (:elements @myatm))))
       (is (= [100 100] (:pos my-fin)))
@@ -49,7 +49,7 @@
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
                        :tmp {:building {:start {:mass 55}}}})
           event {:x 100 :y 100}
-          res (intr/build-start-mouse-press myatm event)
+          res (build/build-start-mouse-press myatm event)
           my-point (get-in @myatm [:elements 1])]
       (is (= 2 (count (:elements @myatm))))
       (is (= [100 100] (:pos my-point)))

@@ -3,7 +3,7 @@
 (defmacro defn-elem-update [name criteria updater]
   `(defn ~name [~'atm {:keys [~'x ~'y]}]
      (when-let [~'point (~'find-elem ~criteria (deref ~'atm))]
-       ;; this depends on the order of :elements
+       ;; this relies on the order of :elements
        (swap! ~'atm update-in [:elements (:id ~'point)] ~updater))
      ~'atm))
 

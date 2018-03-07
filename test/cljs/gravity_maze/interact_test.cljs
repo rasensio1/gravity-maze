@@ -27,7 +27,12 @@
       (is (= line (intr/find-elem #(if (= :line (:type %)) % nil) world))))
     (let [point {:type :point :pos [0 0] :id 0 :mousepress? true}
           world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= point (intr/find-elem intr/pressed? world)))))
+      (is (= point (intr/find-elem intr/pressed? world))))
+    (let [point {:type :point :pos [0 0] :id 0}
+          world {:elements [point]}
+          myfn #(when (= :point (:type %))
+                  ((partial intr/clicked? 20 [0 0]) %))]
+      (is (= point (intr/find-elem myfn world)))))
 
   (testing "Returns nil if no point"
     (let [point {:type :point :pos [20 20]}
@@ -42,7 +47,12 @@
         (let [res (intr/launch-mouse-press myatm "event!")]
           (is (= true (-> (:elements @res)
                           first
-                          :mousepress?))))))))
+                          :mousepress?))))))
+    (testing "Can only click a point"
+      (let [finish {:type :finish :pos [10 10] :id 0}
+            myatm (atom {:elements [finish]})
+            res (intr/launch-mouse-press myatm {:x 10 :y 10})]
+        (is (= finish (first (:elements @myatm))))))))
 
 (deftest launch-drag-test
   (testing "Stores vector of drag when mousepressed"

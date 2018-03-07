@@ -12,10 +12,8 @@ EXTREME GAMES OF CATCH!
        - stores temporary elemtns in :tmp-elements [el]
        - Swaps into :elements on mouse-release after validating
 
-  - Fix bug breaking everything... make sure to get rid of mousepress?
   - option for bigger 'start' and click radius 
 
-    - Add finish point
     - Add start point
       - diff between just any points and the start point 
         (only allow starting from start)

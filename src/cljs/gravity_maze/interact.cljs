@@ -23,7 +23,9 @@
        (some filter-fn)))
 
 (mac/defn-elem-update launch-mouse-press
-  (partial clicked? click-range [x y])
+  ;; must return the point
+  #(when (= :point (:type %))
+        ((partial clicked? click-range [x y]) %))
   (fn [el] (assoc el :mousepress? true)))
 
 (mac/defn-elem-update launch-drag

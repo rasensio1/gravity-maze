@@ -20,6 +20,7 @@ EXTREME GAMES OF CATCH!
 
     - display element information
     
+  - Add full integration tests.
   - Undo/Redo build actions
   - Retry (reset start)
   

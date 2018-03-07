@@ -1,4 +1,4 @@
-(ns gravity-maze.interact
+(ns gravity-maze.interact.core
   (:require [gravity-maze.math.helpers :as mth]
             [gravity-maze.helpers :refer [get-kws]]
             [gravity-maze.state :as state])

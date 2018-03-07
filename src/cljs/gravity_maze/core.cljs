@@ -4,7 +4,7 @@
    [gravity-maze.state :as state]
    [gravity-maze.engine :as eng]
    [gravity-maze.draw :as drw]
-   [gravity-maze.interact :as int]
+   [gravity-maze.interact.core :as int]
    [gravity-maze.views.core :as vw]
    [quil.core :as q :include-macros true]
    [quil.middleware :as m]))

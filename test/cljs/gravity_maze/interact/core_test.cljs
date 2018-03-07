@@ -1,5 +1,5 @@
-(ns gravity-maze.interact-test
-  (:require [gravity-maze.interact :as intr]
+(ns gravity-maze.interact.core-test
+  (:require [gravity-maze.interact.core :as intr]
             [cljs.test :refer-macros [deftest testing is]]))
 
 (deftest clicked?-test

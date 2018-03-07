@@ -17,4 +17,4 @@
 (defn drag-vec? [elem]
   (if (:drag-vec elem) elem false))
 
-
+(defn nothing [atm _] atm)

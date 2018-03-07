@@ -2,9 +2,9 @@
   (:require [gravity-maze.state :as state]
             [gravity-maze.interact.shooting :as shoot]
             [gravity-maze.interact.helpers :refer [find-elem
-                                                   pressed?]])
-  (:require-macros [gravity-maze.macros :as mac])
-  )
+                                                   pressed?
+                                                   nothing]])
+  (:require-macros [gravity-maze.macros :as mac]))
 
 (mac/defn-elem-create build-line-mouse-press
   (assoc state/default-line
@@ -33,9 +33,6 @@
          :id (count (:elements @atm))
          :pos [x y]
          :mass (get-in @atm [:tmp :building :start :mass])))
-
-;; move to helpers
-(defn nothing [atm _] atm)
 
 (def click-fns {:building
                 {:line

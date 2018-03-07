@@ -1,5 +1,5 @@
-(ns gravity-maze.interact.building-test
-  (:require [gravity-maze.interact.building :as build]
+(ns gravity-maze.interact.building.core-test
+  (:require [gravity-maze.interact.building.core :as build]
             [cljs.test :refer-macros [deftest testing is]]))
 
 (deftest build-line-mouse-press-test

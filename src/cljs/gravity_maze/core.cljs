@@ -15,6 +15,13 @@
   (when-not (:finished? @ratom)
     (reset! ratom (eng/update-world @ratom))) ratom)
 
+;; (defn running-update)
+;; same as before
+
+;; (defn building-update)
+;; validates
+;; sets validation errors
+
 (defn setup []
   (q/frame-rate 100)
   (q/background 250)
@@ -22,6 +29,9 @@
 
 (defn mouse-handler [event-name]
   (fn [ratom event] (int/handle-mouse event-name ratom event)))
+
+(defn udpate-handler [major-mode]
+  (fn [ratom] (int/build-updater ratom)))
 
 (q/defsketch hello
   :setup setup

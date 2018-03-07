@@ -1,9 +1,10 @@
-(ns gravity-maze.interact.building
+(ns gravity-maze.interact.building.core
   (:require [gravity-maze.state :as state]
             [gravity-maze.interact.shooting :as shoot]
             [gravity-maze.interact.helpers :refer [find-elem
                                                    pressed?
                                                    nothing]])
+
   (:require-macros [gravity-maze.macros :as mac]))
 
 (mac/defn-elem-create build-line-mouse-press

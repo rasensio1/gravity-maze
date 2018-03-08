@@ -28,9 +28,18 @@
    :dt 0.02
    :drag 0.1
    :finished? false
+   :history nil
 
     ;; defaults for building
    :tmp {:building {:line {:mass 100 :range 50}
                     :start {:mass 20}
                     :finish {:range 20}
                     :options [:show-line-range]}}})
+
+(defn undo [{:keys [history] :as state}]
+  (when history
+    (assoc (:history state) :fwd (dissoc state :history))))
+
+(defn redo [{:keys [fwd] :as state}]
+  (when fwd
+    (assoc fwd :history (dissoc state :fwd))))

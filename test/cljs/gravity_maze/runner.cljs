@@ -2,6 +2,7 @@
     (:require [doo.runner :refer-macros [doo-tests]]
               [gravity-maze.core-test]
               [gravity-maze.engine-test]
+              [gravity-maze.state-test]
               [gravity-maze.interact.building.core-test]
               [gravity-maze.interact.building.validation-test]
               [gravity-maze.interact.shooting-test]
@@ -14,6 +15,7 @@
 
 (doo-tests 'gravity-maze.core-test
            'gravity-maze.engine-test
+           'gravity-maze.state-test
            'gravity-maze.interact.building.core-test
            'gravity-maze.interact.building.validation-test
            'gravity-maze.interact.shooting-test

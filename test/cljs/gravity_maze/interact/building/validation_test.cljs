@@ -3,6 +3,11 @@
             [cljs.test :refer-macros [deftest testing is]]
             [gravity-maze.math.helpers :as mth]))
 
+(deftest range-not-zero-test
+  (testing "Knows when invalid"
+    (is (not-empty (bval/range-not-zero {:range 0})))
+    (is (empty? (bval/range-not-zero {:range 10})))))
+
 (deftest mass-not-zero-test
   (testing "Knows when invalid"
     (is (not-empty (bval/mass-not-zero {:mass 0})))
@@ -46,10 +51,12 @@
       (is (= {:id 0} res )))))
 
 (deftest delete-action-test
-  (with-redefs [js/alert str]
+  (with-redefs [js/alert println]
     (testing "Removes an element"
       (is (= {:id 0 :type nil}
-             (bval/delete-action {:id 0} {:message "booo"}))))))
+             (bval/delete-action {:id 0} {:message "booo"})))
+      (is (= "Element not added. booo\n"
+             (with-out-str (bval/delete-action {:id 0} {:message "booo"})))))))
 
 (deftest do-validation-actions-test
   (testing "deletes when apropos"

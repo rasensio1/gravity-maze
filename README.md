@@ -7,12 +7,11 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Add full integration tests.
-  - :finish validator
-
   - Undo/Redo build actions
   - Retry (reset start)
   
+  - Add full integration tests.
+
 
   - option for bigger 'start' and click radius 
 

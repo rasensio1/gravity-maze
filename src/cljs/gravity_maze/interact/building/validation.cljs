@@ -3,7 +3,7 @@
 
 (defn mass-not-zero [{:keys [mass]}]
   (when (zero? mass)
-    {:action :add-error-message
+    {:action :add-error-msg
      :message "Mass cannot be zero"}))
 
 (defn length-not-zero [{:keys [pos]}]
@@ -30,4 +30,22 @@
   [elems]
   (->> (mapv #(merge % (error-map %)) elems)
        (sort-by :id)))
+
+(defn add-error-msgs-action
+  "Adds error messages from validation to an element."
+  [{:keys [validation-errors] :as el}]
+  (-> (assoc el :error-msgs (map :message validation-errors))
+      (dissoc :validation-errors)))
+
+(defn delete-action
+  "'Removes' and element by returning an empty map, but preserving
+  the ordering of the :elements vector"
+  [{:keys [id]} error]
+  (js/alert "Element not added. " (:message error))
+  {:id id :type nil})
+
+(defn do-validation-actions [{:keys [validation-errors] :as elem}]
+  (if-let [error (some #(= :delete (:action %)) validation-errors)]
+    (delete-action elem error)
+    (add-error-msgs-action elem)))
 

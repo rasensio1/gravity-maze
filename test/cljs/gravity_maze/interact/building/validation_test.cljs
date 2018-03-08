@@ -3,7 +3,6 @@
             [cljs.test :refer-macros [deftest testing is]]
             [gravity-maze.math.helpers :as mth]))
 
-
 (deftest mass-not-zero-test
   (testing "Knows when invalid"
     (is (not-empty (bval/mass-not-zero {:mass 0})))
@@ -36,3 +35,21 @@
       (is (= [{:hi :ok :id 0} {:hi :ok :id 1} {:hi :ok :id 2}]
              (bval/add-errors [{:id 2} {:id 1} {:id 0}]))))))
 
+(deftest add-error-msgs-action
+  (testing "Adds error messages"
+    (let [elem {:id 0 :validation-errors [{:message "HI"}
+                                          {:message "ok"}]}]
+      (is (= ["HI" "ok"]
+             (:error-msgs (bval/add-error-msgs-action elem)))))))
+
+(deftest delete-action-test
+  (with-redefs [js/alert str]
+    (testing "Removes an element"
+      (is (= {:id 0 :type nil}
+             (bval/delete-action {:id 0} {:message "booo"}))))))
+
+(deftest do-validation-actions-test
+  (testing "deletes when apropos"
+    (with-redefs [bval/delete-action (fn [i j] "deleted")]
+      (let [elem {:validation-errors [{:action :delete}]}]
+        (is (= "deleted" (bval/do-validation-actions elem)))))))

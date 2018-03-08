@@ -12,10 +12,10 @@
   (let [path (conj (get-kws (:mode @ratom)) event-name)]
     ((get-in click-fns path) ratom event)))
 
-(defn build-updater [ratom]
-  (let [val-elems (bval/add-errors (:elements @ratom))]
-    (swap! ratom update-in [:elements] val-elems))
-  ;; show error notice
-  ;; do action
-
-  ratom)
+;; TODO test
+(defn build-updater
+  "Validates each element, then performs an 'action'
+  on the element (delting it,or adding error msgs)"
+  [{:keys [elements] :as state}]
+  (let [validated-elems (bval/add-errors elements)]
+    (map bval/do-validation-actions validated-elems)))

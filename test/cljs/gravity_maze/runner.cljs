@@ -6,6 +6,7 @@
               [gravity-maze.interact.building.validation-test]
               [gravity-maze.interact.shooting-test]
               [gravity-maze.interact.helpers-test]
+              [gravity-maze.interact.core-test]
               [gravity-maze.math.helpers-test]
               [gravity-maze.math.draw-test]
               [gravity-maze.helpers-test]
@@ -17,6 +18,7 @@
            'gravity-maze.interact.building.validation-test
            'gravity-maze.interact.shooting-test
            'gravity-maze.interact.helpers-test
+           'gravity-maze.interact.core-test
            'gravity-maze.math.helpers-test
            'gravity-maze.math.draw-test
            'gravity-maze.helpers-test

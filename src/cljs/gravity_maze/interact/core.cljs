@@ -12,10 +12,11 @@
   (let [path (conj (get-kws (:mode @ratom)) event-name)]
     ((get-in click-fns path) ratom event)))
 
-;; TODO test
 (defn build-updater
-  "Validates each element, then performs an 'action'
+  "Updates state while in build mode. Returns new state.
+  Validates each element, then performs an 'action'
   on the element (delting it,or adding error msgs)"
   [{:keys [elements] :as state}]
-  (let [validated-elems (bval/add-errors elements)]
-    (map bval/do-validation-actions validated-elems)))
+  (let [validated (map bval/add-errors elements)
+        acted-on (map bval/do-validation-actions validated)]
+    (assoc state :elements acted-on)))

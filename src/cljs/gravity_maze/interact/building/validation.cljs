@@ -25,11 +25,9 @@
     {:validation-errors validations}))
 
 (defn add-errors
-  "Adds all validation-error information to each element.
-  Returns a new vector of elements."
-  [elems]
-  (->> (mapv #(merge % (error-map %)) elems)
-       (sort-by :id)))
+  "Adds all validation-error information to element.
+  Returns a new element."
+  [el] (merge el (error-map el)))
 
 (defn add-error-msgs-action
   "Adds error messages from validation to an element."

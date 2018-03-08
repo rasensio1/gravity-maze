@@ -32,8 +32,7 @@
 (deftest add-errors-test
   (testing "Adds errors for each element"
     (with-redefs [bval/error-map (fn [el] {:hi :ok :id (:id el)})]
-      (is (= [{:hi :ok :id 0} {:hi :ok :id 1} {:hi :ok :id 2}]
-             (bval/add-errors [{:id 2} {:id 1} {:id 0}]))))))
+      (is (=  {:hi :ok :id 2} (bval/add-errors {:id 2}))))))
 
 (deftest add-error-msgs-action
   (testing "Adds error messages"

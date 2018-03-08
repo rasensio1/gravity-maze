@@ -101,11 +101,14 @@
           line {:type :line :mass 30 :pos [[0 20] [0 200]] :fixed true}]
       (is (= [0 0] (eng/force-between 1 point line)))))
 
-  ;; :finish
-  (testing "Finish points Always returns zero"
+  ;; anything else
+  (testing "other elements always returns zero"
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
           finish {:type :finish :pos [0 20] :fixed true}]
-      (is (= [0 0] (eng/force-between 1 point finish))))))
+      (is (= [0 0] (eng/force-between 1 point finish)))))
+    (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
+          niler {:type nil :id 10}]
+      (is (= [0 0] (eng/force-between 1 point niler)))))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

@@ -62,7 +62,7 @@
         gmm (apply * (cons g (map :mass [el1 point])))]
     (gravity-calc gmm d2 unit-force)))
 
-(defmethod force-between :finish [g el fin] [0 0])
+(defmethod force-between :default [g el fin] [0 0])
 
 (defn sum-interactions [interaction el {:keys [elements g]}]
   (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))

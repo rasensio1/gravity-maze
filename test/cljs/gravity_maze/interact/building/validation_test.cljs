@@ -34,12 +34,16 @@
     (with-redefs [bval/error-map (fn [el] {:hi :ok :id (:id el)})]
       (is (=  {:hi :ok :id 2} (bval/add-errors {:id 2}))))))
 
-(deftest add-error-msgs-action
+(deftest add-error-msgs-action-test
   (testing "Adds error messages"
     (let [elem {:id 0 :validation-errors [{:message "HI"}
                                           {:message "ok"}]}]
       (is (= ["HI" "ok"]
-             (:error-msgs (bval/add-error-msgs-action elem)))))))
+             (:error-msgs (bval/add-error-msgs-action elem))))))
+  (testing "Doesn't add message when no validation-errors"
+    (let [elem {:id 0 :validation-errors []}
+          res (bval/add-error-msgs-action elem)]
+      (is (= {:id 0} res )))))
 
 (deftest delete-action-test
   (with-redefs [js/alert str]

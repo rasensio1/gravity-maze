@@ -13,7 +13,9 @@
 
 (def validators-for {:point [mass-not-zero]
                      :line [mass-not-zero
-                            length-not-zero]})
+                            length-not-zero]
+                     ;; TODO :finish [range-not-zero]
+                     })
 
 (defn error-map
   "Returns a map of validation-errors to be merged with an element.
@@ -30,9 +32,10 @@
   [el] (merge el (error-map el)))
 
 (defn add-error-msgs-action
-  "Adds error messages from validation to an element."
+  "Adds error messages from validation to an element if present."
   [{:keys [validation-errors] :as el}]
-  (-> (assoc el :error-msgs (map :message validation-errors))
+  (-> (if (not-empty validation-errors)
+        (assoc el :error-msgs (map :message validation-errors)) el)
       (dissoc :validation-errors)))
 
 (defn delete-action

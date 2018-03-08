@@ -3,6 +3,7 @@
               [gravity-maze.core-test]
               [gravity-maze.engine-test]
               [gravity-maze.interact.building.core-test]
+              [gravity-maze.interact.building.validation-test]
               [gravity-maze.interact.shooting-test]
               [gravity-maze.interact.helpers-test]
               [gravity-maze.math.helpers-test]
@@ -13,6 +14,7 @@
 (doo-tests 'gravity-maze.core-test
            'gravity-maze.engine-test
            'gravity-maze.interact.building.core-test
+           'gravity-maze.interact.building.validation-test
            'gravity-maze.interact.shooting-test
            'gravity-maze.interact.helpers-test
            'gravity-maze.math.helpers-test

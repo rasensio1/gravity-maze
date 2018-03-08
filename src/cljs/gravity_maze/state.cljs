@@ -5,6 +5,7 @@
                    :range 50
                    :pos [nil nil]
                    :fixed true
+                   ;; validation-errors []
                    :id nil})
 
 (def default-point {:type :point

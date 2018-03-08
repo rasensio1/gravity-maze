@@ -1,6 +1,14 @@
 (ns gravity-maze.interact.building.core-test
   (:require [gravity-maze.interact.building.core :as build]
+            [gravity-maze.interact.building.validation :as bval]
             [cljs.test :refer-macros [deftest testing is]]))
+
+(deftest build-updater-test
+  (testing "updates elements based on validations"
+    (with-redefs [bval/add-errors (fn [el] (assoc el :tmp 0))
+                  bval/do-validation-actions (fn [el] (update-in el [:tmp] inc))]
+      (let [state {:elements [{:id 0}] :g 0}]
+        (is (= {:elements [{:id 0 :tmp 1}] :g 0} (build/build-updater state)))))))
 
 (deftest build-line-mouse-press-test
   (testing "Adds a new line with correct parameters"
@@ -31,7 +39,14 @@
           myatm (atom {:elements [{:type :point} {:type :line} line]})]
       (build/build-line-mouse-release myatm {})
       (is (= (dissoc line :mousepress?) (last (:elements @myatm))))
-      (is (= 3 (count (:elements @myatm)))))))
+      (is (= 3 (count (:elements @myatm))))))
+  (testing "Does side effects"
+    (let [line {:type :line :pos [[0 0 ] [10 10]] :mousepress? true :id 2}
+          myatm (atom {:elements [{:type :point} {:type :line} line]})]
+      (with-redefs [build/build-updater
+                    (fn [st] (assoc st :some :side-effect))]
+        (build/build-line-mouse-release myatm {}))
+      (is (= :side-effect (:some @myatm))))))
 
 (deftest build-finish-mouse-press-test
   (testing "Adds a new finish spot"

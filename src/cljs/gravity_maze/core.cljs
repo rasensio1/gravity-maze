@@ -23,19 +23,10 @@
   (when-not (:finished? @ratom)
     (reset! ratom (eng/update-world @ratom))) ratom)
 
-(defn building-updater [ratom]
-  (reset! ratom (int/build-updater @ratom)) ratom)
-
-(def updaters {:building building-updater
-               :shooting shooting-updater})
-
-(defn update-handler [ratom]
-  (((ffirst (:mode @ratom)) updaters) ratom))
-
 (q/defsketch hello
   :setup setup
   :draw drw/main
-  :update update-handler
+  :update shooting-updater
   :host "host"
   :mouse-dragged (mouse-handler :mouse-dragged)
   :mouse-pressed (mouse-handler :mouse-pressed)

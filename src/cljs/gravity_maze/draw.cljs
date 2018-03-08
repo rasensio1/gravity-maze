@@ -59,6 +59,8 @@
   (q/fill 100)
   (q/ellipse (pos 0) (pos 1) (* 2 range) (* 2 range)))
 
+(defmethod draw-elem :default [i j] nil)
+
 (defn main [state]
  (q/background 250)
   (let [opts (options (:tmp @state) (get-kws (:mode @state)))]

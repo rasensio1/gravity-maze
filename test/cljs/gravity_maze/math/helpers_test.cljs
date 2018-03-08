@@ -12,7 +12,9 @@
     (is (= 5 (mth/pts-dist [0 0] [3 4])))
     (is (= 5 (mth/pts-dist [1 1] [4 5]))))
   (testing "can do non-right triangles"
-    (is (= 8.06 (roundme 2 (mth/pts-dist [1 1] [2 9]))))))
+    (is (= 8.06 (roundme 2 (mth/pts-dist [1 1] [2 9])))))
+  (testing "knows zero distance"
+    (is (= 0 (roundme 2 (mth/pts-dist [1 1] [1 1]))))))
 
 (deftest offset-line-test
   (testing "Creates offset lines"

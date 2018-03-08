@@ -11,17 +11,6 @@
 
 (def app-state (r/atom state/initial-state))
 
-(defn update-state [ratom]
-  (when-not (:finished? @ratom)
-    (reset! ratom (eng/update-world @ratom))) ratom)
-
-;; (defn running-update)
-;; same as before
-
-;; (defn building-update)
-;; validates
-;; sets validation errors
-
 (defn setup []
   (q/frame-rate 100)
   (q/background 250)
@@ -30,13 +19,23 @@
 (defn mouse-handler [event-name]
   (fn [ratom event] (int/handle-mouse event-name ratom event)))
 
-(defn udpate-handler [major-mode]
-  (fn [ratom] (int/build-updater ratom)))
+(defn shooting-updater [ratom]
+  (when-not (:finished? @ratom)
+    (reset! ratom (eng/update-world @ratom))) ratom)
+
+(defn building-updater [ratom]
+  (reset! ratom (int/build-updater @ratom)) ratom)
+
+(def updaters {:building building-updater
+               :shooting shooting-updater})
+
+(defn update-handler [ratom]
+  (((ffirst (:mode @ratom)) updaters) ratom))
 
 (q/defsketch hello
   :setup setup
   :draw drw/main
-  :update update-state
+  :update update-handler
   :host "host"
   :mouse-dragged (mouse-handler :mouse-dragged)
   :mouse-pressed (mouse-handler :mouse-pressed)

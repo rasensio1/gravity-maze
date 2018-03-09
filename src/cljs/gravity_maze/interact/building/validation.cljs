@@ -1,19 +1,22 @@
 (ns gravity-maze.interact.building.validation
   (:require [gravity-maze.math.helpers :as mth]))
 
+(defn some-not-saveable [errors]
+  (some #(when-not (:saveable? %) %) errors))
+
 (defn range-not-zero [{:keys [range]}]
   (when (zero? range)
-    {:action :delete
+    {:saveable? false
      :message "Range cannot be zero"}))
 
 (defn mass-not-zero [{:keys [mass]}]
   (when (zero? mass)
-    {:action :add-error-msg
+    {:saveable? true
      :message "Mass cannot be zero"}))
 
 (defn length-not-zero [{:keys [pos]}]
   (when (zero? (apply mth/pts-dist pos))
-    {:action :delete
+    {:saveable? false
      :message "Length cannot be zero"}))
 
 (def validators-for {:point [mass-not-zero]
@@ -36,23 +39,10 @@
   Returns a new element."
   [el] (merge el (error-map el)))
 
-(defn add-error-msgs-action
+(defn add-error-msgs
   "Adds error messages from validation to an element if present."
   [{:keys [validation-errors] :as el}]
   (-> (if (not-empty validation-errors)
         (assoc el :error-msgs (map :message validation-errors)) el)
       (dissoc :validation-errors)))
-
-(defn delete-action
-  "'Removes' and element by returning an empty map, but preserving
-  the ordering of the :elements vector"
-  [{:keys [id]} error]
-  (js/alert (str "Element not added. " (:message error)))
-  {:id id :type nil})
-
-(defn do-validation-actions [{:keys [validation-errors] :as elem}]
-  (if-let [error (some #(when (= :delete (:action %)) %)
-                       validation-errors)]
-    (delete-action elem error)
-    (add-error-msgs-action elem)))
 

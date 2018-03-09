@@ -1,8 +1,7 @@
 (ns gravity-maze.views.core
   (:require [reagent.core :as r]
             [reagent-forms.core :refer [bind-fields]]
-            [gravity-maze.views.build :as build]
-            ))
+            [gravity-maze.views.build :as build]))
 
 (def mode-btns
   [:div
@@ -12,10 +11,10 @@
     [:button.btn.btn-default
      {:key {:building {}}} "Building"]]])
 
-(def mode-form
+(defn mode-form [ratom]
   [:div.mode-form
    mode-btns
-   build/build-mode-form])
+   (build/build-mode-form ratom)])
 
 (def title
   [:div [:h2 "GRAVITY MAZE"]])
@@ -25,7 +24,7 @@
     [:div
       [:h3 "Mode"]
      (map (fn [el] [:p {:key (:id el)} (str el) ]) (:elements @ratom) )
-      [:p (str (dissoc @ratom :history :elements))]
-     [bind-fields mode-form ratom]]))
+      [:p (str (dissoc @ratom :history :elements :fwd))]
+     [bind-fields (mode-form ratom) ratom]]))
 
 

@@ -1,6 +1,7 @@
 (ns gravity-maze.views.build
   (:require [reagent.core :as r]
-            [reagent-forms.core :refer [bind-fields]]))
+            [reagent-forms.core :refer [bind-fields]]
+            [gravity-maze.views.helpers :as hlp]))
 
 (defn building-mode? [state]
   (get-in state [:mode :building]))
@@ -39,16 +40,26 @@
    [:div.btn-group {:field :multi-select :id :tmp.building.options}
     [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]]])
 
-(def build-mode-form
+(def build-sub-modes
+  [:div.btn-group {:field :single-select :id :mode.building}
+   [:button.btn.btn-default
+    {:key {:line true}} "Add a line"]
+   [:button.btn.btn-default
+    {:key {:start true}} "Add the start"]
+   [:button.btn.btn-default
+    {:key {:finish true}} "Add the finish"]])
+
+(defn undo-button [ratom]
+  [:button.btn.btn-default
+   {:on-click
+    #(hlp/undo! ratom)}
+   "Undo"])
+
+(defn build-mode-form [ratom]
   [:div {:field :container
         :visible? #(contains? (:mode %) :building)}
-   [:div.btn-group {:field :single-select :id :mode.building}
-    [:button.btn.btn-default
-     {:key {:line true}} "Add a line"]
-    [:button.btn.btn-default
-     {:key {:start true}} "Add the start"]
-    [:button.btn.btn-default
-     {:key {:finish true}} "Add the finish"]]
+   build-sub-modes
+   (undo-button ratom)
    build-opts
    [:div.sub-options
     line-params

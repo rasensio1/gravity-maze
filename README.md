@@ -9,7 +9,7 @@ EXTREME GAMES OF CATCH!
 
   - Undo/Redo build actions
      - on hashmap (DONE)
-     - Adding elements adds to history
+     - Adding elements adds to history (DONE)
      - Add buttons on "Options"
 
   - Retry (reset start)

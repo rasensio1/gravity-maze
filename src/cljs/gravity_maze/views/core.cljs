@@ -24,7 +24,8 @@
   (fn []
     [:div
       [:h3 "Mode"]
-      [:p (str @ratom)]
+     (map (fn [el] [:p {:key (:id el)} (str el) ]) (:elements @ratom) )
+      [:p (str (dissoc @ratom :history :elements))]
      [bind-fields mode-form ratom]]))
 
 

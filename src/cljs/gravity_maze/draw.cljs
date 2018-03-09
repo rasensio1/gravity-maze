@@ -1,7 +1,9 @@
 (ns gravity-maze.draw
   (:require [quil.core :as q :include-macros true]
             [gravity-maze.math.helpers :as mth]
-            [gravity-maze.helpers :refer [options get-kws]]
+            [gravity-maze.helpers :refer [options
+                                          get-kws
+                                          tmp-elem]]
             [gravity-maze.math.draw :as mth-drw]))
 
 (def arrow-size 5)
@@ -64,6 +66,6 @@
 (defn main [state]
  (q/background 250)
   (let [opts (options (:tmp @state) (get-kws (:mode @state)))]
-    (doseq [el (:elements @state)]
+    (doseq [el (conj (:elements @state) (tmp-elem @state))]
     (draw-elem el opts))))
 

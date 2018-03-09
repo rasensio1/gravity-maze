@@ -31,10 +31,12 @@
    :history nil
 
     ;; defaults for building
-   :tmp {:building {:line {:mass 100 :range 50}
+   :tmp {:editing-elem nil
+         :building {:line {:mass 100 :range 50}
                     :start {:mass 20}
                     :finish {:range 20}
-                    :options [:show-line-range]}}})
+                    :options [:show-line-range]
+                    }}})
 
 (defn add-history! [atm]
   (swap! atm assoc :history @atm))

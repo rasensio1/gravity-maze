@@ -7,22 +7,27 @@
 
 (def click-range 10)
 
-(mac/defn-elem-update launch-mouse-press
-  {:criteria #(when (= :point (:type %))
-                ((partial clicked? click-range [x y]) %))
-   :updater (fn [el] (assoc el :mousepress? true))})
+(mac/defn-elem-set-update launch-mouse-press
+   (fn [el] (when (= :point (:type el))
+                ((partial clicked? click-range [x y]) el))))
 
 (mac/defn-elem-update launch-drag
-  {:criteria pressed?
-   :updater (fn [el] (assoc el :drag-vec (mth/v- (:pos point) [x y])))})
+   (fn [el] (assoc el :drag-vec (mth/v- (:pos el) [x y]))))
 
-(mac/defn-elem-update launch-mouse-release
-  {:criteria pressed?
-   :updater (fn [el] (-> (if-let [new-vel (:drag-vec el)]
-                 (assoc el :vel new-vel :fixed false) el)
-               (dissoc :mousepress? :drag-vec)))})
+(defn launch-mouse-release
+  "Similar to save-and-validate-temp-elem, but without validators
+  and with some prep to the element before saving"
+  [atm _]
+  (let [elem (get-in @atm [:tmp :editing-elem])]
+    (swap! atm assoc-in [:tmp :editing-elem] nil)
+    (when-let [new-vel (:drag-vec elem)]
+      (as-> (assoc elem :vel new-vel :fixed false) prepped-elem
+        (dissoc prepped-elem :drag-vec)
+        (swap! atm assoc-in [:elements (:id elem)] prepped-elem))))
+  atm)
 
 (def click-fns {:shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag
                            :mouse-released launch-mouse-release
                            }})
+

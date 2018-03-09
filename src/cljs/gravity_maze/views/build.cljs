@@ -55,11 +55,18 @@
     #(hlp/undo! ratom)}
    "Undo"])
 
+(defn redo-button [ratom]
+  [:button.btn.btn-default
+   {:on-click
+    #(hlp/redo! ratom)}
+   "Redo"])
+
 (defn build-mode-form [ratom]
   [:div {:field :container
         :visible? #(contains? (:mode %) :building)}
    build-sub-modes
    (undo-button ratom)
+   (redo-button ratom)
    build-opts
    [:div.sub-options
     line-params

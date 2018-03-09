@@ -10,14 +10,12 @@
 
 (deftest undo-test
   (testing "Can undo last action"
-    ;; given history tree, resets to state before
     (let [old-state {:history [] :elements [{:type :point}]}
           new-state { :elements [{:type :point} {:type :line}]
                      :history old-state}]
       (is (= (assoc old-state :fwd (dissoc new-state :history))
              (st/undo new-state)))))
   (testing "Does nothing if no history"
-    ;; given history tree, resets to state before
     (let [state {:history [] :elements [{:type :point}]}]
       (is (= state (st/undo state))))))
 
@@ -29,5 +27,10 @@
           undone-state {:history nil
                         :elements []
                         :fwd {:fwd nil :elements [{:type :point}]}}]
-      (is (= state (st/redo undone-state))))))
+      (is (= state (st/redo undone-state)))))
+  (testing "Cant redo if fwd is empty"
+    (let [state {:history {:history nil :elements []}
+                 :fwd nil
+                 :elements [{:type :point}]}]
+      (is (= state (st/redo state))))))
 

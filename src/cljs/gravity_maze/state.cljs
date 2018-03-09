@@ -39,7 +39,8 @@
                     }}})
 
 (defn add-history! [atm]
-  (swap! atm assoc :history @atm))
+  (swap! atm assoc :history @atm)
+  (swap! atm dissoc :fwd))
 
 (defn undo [{:keys [history] :as state}]
   (if (not-empty history)
@@ -47,5 +48,6 @@
     state))
 
 (defn redo [{:keys [fwd] :as state}]
-  (when fwd
-    (assoc fwd :history (dissoc state :fwd))))
+  (if (not-empty fwd)
+    (assoc fwd :history (dissoc state :fwd))
+    state))

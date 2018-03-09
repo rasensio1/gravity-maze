@@ -14,3 +14,5 @@
   (let [paths (reductions conj [] paths)]
     (mapcat #(:options (get-in tree %)) paths)))
 
+(defn tmp-elem [state]
+  (get-in state [:tmp :editing-elem]))

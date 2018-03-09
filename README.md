@@ -8,6 +8,10 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - Undo/Redo build actions
+     - on hashmap (DONE)
+     - Adding elements adds to history
+     - Add buttons on "Options"
+
   - Retry (reset start)
   
   - Add full integration tests.

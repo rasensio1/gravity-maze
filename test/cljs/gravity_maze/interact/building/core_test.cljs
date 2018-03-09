@@ -1,5 +1,6 @@
 (ns gravity-maze.interact.building.core-test
   (:require [gravity-maze.interact.building.core :as build]
+            [gravity-maze.state :as state]
             [gravity-maze.interact.building.validation :as bval]
             [cljs.test :refer-macros [deftest testing is]]))
 
@@ -57,7 +58,17 @@
           my-fin (get-in @myatm [:elements 0])]
       (is (= 1 (count (:elements @myatm))))
       (is (= [100 100] (:pos my-fin)))
-      (is (= 20 (:range my-fin))))))
+      (is (= 20 (:range my-fin)))))
+  (testing "Does side effects"
+    (let [myatm (atom {:elements []
+                       :tmp {:building {:finish {:range 20}}}})
+          event {:x 100 :y 100}
+          res (build/build-finish-mouse-press myatm event)
+          my-fin (get-in @myatm [:elements 0])]
+      (with-redefs [state/add-history!
+                    (fn [atm] (reset! atm "affected"))]
+        (build/build-finish-mouse-press myatm event))
+      (is (= "affected" @myatm)))))
 
 (deftest build-start-mouse-press-test
   (testing "Adds a new point with correct params"

@@ -23,12 +23,13 @@
   atm)
 
 (mac/defn-elem-create build-line-mouse-press
-  (assoc state/default-line
-         :id (count (:elements @atm))
-         :mousepress? true
-         :pos [[x y] [x y]]
-         :mass (get-in @atm [:tmp :building :line :mass])
-         :range (get-in @atm [:tmp :building :line :range])))
+  {:new-element
+   (assoc state/default-line
+          :id (count (:elements @atm))
+          :mousepress? true
+          :pos [[x y] [x y]]
+          :mass (get-in @atm [:tmp :building :line :mass])
+          :range (get-in @atm [:tmp :building :line :range]))})
 
 (mac/defn-elem-update build-line-mouse-drag
   {:criteria pressed?
@@ -37,19 +38,23 @@
 (mac/defn-elem-update build-line-mouse-release
   {:criteria pressed?
    :updater (fn [el] (dissoc el :mousepress?))
-   :side-effects add-validations!})
+   :side-effects [add-validations!
+                  state/add-history!]})
 
 (mac/defn-elem-create build-finish-mouse-press
-  (assoc state/default-finish
-         :id (count (:elements @atm))
-         :pos [x y]
-         :range (get-in @atm [:tmp :building :finish :range])))
+  {:new-element
+   (assoc state/default-finish
+          :id (count (:elements @atm))
+          :pos [x y]
+          :range (get-in @atm [:tmp :building :finish :range]))
+   :side-effects [state/add-history!]})
 
 (mac/defn-elem-create build-start-mouse-press
-  (assoc state/default-point
+  {:new-element (assoc state/default-point
          :id (count (:elements @atm))
          :pos [x y]
-         :mass (get-in @atm [:tmp :building :start :mass])))
+         :mass (get-in @atm [:tmp :building :start :mass]))
+   :side-effects [state/add-history!]})
 
 (def click-fns {:building
                 {:line

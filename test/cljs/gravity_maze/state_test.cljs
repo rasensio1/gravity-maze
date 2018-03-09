@@ -15,7 +15,11 @@
           new-state { :elements [{:type :point} {:type :line}]
                      :history old-state}]
       (is (= (assoc old-state :fwd (dissoc new-state :history))
-             (st/undo new-state))))))
+             (st/undo new-state)))))
+  (testing "Does nothing if no history"
+    ;; given history tree, resets to state before
+    (let [state {:history [] :elements [{:type :point}]}]
+      (is (= state (st/undo state))))))
 
 (deftest redo-test
   (testing "Can redo after an undo"

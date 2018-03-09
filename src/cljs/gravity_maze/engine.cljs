@@ -1,6 +1,10 @@
 (ns gravity-maze.engine
   (:require [gravity-maze.math.helpers :as mth :refer [v+ v- mult-v]]))
 
+(defn fixed-elem? [elem]
+  (or (:fixed elem)
+      (nil? (:fixed elem))))
+
 (defn calc-accel [force {:keys [mass] :as el}]
   (mth/div-v mass force))
 
@@ -103,8 +107,8 @@
 
 (defn update-world [world]
   (let [elems (:elements world)
-        fixed (filter :fixed elems)
-        to-update (filter (complement :fixed) elems)
+        fixed (filter fixed-elem? elems)
+        to-update (filter (complement fixed-elem?) elems)
         updated (map update-elem to-update (repeat world))]
     (assoc world
            ;; needs to be sorted, because we do some updates based

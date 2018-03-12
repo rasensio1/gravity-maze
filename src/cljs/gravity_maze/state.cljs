@@ -29,7 +29,7 @@
    :drag 0.1
    :finished? false
    :history nil
-
+   :fwd nil
     ;; defaults for building
    :tmp {:editing-elem nil
          :building {:line {:mass 100 :range 50}
@@ -51,3 +51,6 @@
   (if (not-empty fwd)
     (assoc fwd :history (dissoc state :fwd))
     state))
+
+(defn restart [{:keys [history]}]
+  history)

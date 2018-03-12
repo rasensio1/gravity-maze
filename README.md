@@ -7,15 +7,12 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Undo/Redo build actions
-     - on hashmap (DONE)
-     - Adding elements adds to history (DONE)
-     - Add buttons on "Options"
-
   - Retry (reset start)
+    - on switch to 'shooting' mode... do something
   
-  - Add full integration tests.
+  - Build - EDIT mode (click on and edit elements)
 
+  - Add full integration tests.
 
   - option for bigger 'start' and click radius 
 
@@ -34,3 +31,4 @@ EXTREME GAMES OF CATCH!
   - Would be fun to play on a BIG screen. More like a maze that way.
 
   - New element: "Tarpit" something that slows down the ball
+

@@ -1,6 +1,7 @@
 (ns gravity-maze.state-test
   (:require [gravity-maze.state :as st]
-            [cljs.test :refer-macros [deftest testing is]]))
+            [cljs.test :refer-macros [deftest testing is]]
+            [gravity-maze.engine :as eng]))
 
 (deftest add-history!-test
   (testing "Adds current state as history"
@@ -33,4 +34,16 @@
                  :fwd nil
                  :elements [{:type :point}]}]
       (is (= state (st/redo state))))))
+
+(defn sim-select-shooting-mode [state]
+  (assoc state :history state))
+
+(deftest restart-test
+  (testing "Can restart after shooting a point"
+    (let [point {:type :point :mass 50 :pos [0 0]
+                 :vel [10 10] :fixed false :id 0}
+          state (assoc st/initial-state :elements [point])
+          shooting (sim-select-shooting-mode state)
+          res (last (take 10 (iterate eng/update-world shooting)))]
+      (is (= state (st/restart res))))))
 

@@ -4,7 +4,11 @@
 
 (defn shooting-btn-click [ratom]
   (do (st!/add-history! ratom)
-      (swap! ratom assoc :mode {:shooting {}})))
+      (st!/shooting-mode! ratom)))
+
+(defn restart-btn-click [ratom]
+  (st!/restart! ratom)
+  (st!/shooting-mode! ratom))
 
 (defn shooting-btn [ratom]
   [:button.btn.btn-default
@@ -14,7 +18,7 @@
 (defn restart-button [ratom]
   [:button.btn.btn-default
    {:on-click
-    #(st!/restart! ratom)}
+    #(restart-btn-click ratom)}
    "Restart"])
 
 (defn shoot-mode-form [ratom]

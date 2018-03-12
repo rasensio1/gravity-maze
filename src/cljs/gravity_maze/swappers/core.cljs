@@ -4,3 +4,4 @@
 (defn shooting-updater [ratom]
   (when-not (:finished? @ratom)
     (reset! ratom (eng/update-world @ratom))) ratom)
+

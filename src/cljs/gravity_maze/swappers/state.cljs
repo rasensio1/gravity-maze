@@ -13,3 +13,5 @@
 (defn restart! [ratom]
   (reset! ratom (st/restart @ratom)))
 
+(defn shooting-mode! [ratom]
+  (swap! ratom assoc :mode {:shooting {}}))

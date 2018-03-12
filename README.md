@@ -7,9 +7,6 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Retry (reset start)
-    - on switch to 'shooting' mode... do something
-  
   - Build - EDIT mode (click on and edit elements)
 
   - Add full integration tests.

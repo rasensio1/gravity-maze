@@ -52,5 +52,8 @@
     (assoc fwd :history (dissoc state :fwd))
     state))
 
-(defn restart [{:keys [history]}]
-  history)
+(defn restart
+  "Sets current state as first state in :history. Preserves
+  :history for multiple restarts."
+  [{:keys [history]}]
+  (assoc history :history history))

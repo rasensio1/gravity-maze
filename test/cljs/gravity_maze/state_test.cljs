@@ -45,5 +45,13 @@
           state (assoc st/initial-state :elements [point])
           shooting (sim-select-shooting-mode state)
           res (last (take 10 (iterate eng/update-world shooting)))]
-      (is (= state (st/restart res))))))
+      (is (= shooting (st/restart res)))))
+  (testing "Can restart multiple times"
+    (let [point {:type :point :mass 50 :pos [0 0]
+                 :vel [10 10] :fixed false :id 0}
+          state (assoc st/initial-state :elements [point])
+          shooting (sim-select-shooting-mode state)
+          res (last (take 10 (iterate eng/update-world shooting)))
+          restarted (last (take 5 (iterate st/restart res)))]
+      (is (= shooting restarted)))))
 

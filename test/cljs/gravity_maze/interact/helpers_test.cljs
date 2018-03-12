@@ -13,9 +13,6 @@
     (let [line {:type :line :pos [[5 5] [10 10]] :id 1}
           world {:elements [{:type :point :pos [10 10]} line]}]
       (is (= line (hlp/find-elem #(if (= :line (:type %)) % nil) world))))
-    (let [point {:type :point :pos [0 0] :id 0 :mousepress? true}
-          world {:elements [{:type :point :pos [10 10]} point]}]
-      (is (= point (hlp/find-elem hlp/pressed? world))))
     (let [point {:type :point :pos [0 0] :id 0}
           world {:elements [point]}
           myfn #(when (= :point (:type %))

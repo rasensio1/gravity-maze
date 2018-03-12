@@ -1,6 +1,6 @@
 (ns gravity-maze.views.build
   (:require [reagent.core :as r]
-            [gravity-maze.views.helpers :as hlp]))
+            [gravity-maze.swappers.state :as st!]))
 
 (defn building-mode? [state]
   (get-in state [:mode :building]))
@@ -51,13 +51,13 @@
 (defn undo-button [ratom]
   [:button.btn.btn-default
    {:on-click
-    #(hlp/undo! ratom)}
+    #(st!/undo! ratom)}
    "Undo"])
 
 (defn redo-button [ratom]
   [:button.btn.btn-default
    {:on-click
-    #(hlp/redo! ratom)}
+    #(st!/redo! ratom)}
    "Redo"])
 
 (defn building-btn [ratom]

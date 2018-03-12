@@ -2,7 +2,7 @@
   (:require
    [reagent.core :as r]
    [gravity-maze.state :as state]
-   [gravity-maze.engine :as eng]
+   [gravity-maze.swappers.core :as core!]
    [gravity-maze.draw :as drw]
    [gravity-maze.interact.core :as int]
    [gravity-maze.views.core :as vw]
@@ -19,14 +19,10 @@
 (defn mouse-handler [event-name]
   (fn [ratom event] (int/handle-mouse event-name ratom event)))
 
-(defn shooting-updater [ratom]
-  (when-not (:finished? @ratom)
-    (reset! ratom (eng/update-world @ratom))) ratom)
-
 (q/defsketch hello
   :setup setup
   :draw drw/main
-  :update shooting-updater
+  :update core!/shooting-updater
   :host "host"
   :mouse-dragged (mouse-handler :mouse-dragged)
   :mouse-pressed (mouse-handler :mouse-pressed)

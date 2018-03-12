@@ -1,8 +1,8 @@
 (ns gravity-maze.interact.shooting
   (:require [gravity-maze.math.helpers :as mth]
+            [gravity-maze.swappers.interact.core :as intr!]
             [gravity-maze.interact.helpers :refer [find-elem
-                                                   clicked?
-                                                   pressed?]])
+                                                   clicked?]])
   (:require-macros [gravity-maze.macros :as mac]))
 
 (def click-range 10)
@@ -15,15 +15,15 @@
    (fn [el] (assoc el :drag-vec (mth/v- (:pos el) [x y]))))
 
 (defn launch-mouse-release
-  "Similar to save-and-validate-temp-elem, but without validators
-  and with some prep to the element before saving"
+  "Sets velocity of clicked point, removes it from tmp and adds to
+  :elements. "
   [atm _]
   (let [elem (get-in @atm [:tmp :editing-elem])]
-    (swap! atm assoc-in [:tmp :editing-elem] nil)
+    (intr!/remove-tmp-elem! atm)
     (when-let [new-vel (:drag-vec elem)]
       (as-> (assoc elem :vel new-vel :fixed false) prepped-elem
         (dissoc prepped-elem :drag-vec)
-        (swap! atm assoc-in [:elements (:id elem)] prepped-elem))))
+        (intr!/add-elem! atm prepped-elem))))
   atm)
 
 (def click-fns {:shooting {:mouse-pressed launch-mouse-press

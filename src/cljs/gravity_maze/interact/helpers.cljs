@@ -11,9 +11,6 @@
   (if (>= range (mth/pts-dist click-pos pos))
     elem false))
 
-(defn pressed? [elem]
-  (if (:mousepress? elem) elem false))
-
 (defn drag-vec? [elem]
   (if (:drag-vec elem) elem false))
 

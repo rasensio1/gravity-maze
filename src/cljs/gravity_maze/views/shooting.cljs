@@ -1,11 +1,10 @@
 (ns gravity-maze.views.shooting
   (:require [reagent.core :as r]
-            [gravity-maze.state :as st]
-            [gravity-maze.views.helpers :as hlp]))
+            [gravity-maze.swappers.state :as st!]))
 
 (defn shooting-btn-click [ratom]
-  (do (swap! ratom assoc :mode {:shooting {}})
-      (st/add-history! ratom)))
+  (do (st!/add-history! ratom)
+      (swap! ratom assoc :mode {:shooting {}})))
 
 (defn shooting-btn [ratom]
   [:button.btn.btn-default
@@ -15,7 +14,7 @@
 (defn restart-button [ratom]
   [:button.btn.btn-default
    {:on-click
-    #(hlp/restart! ratom)}
+    #(st!/restart! ratom)}
    "Restart"])
 
 (defn shoot-mode-form [ratom]

@@ -1,10 +1,9 @@
 (ns gravity-maze.interact.building.core
   (:require [gravity-maze.state :as state]
-            [gravity-maze.interact.shooting :as shoot]
+            [gravity-maze.swappers.state :as st!]
             [gravity-maze.interact.building.validation :as bval]
-            [gravity-maze.interact.helpers :refer [find-elem
-                                                   pressed?
-                                                   nothing]])
+            [gravity-maze.interact.helpers :refer [nothing]]
+            [gravity-maze.swappers.interact.core :as intr!])
 
   (:require-macros [gravity-maze.macros :as mac]))
 
@@ -34,15 +33,14 @@
   "Validates and saves a element in temp storage. If not saveable,
   shows error message and does not save."
   [atm _]
-  (let [validated-elem (bval/add-errors (get-in @atm [:tmp :editing-elem]))]
-    (swap! atm assoc-in [:tmp :editing-elem] nil) ;; clear tmp
+  (when-let [validated-elem (bval/add-errors (get-in @atm [:tmp :editing-elem]))]
+    (intr!/remove-tmp-elem! atm)
 
     (if-let [error (bval/some-not-saveable (:validation-errors validated-elem))]
       (js/alert (str "Element not added. " (:message error)))
       ;; else, add error messages, save and clear the tmp
       (let [elem (bval/add-error-msgs validated-elem)]
-        (do (state/add-history! atm)
-            (swap! atm assoc-in [:elements (:id elem)] elem)))))
+        (do (st!/add-history! atm) (intr!/add-elem! atm elem)))))
   atm)
 
 (def click-fns {:building

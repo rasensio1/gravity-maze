@@ -38,9 +38,9 @@
                     :options [:show-line-range]
                     }}})
 
-(defn add-history! [atm]
-  (swap! atm assoc :history @atm)
-  (swap! atm dissoc :fwd))
+(defn add-history [state]
+  (-> (assoc state :history state)
+      (dissoc :fwd)))
 
 (defn undo [{:keys [history] :as state}]
   (if (not-empty history)

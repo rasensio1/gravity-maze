@@ -1,6 +1,5 @@
 (ns gravity-maze.views.build
   (:require [reagent.core :as r]
-            [reagent-forms.core :refer [bind-fields]]
             [gravity-maze.views.helpers :as hlp]))
 
 (defn building-mode? [state]
@@ -60,6 +59,10 @@
    {:on-click
     #(hlp/redo! ratom)}
    "Redo"])
+
+(defn building-btn [ratom]
+  [:button.btn.btn-default
+   {:key {:building {}}} "Building"])
 
 (defn build-mode-form [ratom]
   [:div {:field :container

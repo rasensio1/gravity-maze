@@ -47,8 +47,12 @@
           (apply q/triangle)))))
 
 (defmulti draw-elem (fn [el opts] (:type el)))
-(defmethod draw-elem :point [{:keys [pos r drag-vec] :or {r 5}} opts]
+(defmethod draw-elem :point [{:keys [pos r drag-vec] :or {r 10}} opts]
   (q/fill 0)
+  (q/ellipse (pos 0) (pos 1) r r))
+
+(defmethod draw-elem :start [{:keys [pos r drag-vec] :or {r 5}} opts]
+  (q/fill 0 255 0)
   (q/ellipse (pos 0) (pos 1) r r)
   (draw-arrow pos drag-vec))
 

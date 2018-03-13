@@ -61,6 +61,11 @@
                   :mouse-dragged nothing
                   :mouse-released save-and-validate-tmp-elem
                   }
+                 :point
+                 {:mouse-pressed build-point-mouse-press
+                  :mouse-dragged nothing
+                  :mouse-released save-and-validate-tmp-elem
+                  }
                  :finish
                  {:mouse-pressed build-finish-mouse-press
                   :mouse-dragged nothing

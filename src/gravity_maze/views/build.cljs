@@ -21,6 +21,13 @@
    (build-param "Mass" :tmp.building.line.mass)
    (build-param "Range" :tmp.building.line.range)])
 
+(def point-params
+  [:div {:field :container
+         :visible? #(get-in % [:mode :building :point])}
+   [:h3 "point-opts"]
+   (build-param "Mass" :tmp.building.point.mass)
+   (build-param "Range" :tmp.building.point.range)])
+
 (def start-params
   [:div {:field :container
          :visible? #(get-in % [:mode :building :start])}
@@ -43,6 +50,8 @@
   [:div.btn-group {:field :single-select :id :mode.building}
    [:button.btn.btn-default
     {:key {:line true}} "Add a line"]
+   [:button.btn.btn-default
+    {:key {:point true}} "Add a point"]
    [:button.btn.btn-default
     {:key {:start true}} "Add the start"]
    [:button.btn.btn-default
@@ -73,6 +82,7 @@
    build-opts
    [:div.sub-options
     line-params
+    point-params
     start-params
     finish-params]])
 

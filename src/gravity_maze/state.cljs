@@ -40,6 +40,7 @@
    :tmp {:editing-elem nil
          :building {:line {:mass 100 :range 50}
                     :start {:mass 20}
+                    :point {:mass 50 :range 50}
                     :finish {:range 20}
                     :options [:show-line-range]
                     }}})

@@ -10,6 +10,12 @@
 
 (def default-point {:type :point
                     :mass 50
+                    :range 100
+                    :fixed true
+                    :id nil})
+
+(def default-start {:type :start
+                    :mass 50
                     :pos [nil nil]
                     :vel [0 0]
                     :fixed true

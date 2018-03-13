@@ -24,10 +24,17 @@
          :range (get-in @atm [:tmp :building :finish :range])))
 
 (mac/defn-elem-create build-start-mouse-press
-  (assoc state/default-point
+  (assoc state/default-start
          :id (count (:elements @atm))
          :pos [x y]
          :mass (get-in @atm [:tmp :building :start :mass])))
+
+(mac/defn-elem-create build-point-mouse-press
+  (assoc state/default-point
+         :id (count (:elements @atm))
+         :pos [x y]
+         :mass (get-in @atm [:tmp :building :point :mass])
+         :range (get-in @atm [:tmp :building :point :range])))
 
 (defn save-and-validate-tmp-elem
   "Validates and saves a element in temp storage. If not saveable,

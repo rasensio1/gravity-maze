@@ -47,6 +47,19 @@
       (is (= 55 (:mass my-start)))
       (is (= 1 (:id my-start))))))
 
+(deftest build-point-mouse-press-test
+  (testing "Adds a new point with correct params"
+    (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
+                        :tmp {:building {:point {:mass 55 :range 100}}}})
+          event {:x 100 :y 100}
+          res (build/build-point-mouse-press myatm event)
+          my-point (temp-elem @myatm)]
+      (println "state here" @myatm)
+      (is (= [100 100] (:pos my-point)))
+      (is (= 55 (:mass my-point)))
+      (is (= 1 (:id my-point)))
+      (is (= 100 (:range my-point))))))
+
 (deftest save-and-validate-temp-elem-test
   (testing "Adds valid element"
     (let [line {:type :line :pos [[0 0 ] [10 10]] :id 2}

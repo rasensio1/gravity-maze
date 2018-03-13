@@ -8,7 +8,7 @@
 (def click-range 10)
 
 (mac/defn-elem-set-update launch-mouse-press
-   (fn [el] (when (= :point (:type el))
+   (fn [el] (when (= :start (:type el))
                 ((partial clicked? click-range [x y]) el))))
 
 (mac/defn-elem-update launch-drag

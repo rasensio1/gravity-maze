@@ -129,7 +129,7 @@
 
 (deftest update-world-test
   (with-redefs [eng/force-between simple-forces]
-    (testing "updates all non-fixed elements in state"
+    (testing "updates all non-fixed start elements in state"
       (let [new-world (eng/update-world simple-point-world)]
         (is (= (set [[1 1] [0.5 0.5]]) (set (mapv :pos (:elements new-world)))))
         (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))

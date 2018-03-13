@@ -36,16 +36,16 @@
       (is (= 20 (:range my-fin))))))
 
 (deftest build-start-mouse-press-test
-  (testing "Adds a new point with correct params"
+  (testing "Adds a new start with correct params"
     (let [myatm (atom {:elements [{:type :point :pos [1 1]}]
                        :tmp {:building {:start {:mass 55}}}})
           event {:x 100 :y 100}
           res (build/build-start-mouse-press myatm event)
-          my-point (temp-elem @myatm)]
-      (is (= [100 100] (:pos my-point)))
-      (is (= [0 0] (:vel my-point)))
-      (is (= 55 (:mass my-point)))
-      (is (= 1 (:id my-point))))))
+          my-start (temp-elem @myatm)]
+      (is (= [100 100] (:pos my-start)))
+      (is (= [0 0] (:vel my-start)))
+      (is (= 55 (:mass my-start)))
+      (is (= 1 (:id my-start))))))
 
 (deftest save-and-validate-temp-elem-test
   (testing "Adds valid element"

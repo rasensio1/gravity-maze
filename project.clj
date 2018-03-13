@@ -8,7 +8,7 @@
 
   :min-lein-version "2.5.3"
 
-  :source-paths ["src/clj"]
+  :source-paths ["src"]
 
   :plugins [[lein-cljsbuild "1.1.4"]
             [lein-auto "0.1.3"] ]
@@ -34,7 +34,7 @@
   :cljsbuild
   {:builds
    [{:id           "dev"
-     :source-paths ["src/cljs"]
+     :source-paths ["src"]
      :figwheel     {:on-jsload "gravity-maze.core/reload"}
      :compiler     {:main                 gravity-maze.core
                     :optimizations        :none
@@ -50,7 +50,7 @@
                     :source-map-timestamp true}}
 
     {:id           "min"
-     :source-paths ["src/cljs"]
+     :source-paths ["src"]
      :compiler     {:main            gravity-maze.core
                     :optimizations   :advanced
                     :output-to       "resources/public/js/app.js"
@@ -60,7 +60,7 @@
                     :pretty-print    false}}
 
     {:id           "test"
-     :source-paths ["src/cljs" "test/cljs"]
+     :source-paths ["src" "test"]
      :compiler     {:output-to     "resources/public/js/test.js"
                     :output-dir    "resources/public/js/test"
                     :main          gravity-maze.runner

@@ -6,22 +6,26 @@
 
 (deftest launch-mouse-press-test
   (testing "Moves to tmp and sets placeholder when clicked"
-    (let [point {:type :point :id 1}
+    (let [start {:type :start :id 1}
           line {:type :line :id 0}
-          myatm (atom {:elements [line point]})]
-      (with-redefs [hlp/find-elem (fn [i j] point)]
+          myatm (atom {:elements [line start]})]
+      (with-redefs [hlp/find-elem (fn [i j] start)]
         (let [res (shoot/launch-mouse-press myatm "event!")]
-          (is (= point (temp-elem @res)))
-          (is (= {:type :editing :id 1} (last (:elements @myatm)))))))
-    (testing "Can only click a point"
-      (let [finish {:type :finish :pos [10 10] :id 0}
-            myatm (atom {:elements [finish]})
-            res (shoot/launch-mouse-press myatm {:x 10 :y 10})]
-        (is (= finish (first (:elements @myatm))))))))
+          (is (= start (temp-elem @res)))
+          (is (= {:type :editing :id 1} (last (:elements @myatm))))))))
+  (testing "Can only click a start"
+    (let [finish {:type :finish :pos [10 10] :id 0}
+          myatm (atom {:elements [finish]})
+          res (shoot/launch-mouse-press myatm {:x 10 :y 10})]
+      (is (= finish (first (:elements @myatm)))))
+    (let [point {:type :point :pos [10 10] :id 0}
+          myatm (atom {:elements [point]})
+          res (shoot/launch-mouse-press myatm {:x 10 :y 10})]
+      (is (= point (first (:elements @myatm)))))))
 
 (deftest launch-drag-test
   (testing "Stores vector of drag when mousepressed"
-    (let [myatm (atom {:tmp {:editing-elem {:type :point :id 0 :pos [0 0]}}})
+    (let [myatm (atom {:tmp {:editing-elem {:type :start :id 0 :pos [0 0]}}})
           event {:x 1 :y 1}
           res (shoot/launch-drag myatm event)]
       (is (= [-1 -1] (:drag-vec (temp-elem @res)))))))
@@ -29,7 +33,7 @@
 (deftest launch-mouse-release-test
   (testing "Sets velocity if mouse is released with non-nil :drag-vec"
     (let [myatm (atom {:elements [{:type :line :id 1 :pos [0 0]}]
-                       :tmp {:editing-elem {:type :point :id 0
+                       :tmp {:editing-elem {:type :start :id 0
                                             :pos [0 0] :drag-vec [10 10]}}})
           event {}
           res (shoot/launch-mouse-release myatm event)

@@ -17,8 +17,7 @@
 
 (defn restart-button [ratom]
   [:button.btn.btn-default
-   {:on-click
-    #(restart-btn-click ratom)}
+   {:on-click #(restart-btn-click ratom)}
    "Restart"])
 
 (defn shoot-mode-form [ratom]

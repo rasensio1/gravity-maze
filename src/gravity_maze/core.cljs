@@ -3,7 +3,7 @@
    [reagent.core :as r]
    [gravity-maze.state :as state]
    [gravity-maze.swappers.core :as core!]
-   [gravity-maze.draw :as drw]
+   [gravity-maze.draw.core :as drw]
    [gravity-maze.interact.core :as int]
    [gravity-maze.views.core :as vw]
    [quil.core :as q :include-macros true]

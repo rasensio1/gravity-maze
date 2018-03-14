@@ -54,7 +54,6 @@
           event {:x 100 :y 100}
           res (build/build-point-mouse-press myatm event)
           my-point (temp-elem @myatm)]
-      (println "state here" @myatm)
       (is (= [100 100] (:pos my-point)))
       (is (= 55 (:mass my-point)))
       (is (= 1 (:id my-point)))

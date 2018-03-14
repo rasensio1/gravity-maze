@@ -7,15 +7,20 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
+  - Display range on :point elements
+  - Only affect :start when in range
+
+
+
+
+
   - Build - EDIT mode (click on and edit elements)
 
   - Add full integration tests.
+  
+  - Clear all button
 
   - option for bigger 'start' and click radius 
-
-  - Add start point
-    - diff between just any points and the start point 
-      (only allow starting from start)
 
   - display element information
     

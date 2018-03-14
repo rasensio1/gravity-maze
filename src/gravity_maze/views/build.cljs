@@ -44,7 +44,8 @@
   [:div.build-opts
    [:h3 "Options"]
    [:div.btn-group {:field :multi-select :id :tmp.building.options}
-    [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]]])
+    [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]
+    [:button.btn.btn-default {:key :show-point-range} "Show point ranges"]]])
 
 (def build-sub-modes
   [:div.btn-group {:field :single-select :id :mode.building}

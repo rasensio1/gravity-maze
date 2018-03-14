@@ -1,6 +1,12 @@
 (ns gravity-maze.engine
   (:require [gravity-maze.math.helpers :as mth :refer [v+ v- mult-v]]))
 
+(def elem-hierarchy
+  (-> (make-hierarchy)
+      (derive :finish :point)
+      (derive :start :point)
+      atom))
+
 (defn fixed-elem? [elem]
   (or (:fixed elem)
       (nil? (:fixed elem))))
@@ -25,20 +31,24 @@
 (defn sum-by-dot-prod [point lines]
   (reduce #(+ %1 (mth/perp-dot-prod %2 point)) 0 lines))
 
-(defn in-zone?
-  "Checks if a point is in the 'zone' of the line. Determines bounds of 'zone'
-  (base-lines, side-lines) and checks if point is inside by making sure it is
-  above and below one of each group of lines "
-  [line point]
-  (let [[line-pos pt-pos] (map :pos [line point])
+(defmulti in-zone?
+  "Checks if a element is in the 'zone' of the other element.
+  'zone' is determined by element-specific attrs (e.g :line -> within sides)
+  (e.g. :point -> closer than :range)"
+  #(:type %1)
+  :hierarchy elem-hierarchy)
+
+(defmethod in-zone? :line
+  [line ball]
+  (let [[line-pos pt-pos] (map :pos [line ball])
         offset (mult-v (:range line) (mth/unit-normal-vec line-pos pt-pos))
         [b-lines s-lines] ((juxt base-sides other-sides) line-pos offset)
         [b-score s-score] (map (partial sum-by-dot-prod pt-pos)
                                        [b-lines s-lines])]
     (= [0.0 0.0] [b-score s-score])))
 
-(defn in-finish? [{:keys [range] :as fin} pt]
-  (> range (apply mth/pts-dist (map :pos [fin pt]))))
+(defmethod in-zone? :point [{:keys [range] :as el-z} pt]
+  (> range (apply mth/pts-dist (map :pos [el-z pt]))))
 
 (defn is-finished?
   "Checks if a non-fixed point is within the range of a ':finish' element."
@@ -47,29 +57,33 @@
         moving-pts (filter (complement fixed-elem?)
                            (:elements world))]
     (boolean (some true? (for [f finish-pts
-                      m moving-pts] (in-finish? f m))))))
+                      m moving-pts] (in-zone? f m))))))
 
-(defmulti force-between (fn [g e1 e2] (e2 :type)))
+(defmulti force-between
+  "Calculates force between elem and ball."
+  #(:type %1)
+  :hierarchy elem-hierarchy)
 
-(defmethod force-between :line [g el line]
-  (if (not (in-zone? line el)) [0 0] ;; No force if point is outside of zone
-      (let [inputs (map :pos [line el])
+(defmethod force-between :line [line ball g]
+  (if (not (in-zone? line ball)) [0 0] ;; No force if point is outside of zone
+      (let [inputs (map :pos [line ball])
             unit-force (apply mth/unit-normal-vec inputs)
             d2 (Math/pow (apply mth/line-dist inputs) 2)
-            gmm (apply * (cons g (map :mass [el line])))]
+            gmm (apply * (cons g (map :mass [ball line])))]
         (gravity-calc gmm d2 unit-force))))
 
-(defmethod force-between :point [g el1 point]
-  (let [force-dir (apply v- (map :pos [point el1]))
-        d2 (mth/sumsqs force-dir)
-        unit-force (mth/unit-vec force-dir)
-        gmm (apply * (cons g (map :mass [el1 point])))]
-    (gravity-calc gmm d2 unit-force)))
+(defmethod force-between :point [point ball g]
+  (if (not (in-zone? point ball)) [0 0]
+    (let [force-dir (apply v- (map :pos [point ball]))
+          d2 (mth/sumsqs force-dir)
+          unit-force (mth/unit-vec force-dir)
+          gmm (apply * (cons g (map :mass [ball point])))]
+    (gravity-calc gmm d2 unit-force))))
 
-(defmethod force-between :default [g el fin] [0 0])
+(defmethod force-between :default [def ball g] [0 0])
 
 (defn sum-interactions [interaction el {:keys [elements g]}]
-  (reduce (fn [agg el2] (v+ agg (interaction g el el2))) [0 0] elements))
+  (reduce (fn [agg el2] (v+ agg (interaction el2 el g))) [0 0] elements))
 
 (defn update-elem
   "Uses the fourth order Runge-Kutta numerical integration

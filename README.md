@@ -7,10 +7,7 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Display range on :point elements
   - Only affect :start when in range
-
-
 
 
 

@@ -5,10 +5,17 @@
             [cljs.test :refer-macros [deftest testing is]]))
 
 (def zero-point {:type :point
+                 :pos [0 0]
                  :id 0
+                 :range 20
                  :mass 1
+                 :fixed true})
+
+(def zero-start {:type :start
                  :pos [0 0]
                  :vel [0 0]
+                 :id 2
+                 :mass 1
                  :fixed false})
 
 (def zero-x-line {:type :line
@@ -27,11 +34,8 @@
 ;; ... 1 2 3 | 3 2 1 ...
 ;; 0 0 0 0 0 0 0 0 0 0 0
 
-(def simple-point-world {:elements [zero-point
-                                    (assoc zero-point
-                                           :pos [1 1]
-                                           :id 2
-                                           :fixed true)]
+(def simple-point-world {:elements [zero-start
+                                    (assoc zero-point :pos [1 1])]
                          :g 1
                          :dt 1})
 
@@ -52,17 +56,34 @@
              (eng/other-sides line offset))))))
 
 (deftest in-zone?-test
-  (testing "Point in zone returns true"
-    (let [line {:pos [[0 0] [3 0]] :range 3}
+  ;; :line
+  (testing "Point in line zone returns true"
+    (let [line {:type :line :pos [[0 0] [3 0]] :range 3}
           point {:pos [1 1]}]
       (is (= true (eng/in-zone? line point))))
     (let [line zero-x-line
           point (assoc zero-point :pos [2 1])]
       (is (= true (eng/in-zone? line point)))))
-  (testing "Point outside of zone returns false"
-    (let [line {:pos [[0 0] [3 0]] :range 3}
+  (testing "Point outside of line zone returns false"
+    (let [line {:type :line :pos [[0 0] [3 0]] :range 3}
           point {:pos [1 4]}]
-      (is (= false (eng/in-zone? line point))))))
+      (is (= false (eng/in-zone? line point)))))
+
+  ;; :point
+  (testing "Point outside of point zone returns false"
+    (let [point-z {:type :point :pos [10 10] :range 10}
+          point {:pos [20 20]}]
+      (is (= false (eng/in-zone? point-z point)))))
+  (testing "start inside of point zone returns true"
+    (let [point-z {:type :point :pos [10 10] :range 20}
+          point {:pos [20 20]}]
+      (is (= true (eng/in-zone? point-z point)))))
+
+  ;; :finish
+  (testing ":finish elem is a sub-group of :point"
+    (let [point-z {:type :finish :pos [10 10] :range 20}
+          point {:pos [20 20]}]
+      (is (= true (eng/in-zone? point-z point))))))
 
 (deftest calc-accel-test
   (testing "calculates acceleration given force and element"
@@ -76,22 +97,30 @@
     (is (= [1 1] (eng/gravity-calc 1 1 [1 1])))))
 
 (deftest force-between-test
-  ;; Point - Point
+  ;; Start - Point
   (testing "Force between self is zero"
-    (is (= [0 0] (eng/force-between 1 zero-point zero-point))))
+    (is (= [0 0] (eng/force-between zero-start zero-start 1))))
+
   (testing "Force in x=y direction"
-    (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [1 1]))
+    (let [res (eng/force-between (assoc zero-point :pos [1 1]) zero-start  1)
           fmt-res (mapv (partial roundme 2) res)]
       (is (= [0.35 0.35] fmt-res))))
+
   (testing "Force in x-direction mainly"
-    (let [res (eng/force-between 1 zero-point (assoc zero-point :pos [10 1]))
+    (let [res (eng/force-between (assoc zero-point :pos [10 1]) zero-start 1)
           fmt-res (mapv (partial roundme 3) res)]
       (is (= [0.010 0.001] fmt-res))))
+  (testing "No force when ouside of range"
+    (let [res (eng/force-between (assoc zero-point :range 1)
+                                 (assoc zero-start :pos [10 1])
+                                 10)
+          fmt-res (mapv (partial roundme 3) res)]
+      (is (= [0 0] fmt-res))))
 
   ;; Point - line
   (testing "Calculates force"
     (let [point (assoc zero-point :pos [1 1])]
-      (is (= [-1 0] (eng/force-between 1 point zero-x-line)))))
+      (is (= [-1 0] (eng/force-between zero-x-line point 1)))))
   (testing "Zero force if on line"
     (let [point {:type :point :mass 30 :fixed false}
           line {:type :line :mass 30 :pos [[0 0] [0 200]] :fixed true}]
@@ -119,20 +148,20 @@
 (deftest update-elem-test
   (with-redefs [eng/force-between simple-forces]
     (testing "updates element attrs given a point world"
-    (let [res (eng/update-elem zero-point simple-point-world)]
+    (let [res (eng/update-elem zero-start simple-point-world)]
       (is (= [1 1] (:vel res))))
 
-    (let [res (->> (iterate #(eng/update-elem % simple-point-world) zero-point)
+    (let [res (->> (iterate #(eng/update-elem % simple-point-world) zero-start)
                    (take 3)
                    last)]
-      (is (= [1.83 1.83] (map (partial roundme 2) (:pos res))))))))
+      (is (= [2 2] (map (partial roundme 2) (:pos res))))))))
 
 (deftest update-world-test
   (with-redefs [eng/force-between simple-forces]
     (testing "updates all non-fixed start elements in state"
       (let [new-world (eng/update-world simple-point-world)]
         (is (= (set [[1 1] [0.5 0.5]]) (set (mapv :pos (:elements new-world)))))
-        (is (= (set [[1 1] [0 0]]) (set (mapv :vel (:elements new-world)))))))
+        (is (= (set [[1 1] nil]) (set (mapv :vel (:elements new-world)))))))
     (testing "updates :finished attr when appropriate"
       (with-redefs [eng/update-elem (fn [x] x)
                     eng/is-finished? (fn [x] true)]
@@ -141,16 +170,6 @@
                      :finished? false}
               res (eng/update-world world)]
           (is (= true (:finished? res))))))))
-
-(deftest in-finish?-test
-  (testing "Knows when true"
-    (let [fin {:pos [0 0] :range 5}
-          pt {:pos [3 3]}]
-      (is (= true (eng/in-finish? fin pt)))))
-  (testing "Knows when false"
-    (let [fin {:pos [0 0] :range 5}
-          pt {:pos [3 6]}]
-      (is (= false (eng/in-finish? fin pt))))))
 
 (deftest is-finished?-test
   (testing "Can tell when a game is finished"

@@ -1,5 +1,5 @@
 (ns gravity-maze.draw.core
-  (:require [quil.core :as q :include-macros true]
+  (:require [quil.core :as q]
             [gravity-maze.draw.opts :as opt]
             [gravity-maze.draw.parts :as prt]
             [gravity-maze.helpers :refer [options

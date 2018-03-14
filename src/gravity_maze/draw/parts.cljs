@@ -1,6 +1,6 @@
 (ns gravity-maze.draw.parts
   (:require
-   [quil.core :as q :include-macros true]
+   [quil.core :as q]
    [gravity-maze.math.helpers :as mth]
    [gravity-maze.math.draw :as mth-drw]))
 

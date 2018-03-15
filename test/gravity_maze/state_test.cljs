@@ -36,20 +36,18 @@
                  :elements [{:type :point}]}]
       (is (= state (st/redo state))))))
 
-(comment (deftest restart-test
-  (testing "Can restart after shooting a point"
-    (let [point {:type :point :mass 50 :pos [0 0]
-                 :vel [10 10] :fixed false :id 0}
-          state (atom (assoc st/initial-state :elements [point]))
-          shooting (shoot/shooting-btn-click state)
-          res (last (take 10 (iterate eng/update-world shooting)))]
-      (is (= shooting (st/restart res)))))
-  (testing "Can restart multiple times"
-    (let [point {:type :point :mass 50 :pos [0 0]
-                 :vel [10 10] :fixed false :id 0}
-          state (atom (assoc st/initial-state :elements [point]))
-          shooting (shoot/shooting-btn-click state)
-          res (last (take 10 (iterate eng/update-world shooting)))
-          restarted (last (take 5 (iterate st/restart res)))]
-      (is (= shooting restarted))))))
+(deftest shoot-start-test
+  (testing "Can restart a game after shooting"
+    (let [state {:hi :ok}]
+      (is (= {:hi :ok :shoot-start state} (st/add-shoot-start state)))))
+  (testing "Can click multiple times"
+    (let [state {:hi :ok :shoot-start :blah}]
+      (is (= {:hi :ok :shoot-start {:hi :ok}} (st/add-shoot-start state))))))
+
+(deftest restart-test
+  (testing "Can restart a game"
+    (let [state {:hi :ok :lol :yeah}
+          saved (st/add-shoot-start state)
+          changed (assoc saved :hi :booo)]
+      (is (= saved (st/restart changed))))))
 

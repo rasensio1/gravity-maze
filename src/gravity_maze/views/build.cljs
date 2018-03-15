@@ -70,9 +70,14 @@
     #(st!/redo! ratom)}
    "Redo"])
 
+(defn building-btn-click [ratom]
+  (do (st!/building-mode! ratom)
+      (st!/remove-shooting-tmps! ratom)))
+
 (defn building-btn [ratom]
   [:button.btn.btn-default
-   {:key {:building {}}} "Building"])
+   {:key {:building {}} :on-click #(building-btn-click ratom)}
+   "Building"])
 
 (defn build-mode-form [ratom]
   [:div {:field :container

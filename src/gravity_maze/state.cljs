@@ -59,8 +59,10 @@
     (assoc fwd :history (dissoc state :fwd))
     state))
 
-(defn restart
-  "Sets current state as first state in :history. Preserves
-  :history for multiple restarts."
-  [{:keys [history]}]
-  (assoc history :history history))
+(defn restart [{:keys [shoot-start] :as state}]
+   (assoc shoot-start :shoot-start shoot-start))
+
+(defn add-shoot-start
+  "Sets current state as :shoot-start"
+  [state]
+  (assoc state :shoot-start (dissoc state :shoot-start)))

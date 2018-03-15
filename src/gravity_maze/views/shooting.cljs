@@ -3,12 +3,11 @@
             [gravity-maze.swappers.state :as st!]))
 
 (defn shooting-btn-click [ratom]
-  (do (st!/add-history! ratom)
-      (st!/shooting-mode! ratom)))
+  (do (st!/shooting-mode! ratom)
+      (st!/add-shoot-start! ratom)))
 
 (defn restart-btn-click [ratom]
-  (st!/restart! ratom)
-  (st!/shooting-mode! ratom))
+  (st!/restart! ratom))
 
 (defn shooting-btn [ratom]
   [:button.btn.btn-default

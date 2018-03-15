@@ -7,9 +7,7 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Only affect :start when in range
-
-
+  - BUG click and release w/ no drag the start
 
   - Build - EDIT mode (click on and edit elements)
 

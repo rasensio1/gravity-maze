@@ -19,8 +19,8 @@
   :elements. "
   [atm _]
   (let [elem (get-in @atm [:tmp :editing-elem])]
-    (intr!/remove-tmp-elem! atm)
     (when-let [new-vel (:drag-vec elem)]
+      (intr!/remove-tmp-elem! atm)
       (as-> (assoc elem :vel new-vel :fixed false) prepped-elem
         (dissoc prepped-elem :drag-vec)
         (intr!/add-elem! atm prepped-elem))))

@@ -31,7 +31,9 @@
     (= [0.0 0.0] [b-score s-score])))
 
 (defmethod in-zone? :point [{:keys [range] :as el-z} pt]
-  (> range (apply mth/pts-dist (map :pos [el-z pt]))))
+  (if range
+    (> range (apply mth/pts-dist (map :pos [el-z pt])))
+    true))
 
 (defn is-finished?
   "Checks if a non-fixed point is within the range of a ':finish' element."

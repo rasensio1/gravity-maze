@@ -85,10 +85,10 @@
     (is (= [1 1] (eng/gravity-calc 1 1 [1 1])))))
 
 (deftest force-between-test
-  ;; Start - Point
   (testing "Force between self is zero"
     (is (= [0 0] (eng/force-between zero-start zero-start 1))))
 
+  ;; Start - Point
   (testing "Force in x=y direction"
     (let [res (eng/force-between (assoc zero-point :pos [1 1]) zero-start  1)
           fmt-res (mapv (partial roundme 2) res)]
@@ -112,20 +112,25 @@
   (testing "Zero force if on line"
     (let [point {:type :point :mass 30 :fixed false}
           line {:type :line :mass 30 :pos [[0 0] [0 200]] :fixed true}]
-      (is (= [0 0] (eng/force-between 1 point line)))))
+      (is (= [0 0] (eng/force-between line point 1)))))
   (testing "Zero force if not in 'zone' of line"
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
-          line {:type :line :mass 30 :pos [[0 20] [0 200]] :fixed true}]
-      (is (= [0 0] (eng/force-between 1 point line)))))
+          line {:type :line :range 1 :mass 30 :pos [[0 20] [0 200]] :fixed true}]
+      (is (= [0 0] (eng/force-between line point 1)))))
+
+  ;; start - start
+  (testing "Calculates force"
+    (let [start (assoc zero-start :pos [1 0] :id 100)]
+      (is (= [-1 0] (eng/force-between zero-start start 1)))))
 
   ;; anything else
   (testing "other elements always returns zero"
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
           finish {:type :finish :pos [0 20] :fixed true}]
-      (is (= [0 0] (eng/force-between 1 point finish)))))
+      (is (= [0 0] (eng/force-between point finish 1 )))))
     (let [point {:type :point :mass 30 :pos [10 10] :fixed false}
           niler {:type nil :id 10}]
-      (is (= [0 0] (eng/force-between 1 point niler)))))
+      (is (= [0 0] (eng/force-between point niler 1 )))))
 
 (deftest sum-interactions-test
   (testing "calculates the total force on an element"

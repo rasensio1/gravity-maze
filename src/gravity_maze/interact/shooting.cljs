@@ -14,9 +14,8 @@
 
 (defn launch-mouse-press [atm event]
     (when-let [elem (find-elem (partial launchable? event) @atm)]
-      (swap! atm assoc-in [:elements (:id elem)]
-            {:type :editing :id (:id elem)})
-      (swap! atm assoc-in [:tmp :editing-elem] elem))
+      (intr!/add-placeholder-elem! atm (:id elem))
+      (intr!/set-tmp-elem! atm elem))
     atm)
 
 (mac/defn-elem-update launch-drag
@@ -36,6 +35,5 @@
 
 (def click-fns {:shooting {:mouse-pressed launch-mouse-press
                            :mouse-dragged launch-drag
-                           :mouse-released launch-mouse-release
-                           }})
+                           :mouse-released launch-mouse-release}})
 

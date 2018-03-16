@@ -20,8 +20,8 @@
   [:div [:h2 "GRAVITY MAZE"]])
 
 (defn -debugging [ratom]
-  [:div  (map (fn [el] [:p {:key (:id el)} (str el) ]) (:elements @ratom) )
-  [:p (str (dissoc @ratom :history :elements :fwd))]  ])
+  [:div  (map (fn [el] [:p {:key (:id el)} (str el) ]) (:elements @ratom))
+  [:p (str (dissoc @ratom :history :elements :fwd :shoot-start))]])
 
 (defn dash [ratom]
   (fn []

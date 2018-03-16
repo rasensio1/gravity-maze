@@ -30,7 +30,7 @@
 (def initial-state
   {:elements []
    :g -500
-   :mode {:building {:line true}}
+   :mode {:building {:add {:line true}}}
    :dt 0.02
    :drag 0.1
    :finished? false

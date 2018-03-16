@@ -51,22 +51,23 @@
   atm)
 
 (def click-fns {:building
-                {:line
-                 {:mouse-pressed build-line-mouse-press
-                  :mouse-dragged build-line-mouse-drag
-                  :mouse-released save-and-validate-tmp-elem
-                  }
-                 :start
-                 {:mouse-pressed build-start-mouse-press
-                  :mouse-dragged nothing
-                  :mouse-released save-and-validate-tmp-elem
-                  }
-                 :point
-                 {:mouse-pressed build-point-mouse-press
-                  :mouse-dragged nothing
-                  :mouse-released save-and-validate-tmp-elem
-                  }
-                 :finish
-                 {:mouse-pressed build-finish-mouse-press
-                  :mouse-dragged nothing
-                  :mouse-released save-and-validate-tmp-elem}}})
+                {:add
+                 {:line
+                  {:mouse-pressed build-line-mouse-press
+                   :mouse-dragged build-line-mouse-drag
+                   :mouse-released save-and-validate-tmp-elem
+                   }
+                  :start
+                  {:mouse-pressed build-start-mouse-press
+                   :mouse-dragged nothing
+                   :mouse-released save-and-validate-tmp-elem
+                   }
+                  :point
+                  {:mouse-pressed build-point-mouse-press
+                   :mouse-dragged nothing
+                   :mouse-released save-and-validate-tmp-elem
+                   }
+                  :finish
+                  {:mouse-pressed build-finish-mouse-press
+                   :mouse-dragged nothing
+                   :mouse-released save-and-validate-tmp-elem}}}})

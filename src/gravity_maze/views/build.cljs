@@ -8,37 +8,32 @@
 (defn building-line? [state]
   (get-in state [:mode :building :line]))
 
-(defn build-param [label id]
-  [:div.param-group
+(defn build-param [idx {:keys [label id]}]
+  ;; requires idx because react will complain
+  [:div.param-group {:key idx}
    [:div [:p label]]
    [:div [:input.form-control
           {:field :numeric :id id}]]])
 
-(def line-params
+(defn elem-params [type params]
   [:div {:field :container
-         :visible? #(get-in % [:mode :building :line])}
-   [:h3 "line-opts"]
-   (build-param "Mass" :tmp.building.line.mass)
-   (build-param "Range" :tmp.building.line.range)])
+         :visible? #(get-in % [:mode :building :add type])}
+   [:h3 (str (name type) "opts")]
+   (map-indexed build-param params)])
+
+(def line-params
+  (elem-params :line [{:label "Mass" :id :tmp.building.line.mass}
+                      {:label "Range" :id :tmp.building.line.range}]))
 
 (def point-params
-  [:div {:field :container
-         :visible? #(get-in % [:mode :building :point])}
-   [:h3 "point-opts"]
-   (build-param "Mass" :tmp.building.point.mass)
-   (build-param "Range" :tmp.building.point.range)])
+  (elem-params :point [{:label "Mass" :id :tmp.building.point.mass}
+                       {:label "Range" :id :tmp.building.point.range}]))
 
 (def start-params
-  [:div {:field :container
-         :visible? #(get-in % [:mode :building :start])}
-   [:h3 "start-opts"]
-   (build-param "Mass" :tmp.building.start.mass)])
+  (elem-params :start [{:label "Mass" :id :tmp.building.start.mass}]))
 
 (def finish-params
-  [:div {:field :container
-         :visible? #(get-in % [:mode :building :finish])}
-   [:h3 "start-opts"]
-   (build-param "Range" :tmp.building.finish.range)])
+  (elem-params :finish [{:label "Range" :id :tmp.building.finish.range}]))
 
 (def build-opts
   [:div.build-opts
@@ -47,8 +42,18 @@
     [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]
     [:button.btn.btn-default {:key :show-point-range} "Show point ranges"]]])
 
-(def build-sub-modes
-  [:div.btn-group {:field :single-select :id :mode.building}
+(def build-elem-params
+  [:div.build-elem-params
+   line-params
+   point-params
+   start-params
+   finish-params])
+
+(def build-add-modes
+  [:div.build-add-modes
+   [:div.btn-group {:field :single-select
+                   :id :mode.building.add
+                   :visible? #(get-in % [:mode :building :add])}
    [:button.btn.btn-default
     {:key {:line true}} "Add a line"]
    [:button.btn.btn-default
@@ -56,19 +61,25 @@
    [:button.btn.btn-default
     {:key {:start true}} "Add the start"]
    [:button.btn.btn-default
-    {:key {:finish true}} "Add the finish"]])
+    {:key {:finish true}} "Add the finish"]]
+   build-elem-params])
+
+(def build-modes
+  [:div.build-modes
+   [:div.btn-group {:field :single-select :id :mode.building}
+   [:button.btn.btn-default
+    {:key {:add true}} "Add elements"]
+   [:button.btn.btn-default
+    {:key {:edit true}} "Edit elements"]]
+   build-add-modes])
 
 (defn undo-button [ratom]
   [:button.btn.btn-default
-   {:on-click
-    #(st!/undo! ratom)}
-   "Undo"])
+   {:on-click #(st!/undo! ratom)} "Undo"])
 
 (defn redo-button [ratom]
   [:button.btn.btn-default
-   {:on-click
-    #(st!/redo! ratom)}
-   "Redo"])
+   {:on-click #(st!/redo! ratom)} "Redo"])
 
 (defn building-btn-click [ratom]
   (do (st!/building-mode! ratom)
@@ -82,13 +93,8 @@
 (defn build-mode-form [ratom]
   [:div {:field :container
         :visible? #(contains? (:mode %) :building)}
-   build-sub-modes
    (undo-button ratom)
    (redo-button ratom)
-   build-opts
-   [:div.sub-options
-    line-params
-    point-params
-    start-params
-    finish-params]])
+   build-modes
+   build-opts])
 

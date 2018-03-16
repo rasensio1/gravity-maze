@@ -7,8 +7,6 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - BUG click and release w/ no drag the start
-
   - Build - EDIT mode (click on and edit elements)
 
   - Add full integration tests.

@@ -14,19 +14,6 @@
   (if (zero? d2) [0 0]
       (mult-v (/ gmm d2) vec)))
 
-(defn base-sides
-  "Returns base sides of zone by offsetting in both + and - dirs."
-  [line offset]
-  ((juxt (partial mth/offset-line v+ offset)
-       (partial mth/offset-line v- offset)) line))
-
-(defn other-sides
-  "Returns sides of zone by doubling normal vectors at line ends."
-  [line offset] (mapv #((juxt v+ v-) % offset) line))
-
-(defn sum-by-dot-prod [point lines]
-  (reduce #(+ %1 (mth/perp-dot-prod %2 point)) 0 lines))
-
 (defmulti in-zone?
   "Checks if a element is in the 'zone' of the other element.
   'zone' is determined by element-specific attrs (e.g :line -> within sides)
@@ -38,8 +25,8 @@
   [line ball]
   (let [[line-pos pt-pos] (map :pos [line ball])
         offset (mult-v (:range line) (mth/unit-normal-vec line-pos pt-pos))
-        [b-lines s-lines] ((juxt base-sides other-sides) line-pos offset)
-        [b-score s-score] (map (partial sum-by-dot-prod pt-pos)
+        [b-lines s-lines] ((juxt mth/base-sides mth/other-sides) line-pos offset)
+        [b-score s-score] (map (partial mth/sum-by-dot-prod pt-pos)
                                        [b-lines s-lines])]
     (= [0.0 0.0] [b-score s-score])))
 

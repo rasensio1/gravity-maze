@@ -43,18 +43,6 @@
   (if (apply = (map :pos [j k]))
     [0 0] [1 1]))
 
-(deftest base-sides-test
-  (testing "returns base sides"
-    (is (= [[[0 1] [1 1]] [[0 -1] [1 -1]]]
-           (eng/base-sides [[0 0] [1 0]] [0 1])))))
-
-(deftest other-sides-test
-  (testing "Creates side lines"
-    (let [line [[0 0] [3 0]]
-          offset [-1 1]]
-      (is (= [[[-1 1] [1 -1]] [[2 1] [4 -1]]]
-             (eng/other-sides line offset))))))
-
 (deftest in-zone?-test
   ;; :line
   (testing "Point in line zone returns true"

@@ -60,9 +60,33 @@
     (is (= 0 (mth/det3x3 [[1 4] [2 5] [3 6]])))
     (is (= -9 (mth/det3x3 [[10 4] [2 5] [3 6]])))))
 
+(deftest other-sides-test
+  (testing "Creates side lines"
+    (let [line [[0 0] [3 0]]
+          offset [-1 1]]
+      (is (= [[[-1 1] [1 -1]] [[2 1] [4 -1]]]
+             (mth/other-sides line offset))))))
+
+(deftest base-sides-test
+  (testing "returns base sides"
+    (is (= [[[0 1] [1 1]] [[0 -1] [1 -1]]]
+           (mth/base-sides [[0 0] [1 0]] [0 1])))))
+
+(deftest out-of-line?-test
+  (testing "knows when out of line"
+    (is (= true (mth/out-of-line? [[0 0] [10 0]] [11 1])))
+    (is (= true (mth/out-of-line? [[10 0] [20 0]] [1 1])))
+    (is (= true (mth/out-of-line? [[0 0] [10 0]] [11 0])))
+    (is (= true (mth/out-of-line? [[10 0] [20 0]] [21 1]))))
+  (testing "knows not out of line trianges"
+    (is (= false (mth/out-of-line? [[10 0] [20 0]] [15 30])))
+    (is (= false (mth/out-of-line? [[10 0] [20 0]] [15 1])))))
+
 (deftest line-dist-test
   (testing "can find simple distances"
     (is (= 2 (mth/line-dist [[0 0] [5 0]] [0 2])))
     (is (= 5 (mth/line-dist [[0 0] [5 0]] [0 5]))))
   (testing "can find non-simple distances"
-    (is (= 4.95 (roundme 2 (mth/line-dist [[0 0] [10 10]] [2 9]))))))
+    (is (= 4.95 (roundme 2 (mth/line-dist [[0 0] [10 10]] [2 9])))))
+  (testing "can find distance when line has start and end"
+    (is (= 2 (mth/line-dist [[0 0] [0 5]] [0 7])))))

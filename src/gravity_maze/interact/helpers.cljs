@@ -1,6 +1,8 @@
 (ns gravity-maze.interact.helpers
   (:require [gravity-maze.math.helpers :as mth]))
 
+(def click-range 10)
+
 (defn find-elem
   "Returns element based on filter-fn, else nil."
   [filter-fn world]

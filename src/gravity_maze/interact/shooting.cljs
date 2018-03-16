@@ -2,14 +2,22 @@
   (:require [gravity-maze.math.helpers :as mth]
             [gravity-maze.swappers.interact.core :as intr!]
             [gravity-maze.interact.helpers :refer [find-elem
-                                                   clicked?]])
+                                                   clicked?
+                                                   click-range]])
   (:require-macros [gravity-maze.macros :as mac]))
 
-(def click-range 10)
+(defn launchable?
+  "Returns launchable element if clicked, else nil"
+  [{:keys [x y]} el ]
+  (when (= :start (:type el))
+    ((partial clicked? click-range [x y]) el)))
 
-(mac/defn-elem-set-update launch-mouse-press
-   (fn [el] (when (= :start (:type el))
-                ((partial clicked? click-range [x y]) el))))
+(defn launch-mouse-press [atm event]
+    (when-let [elem (find-elem (partial launchable? event) @atm)]
+      (swap! atm assoc-in [:elements (:id elem)]
+            {:type :editing :id (:id elem)})
+      (swap! atm assoc-in [:tmp :editing-elem] elem))
+    atm)
 
 (mac/defn-elem-update launch-drag
    (fn [el] (assoc el :drag-vec (mth/v- (:pos el) [x y]))))

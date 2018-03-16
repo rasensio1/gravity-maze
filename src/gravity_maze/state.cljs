@@ -1,5 +1,11 @@
 (ns gravity-maze.state)
 
+(def elem-hierarchy
+  (-> (make-hierarchy)
+      (derive :finish :point)
+      (derive :start :point)
+      atom))
+
 (def default-line {:type :line
                    :mass 800
                    :range 50

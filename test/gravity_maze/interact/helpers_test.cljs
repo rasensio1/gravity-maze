@@ -25,6 +25,7 @@
       (is (= nil (hlp/find-elem #(= [0 0] (:pos %)) world))))))
 
 (deftest clicked?-test
+  ;; :point
   (testing "Knows if point pos is in range of click"
     (let [pt {:pos [10 10] :type :point}]
       (is (= pt (hlp/clicked? 20 [0 0] pt))))
@@ -34,4 +35,18 @@
       (is (= pt (hlp/clicked? 25 [10 10] pt)))))
   (testing "Knows if point pos isn't in range of click"
     (is (= false (hlp/clicked? 5 [0 0] {:pos [10 10] :type :point})))
-    (is (= false (hlp/clicked? 10 [20 20] {:pos [35 20] :type :point})))))
+    (is (= false (hlp/clicked? 10 [20 20] {:pos [35 20] :type :point}))))
+
+  (testing "Knows if line is in range of click"
+    (let [ln {:pos [[10 10] [20 20]] :type :line}]
+      (is (= ln (hlp/clicked? 10 [10 10] ln))))
+    (let [ln {:pos [[10 10] [20 20]] :type :line}]
+      (is (= ln (hlp/clicked? 10 [15 10] ln))))
+    (let [ln {:pos [[10 10] [20 20]] :type :line}]
+      (is (= ln (hlp/clicked? 10 [25 25] ln)))))
+
+  (testing "Knows if line is not in range of click"
+    (let [ln {:pos [[10 10] [20 20]] :type :line}]
+      (is (= false (hlp/clicked? 10 [30 30] ln))))
+    (let [ln {:pos [[10 10] [20 20]] :type :line}]
+      (is (= false (hlp/clicked? 1 [12 10] ln))))))

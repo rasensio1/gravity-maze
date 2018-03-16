@@ -18,6 +18,12 @@
   (if (>= range (mth/pts-dist click-pos pos))
     elem false))
 
+(defmethod clicked? :line [range click-pos {:keys [pos] :as line}]
+  (if (>= range (mth/line-dist pos click-pos))
+    line false))
+
+(defmethod clicked? :default [i j k] false)
+
 (defn drag-vec? [elem]
   (if (:drag-vec elem) elem false))
 

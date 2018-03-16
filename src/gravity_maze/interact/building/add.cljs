@@ -1,10 +1,8 @@
 (ns gravity-maze.interact.building.add
   (:require [gravity-maze.state :as state]
-            [gravity-maze.swappers.state :as st!]
             [gravity-maze.interact.building.validation :as bval]
             [gravity-maze.interact.helpers :refer [nothing]]
-            [gravity-maze.interact.building.helpers :refer [save-and-validate-tmp-elem]]
-            [gravity-maze.swappers.interact.core :as intr!])
+            [gravity-maze.interact.building.helpers :refer [save-and-validate-tmp-elem]])
 
   (:require-macros [gravity-maze.macros :as mac]))
 

@@ -7,7 +7,8 @@ EXTREME GAMES OF CATCH!
 
 ### TODO
 
-  - Build - EDIT mode (click on and edit elements)
+  - WIP Build - EDIT mode (click on and edit elements)
+    - add 'edit' ns under interact/bulding...
 
   - Add full integration tests.
   

@@ -26,12 +26,12 @@
 
 (deftest clicked?-test
   (testing "Knows if point pos is in range of click"
-    (let [pt {:pos [10 10]}]
+    (let [pt {:pos [10 10] :type :point}]
       (is (= pt (hlp/clicked? 20 [0 0] pt))))
-    (let [pt {:pos [0 0]}]
+    (let [pt {:pos [0 0] :type :point}]
       (is (= pt (hlp/clicked? 10 [0 0] pt))) )
-    (let [pt {:pos [27 27]}]
+    (let [pt {:pos [27 27] :type :point}]
       (is (= pt (hlp/clicked? 25 [10 10] pt)))))
   (testing "Knows if point pos isn't in range of click"
-    (is (= false (hlp/clicked? 5 [0 0] {:pos [10 10]})))
-    (is (= false (hlp/clicked? 10 [20 20] {:pos [35 20]})))))
+    (is (= false (hlp/clicked? 5 [0 0] {:pos [10 10] :type :point})))
+    (is (= false (hlp/clicked? 10 [20 20] {:pos [35 20] :type :point})))))

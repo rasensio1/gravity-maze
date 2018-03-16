@@ -1,5 +1,6 @@
 (ns gravity-maze.interact.helpers
-  (:require [gravity-maze.math.helpers :as mth]))
+  (:require [gravity-maze.math.helpers :as mth]
+            [gravity-maze.state :as st]))
 
 (def click-range 10)
 
@@ -9,7 +10,11 @@
   (->> (:elements world)
        (some filter-fn)))
 
-(defn clicked? [range click-pos {:keys [pos] :as elem}]
+(defmulti clicked?
+  (fn [range click-pos elem] (:type elem))
+  :hierarchy st/elem-hierarchy)
+
+(defmethod clicked? :point [range click-pos {:keys [pos] :as elem}]
   (if (>= range (mth/pts-dist click-pos pos))
     elem false))
 

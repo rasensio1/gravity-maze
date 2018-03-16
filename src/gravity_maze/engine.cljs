@@ -1,11 +1,7 @@
 (ns gravity-maze.engine
-  (:require [gravity-maze.math.helpers :as mth :refer [v+ v- mult-v]]))
-
-(def elem-hierarchy
-  (-> (make-hierarchy)
-      (derive :finish :point)
-      (derive :start :point)
-      atom))
+  (:require [gravity-maze.math.helpers :as mth :refer [v+ v-
+                                                       mult-v]]
+            [gravity-maze.state :as st]))
 
 (defn fixed-elem? [elem]
   (or (:fixed elem)
@@ -36,7 +32,7 @@
   'zone' is determined by element-specific attrs (e.g :line -> within sides)
   (e.g. :point -> closer than :range)"
   #(:type %1)
-  :hierarchy elem-hierarchy)
+  :hierarchy st/elem-hierarchy)
 
 (defmethod in-zone? :line
   [line ball]
@@ -62,7 +58,7 @@
 (defmulti force-between
   "Calculates force between elem and ball."
   #(:type %1)
-  :hierarchy elem-hierarchy)
+  :hierarchy st/elem-hierarchy)
 
 (defmethod force-between :line [line ball g]
   (if (not (in-zone? line ball)) [0 0] ;; No force if point is outside of zone

@@ -14,7 +14,6 @@
 
 (defn launch-mouse-press [atm event]
     (when-let [elem (find-elem (partial launchable? event) @atm)]
-      (intr!/add-placeholder-elem! atm (:id elem))
       (intr!/set-tmp-elem! atm elem))
     atm)
 

@@ -5,14 +5,13 @@
             [cljs.test :refer-macros [deftest testing is]]))
 
 (deftest launch-mouse-press-test
-  (testing "Moves to tmp and sets placeholder when clicked"
+  (testing "Moves to tmp when clicked"
     (let [start {:type :start :id 1}
           line {:type :line :id 0}
           myatm (atom {:elements [line start]})]
       (with-redefs [hlp/find-elem (fn [i j] start)]
         (let [res (shoot/launch-mouse-press myatm "event!")]
-          (is (= start (temp-elem @res)))
-          (is (= {:type :editing :id 1} (last (:elements @myatm))))))))
+          (is (= start (temp-elem @res)))))))
   (testing "Can only click a start"
     (let [finish {:type :finish :pos [10 10] :id 0}
           myatm (atom {:elements [finish]})

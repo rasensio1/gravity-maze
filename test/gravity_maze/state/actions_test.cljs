@@ -1,8 +1,14 @@
 (ns gravity-maze.state.actions-test
   (:require [gravity-maze.state.actions :as act]
-            [cljs.test :refer-macros [deftest testing is]]
-            [gravity-maze.views.shooting :as shoot]
-            [gravity-maze.engine :as eng]))
+            [cljs.test :refer-macros [deftest testing is]]))
+
+(deftest set-mode-test
+  (testing "sets the mode yo"
+    (is (= {:boo :lol :mode {:hi {:ok true}}}
+           (act/set-mode {:boo :lol} [:hi :ok]))))
+  (testing "overwrites other mode"
+    (is (= {:boo :lol :mode {:hi {:ok true}}}
+           (act/set-mode {:boo :lol :mode {:nope {:not true}}} [:hi :ok])))))
 
 (deftest add-history-test
   (testing "Adds current state as history"

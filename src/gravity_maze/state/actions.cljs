@@ -1,5 +1,9 @@
 (ns gravity-maze.state.actions)
 
+(defn set-mode [state mode]
+  (->> (assoc-in {} mode true)
+       (assoc state :mode)))
+
 (defn add-history [state]
   (-> (assoc state :history state)
       (dissoc :fwd)))

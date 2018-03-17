@@ -3,6 +3,7 @@
               [gravity-maze.core-test]
               [gravity-maze.engine-test]
               [gravity-maze.state.actions-test]
+              [gravity-maze.state.mode-test]
               [gravity-maze.interact.building.add-test]
               [gravity-maze.interact.building.edit-test]
               [gravity-maze.interact.building.helpers-test]
@@ -17,6 +18,7 @@
 (doo-tests 'gravity-maze.core-test
            'gravity-maze.engine-test
            'gravity-maze.state.actions-test
+           'gravity-maze.state.mode-test
            'gravity-maze.interact.building.add-test
            'gravity-maze.interact.building.edit-test
            'gravity-maze.interact.building.helpers-test

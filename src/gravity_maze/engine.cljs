@@ -1,11 +1,9 @@
 (ns gravity-maze.engine
-  (:require [gravity-maze.math.helpers :as mth :refer [v+ v-
-                                                       mult-v]]
+  (:require [gravity-maze.math.helpers :as mth :refer [v+ v- mult-v]]
             [gravity-maze.state.core :as st]))
 
-(defn fixed-elem? [elem]
-  (or (:fixed elem)
-      (nil? (:fixed elem))))
+(defn fixed-elem? [elem] ;; true if nil
+  (not (false? (:fixed elem))))
 
 (defn calc-accel [force {:keys [mass] :as el}]
   (mth/div-v mass force))
@@ -31,18 +29,19 @@
     (= [0.0 0.0] [b-score s-score])))
 
 (defmethod in-zone? :point [{:keys [range] :as el-z} pt]
-  (if range
-    (> range (apply mth/pts-dist (map :pos [el-z pt])))
-    true))
+  (if-not range true ;; if no :range attr, assume true
+    (> range (apply mth/pts-dist (map :pos [el-z pt])))))
 
 (defn is-finished?
   "Checks if a non-fixed point is within the range of a ':finish' element."
   [world]
-  (let [finish-pts (filter #(= :finish (:type %)) (:elements world))
+  (let [finish-pts (filter #(= :finish (:type %))
+                           (:elements world))
         moving-pts (filter (complement fixed-elem?)
                            (:elements world))]
     (boolean (some true? (for [f finish-pts
-                      m moving-pts] (in-zone? f m))))))
+                               m moving-pts]
+                           (in-zone? f m))))))
 
 (defmulti force-between
   "Calculates force between elem and ball."
@@ -50,7 +49,7 @@
   :hierarchy st/elem-hierarchy)
 
 (defmethod force-between :line [line ball g]
-  (if (not (in-zone? line ball)) [0 0] ;; No force if point is outside of zone
+  (if-not (in-zone? line ball) [0 0] ;; No force if point is outside of zone
       (let [inputs (map :pos [line ball])
             unit-force (apply mth/unit-normal-vec inputs)
             d2 (Math/pow (apply mth/line-dist inputs) 2)
@@ -58,7 +57,7 @@
         (gravity-calc gmm d2 unit-force))))
 
 (defmethod force-between :point [point ball g]
-  (if (not (in-zone? point ball)) [0 0]
+  (if-not (in-zone? point ball) [0 0]
     (let [force-dir (apply v- (map :pos [point ball]))
           d2 (mth/sumsqs force-dir)
           unit-force (mth/unit-vec force-dir)

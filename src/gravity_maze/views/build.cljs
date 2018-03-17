@@ -65,10 +65,8 @@
    build-elem-params])
 
 (defn edit-btn-click [ratom]
-  ;; (exit-mode ratom)  any cleanup that needs to be done before switching mode
-  ;; (enter-mode ratom mode) sets mode and any other setup that should be done.
-  (swap! ratom assoc-in [:mode :building] {:edit true})
-  )
+  (do (st!/exit-mode! ratom)
+      (st!/enter-mode! ratom [:building :edit])))
 
 (defn build-modes [ratom]
   [:div.build-modes
@@ -88,10 +86,8 @@
    {:on-click #(st!/redo! ratom)} "Redo"])
 
 (defn building-btn-click [ratom]
-  ;; (exit-mode ratom)  any cleanup that needs to be done before switching mode
-  ;; (enter-mode ratom mode) sets mode and any other setup that should be done.
-  (do (st!/building-mode! ratom)
-      (st!/remove-shooting-tmps! ratom)))
+  (do (st!/exit-mode! ratom)
+      (st!/enter-mode! ratom [:building])))
 
 (defn building-btn [ratom]
   [:button.btn.btn-default

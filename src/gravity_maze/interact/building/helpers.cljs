@@ -1,18 +1,16 @@
 (ns gravity-maze.interact.building.helpers
-  (:require [gravity-maze.swappers.state :as st!]
-            [gravity-maze.interact.building.validation :as bval]
-            [gravity-maze.swappers.interact.core :as intr!]))
+  (:require [gravity-maze.state.actions :as act]
+            [gravity-maze.helpers :as hlp]
+            [gravity-maze.interact.building.validation :as bval]))
 
-(defn save-and-validate-tmp-elem
-  "Validates and saves a element in temp storage. If not saveable,
-  shows error message and does not save."
-  [atm _]
-  (when-let [validated-elem (bval/add-errors (get-in @atm [:tmp :editing-elem]))]
-    (intr!/remove-tmp-elem! atm)
+(defn save-and-validate-tmp-elem [state]
+  (if-let [val-elem (-> state hlp/tmp-elem bval/add-errors)]
+    (if-let [error (bval/some-not-saveable (:validation-errors val-elem))]
+      (do ;; alert message and return original state
+        (js/alert (str "Element not added. " (:message error))) state)
+      (-> state
+          act/remove-tmp-elem
+          act/add-history
+          (act/add-elem (bval/add-error-msgs val-elem))))
+    state)) ;; if no 'tmp-elem' just return state
 
-    (if-let [error (bval/some-not-saveable (:validation-errors validated-elem))]
-      (js/alert (str "Element not added. " (:message error)))
-      ;; else, add error messages, save and clear the tmp
-      (let [elem (bval/add-error-msgs validated-elem)]
-        (do (st!/add-history! atm) (intr!/add-elem! atm elem)))))
-  atm)

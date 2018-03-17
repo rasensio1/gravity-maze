@@ -8,7 +8,7 @@
   (:require-macros [gravity-maze.macros :as mac]))
 
 (defn edit-mouse-press [atm {:keys [x y]}]
-  (bhlp/save-and-validate-tmp-elem atm nil)
+  (intr!/save-and-validate-tmp-elem! atm)
     (when-let [elem (find-elem (partial clicked? click-range [x y]) @atm)]
       (intr!/add-placeholder-elem! atm (:id elem))
       (intr!/set-tmp-elem! atm elem))

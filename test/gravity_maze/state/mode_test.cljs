@@ -9,6 +9,25 @@
       ;; sets mode
       (is (= {:shooting true} (:mode res)))
       ;; sets restart state
-      (is (= {:hi :ok :mode {:shooting true}} (:shoot-start res))))))
+      (is (= {:hi :ok :mode {:shooting true}} (:shoot-start res)))))
 
+  (testing "enters [:building] properly"
+    (let [state {:hi :ok :mode {:shooting true}}
+          res (mode/enter-mode state [:building])]
+      ;; sets mode
+      (is (= {:building true} (:mode res))))))
+
+(deftest exit-mode-test
+  (testing "exits [:shooting] properly"
+    (let [state {:shoot-start {:lol :yeah} :hi :ok :mode {:shooting true}}
+          res (mode/exit-mode state)]
+      (is (= (dissoc state :shoot-start) res))))
+
+  (testing "exits [:building :edit] properly"
+    (let [elem {:id 0 :hi :ok}
+          state {:elements []
+                 :mode {:building {:edit true}}
+                 :tmp {:editing-elem elem}}
+          res (mode/exit-mode state)]
+      (is (= [elem] (:elements res))))))
 

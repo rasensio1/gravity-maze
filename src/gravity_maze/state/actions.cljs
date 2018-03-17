@@ -1,5 +1,11 @@
 (ns gravity-maze.state.actions)
 
+(defn add-elem [state {:keys [id] :as elem}]
+  (assoc-in state [:elements id] elem))
+
+(defn remove-tmp-elem [state]
+  (assoc-in state [:tmp :editing-elem] nil))
+
 (defn set-mode [state mode]
   (->> (assoc-in {} mode true)
        (assoc state :mode)))

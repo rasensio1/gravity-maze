@@ -3,8 +3,8 @@
             [gravity-maze.swappers.state :as st!]))
 
 (defn shooting-btn-click [ratom]
-  ;; (exit-mode ratom)  any cleanup that needs to be done before switching mode
-      (st!/enter-mode! ratom [:shooting]))
+  (do (st!/exit-mode! ratom)
+      (st!/enter-mode! ratom [:shooting])))
 
 (defn restart-btn-click [ratom]
   (st!/restart! ratom))

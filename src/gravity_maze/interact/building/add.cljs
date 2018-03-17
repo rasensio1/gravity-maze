@@ -2,7 +2,7 @@
   (:require [gravity-maze.state.core :as state]
             [gravity-maze.interact.building.validation :as bval]
             [gravity-maze.interact.helpers :refer [nothing]]
-            [gravity-maze.interact.building.helpers :refer [save-and-validate-tmp-elem]])
+            [gravity-maze.swappers.interact.core :as intr!])
 
   (:require-macros [gravity-maze.macros :as mac]))
 
@@ -39,20 +39,20 @@
                  {:line
                   {:mouse-pressed build-line-mouse-press
                    :mouse-dragged build-line-mouse-drag
-                   :mouse-released save-and-validate-tmp-elem
+                   :mouse-released intr!/save-and-validate-tmp-elem!
                    }
                   :start
                   {:mouse-pressed build-start-mouse-press
                    :mouse-dragged nothing
-                   :mouse-released save-and-validate-tmp-elem
+                   :mouse-released intr!/save-and-validate-tmp-elem!
                    }
                   :point
                   {:mouse-pressed build-point-mouse-press
                    :mouse-dragged nothing
-                   :mouse-released save-and-validate-tmp-elem
+                   :mouse-released intr!/save-and-validate-tmp-elem!
                    }
                   :finish
                   {:mouse-pressed build-finish-mouse-press
                    :mouse-dragged nothing
-                   :mouse-released save-and-validate-tmp-elem}}})
+                   :mouse-released intr!/save-and-validate-tmp-elem!}}})
 

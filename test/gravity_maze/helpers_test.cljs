@@ -6,6 +6,10 @@
   (testing "Gets all keywords from a map"
     (is (= [:hi :ok] (hps/get-kws {:hi {:ok true}})))))
 
+(deftest get-mode-test
+  (testing "retrieves the mode"
+    (is (= [:a :b :c] (hps/get-mode {:mode {:a {:b {:c true}}}})))))
+
 (deftest options-test
   (testing "gets all values within :options vectors"
     (let [tree {:lol {:options [:hi]

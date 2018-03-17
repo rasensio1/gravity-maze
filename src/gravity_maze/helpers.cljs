@@ -7,6 +7,9 @@
        (filter keyword?)
        vec))
 
+(defn get-mode [state]
+  (-> state :mode get-kws))
+
 (defn options
   "Returns all values in k-v pairs {:options [values.]}
   withing a `tree`, along `paths`"

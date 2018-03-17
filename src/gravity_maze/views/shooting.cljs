@@ -4,9 +4,7 @@
 
 (defn shooting-btn-click [ratom]
   ;; (exit-mode ratom)  any cleanup that needs to be done before switching mode
-  ;; (enter-mode ratom mode) sets mode and any other setup that should be done.
-  (do (st!/shooting-mode! ratom)
-      (st!/add-shoot-start! ratom)))
+      (st!/enter-mode! ratom [:shooting]))
 
 (defn restart-btn-click [ratom]
   (st!/restart! ratom))

@@ -1,5 +1,5 @@
 (ns gravity-maze.interact.building.add
-  (:require [gravity-maze.state :as state]
+  (:require [gravity-maze.state.core :as state]
             [gravity-maze.interact.building.validation :as bval]
             [gravity-maze.interact.helpers :refer [nothing]]
             [gravity-maze.interact.building.helpers :refer [save-and-validate-tmp-elem]])

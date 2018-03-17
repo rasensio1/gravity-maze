@@ -9,6 +9,8 @@ EXTREME GAMES OF CATCH!
 
   - WIP Build - EDIT mode (click on and edit elements)
     - add 'edit' ns under interact/bulding...
+    
+  - BUG clicking a different mode when item is still in :editing... in limbo
 
   - Add full integration tests.
   

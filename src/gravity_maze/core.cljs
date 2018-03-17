@@ -1,7 +1,7 @@
 (ns gravity-maze.core
   (:require
    [reagent.core :as r]
-   [gravity-maze.state :as state]
+   [gravity-maze.state.core :as state]
    [gravity-maze.swappers.core :as core!]
    [gravity-maze.draw.core :as drw]
    [gravity-maze.interact.core :as int]

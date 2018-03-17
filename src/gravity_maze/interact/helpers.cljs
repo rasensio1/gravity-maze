@@ -1,6 +1,6 @@
 (ns gravity-maze.interact.helpers
   (:require [gravity-maze.math.helpers :as mth]
-            [gravity-maze.state :as st]))
+            [gravity-maze.state.core :as st]))
 
 (def click-range 10)
 

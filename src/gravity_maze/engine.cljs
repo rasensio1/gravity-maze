@@ -1,7 +1,7 @@
 (ns gravity-maze.engine
   (:require [gravity-maze.math.helpers :as mth :refer [v+ v-
                                                        mult-v]]
-            [gravity-maze.state :as st]))
+            [gravity-maze.state.core :as st]))
 
 (defn fixed-elem? [elem]
   (or (:fixed elem)

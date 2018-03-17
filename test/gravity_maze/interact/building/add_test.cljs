@@ -1,6 +1,6 @@
 (ns gravity-maze.interact.building.add-test
   (:require [gravity-maze.interact.building.add :as add]
-            [gravity-maze.state :as state]
+            [gravity-maze.state.core :as state]
             [gravity-maze.interact.building.validation :as bval]
             [gravity-maze.test-helpers :refer [temp-elem]]
             [cljs.test :refer-macros [deftest testing is]]))

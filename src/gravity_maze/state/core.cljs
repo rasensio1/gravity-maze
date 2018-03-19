@@ -44,6 +44,7 @@
    :fwd nil
     ;; defaults for building
    :tmp {:editing-elem nil
+        ;:click-pos 
          :building {:line {:mass 100 :range 50}
                     :start {:mass 20}
                     :point {:mass 50 :range 50}

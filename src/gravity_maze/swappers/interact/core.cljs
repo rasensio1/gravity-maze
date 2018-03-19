@@ -2,6 +2,9 @@
   (:require [gravity-maze.interact.building.helpers :as bhlp]
             [gravity-maze.state.actions :as act]))
 
+(defn set-tmp-click-pos! [ratom pos]
+  (swap! ratom assoc-in [:tmp :click-pos] pos))
+
 (defn add-placeholder-elem! [ratom id]
   (swap! ratom assoc-in [:elements id] {:type :editing :id id}))
 

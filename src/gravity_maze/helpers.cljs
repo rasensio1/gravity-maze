@@ -19,3 +19,6 @@
 
 (defn tmp-elem [state]
   (get-in state [:tmp :editing-elem]))
+
+(defn init-click [state]
+  (get-in state [:tmp :click-pos]))

@@ -18,7 +18,7 @@
       (.save ctxt)
       (.addColorStop grad 0 "transparent")
       (.addColorStop grad 1 "pink"))
-    (.arc ctxt x y, range, 0, (* 2 3.1415))
+    (.arc ctxt x y, range, 0, (* 2 Math/PI))
     (goog.object/set ctxt "fillStyle" grad)
     (.fill ctxt)
     (.restore ctxt)))

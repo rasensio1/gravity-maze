@@ -5,7 +5,7 @@
               [gravity-maze.state.actions-test]
               [gravity-maze.state.mode-test]
               [gravity-maze.interact.building.add-test]
-              [gravity-maze.interact.building.edit-test]
+              [gravity-maze.interact.building.core-test]
               [gravity-maze.interact.building.helpers-test]
               [gravity-maze.interact.building.validation-test]
               [gravity-maze.interact.shooting-test]
@@ -20,7 +20,7 @@
            'gravity-maze.state.actions-test
            'gravity-maze.state.mode-test
            'gravity-maze.interact.building.add-test
-           'gravity-maze.interact.building.edit-test
+           'gravity-maze.interact.building.core-test
            'gravity-maze.interact.building.helpers-test
            'gravity-maze.interact.building.validation-test
            'gravity-maze.interact.shooting-test

@@ -8,7 +8,7 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - WIP Build - EDIT mode (click on and edit elements)
-    - add 'edit' ns under interact/bulding...
+   - unclick "Add line" -> doesn't show add menu
     
   - BUG clicking a different mode when item is still in :editing... in limbo
 

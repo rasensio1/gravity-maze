@@ -53,7 +53,8 @@
   [:div.build-add-modes
    [:div.btn-group {:field :single-select
                    :id :mode.building.add
-                   :visible? #(get-in % [:mode :building :add])}
+                    :visible? #(contains?
+                                (get-in % [:mode :building]) :add)}
    [:button.btn.btn-default
     {:key {:line true}} "Add a line"]
    [:button.btn.btn-default
@@ -64,17 +65,11 @@
     {:key {:finish true}} "Add the finish"]]
    build-elem-params])
 
-(defn edit-btn-click [ratom]
-  (do (st!/exit-mode! ratom)
-      (st!/enter-mode! ratom [:building :edit])))
-
 (defn build-modes [ratom]
   [:div.build-modes
    [:div.btn-group {:field :single-select :id :mode.building}
    [:button.btn.btn-default
-    {:key {:add true}} "Add elements"]
-   [:button.btn.btn-default
-    {:key {:edit true} :on-click #(edit-btn-click ratom)} "Edit elements"]]
+    {:key {:add true}} "Add elements"]]
    build-add-modes])
 
 (defn undo-button [ratom]
@@ -84,6 +79,10 @@
 (defn redo-button [ratom]
   [:button.btn.btn-default
    {:on-click #(st!/redo! ratom)} "Redo"])
+
+(defn add-elem-click [ratom]
+  (do (st!/exit-mode! ratom)
+      (st!/enter-mode! ratom [:building])))
 
 (defn building-btn-click [ratom]
   (do (st!/exit-mode! ratom)

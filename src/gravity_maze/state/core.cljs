@@ -49,6 +49,6 @@
                     :start {:mass 20}
                     :point {:mass 50 :range 50}
                     :finish {:range 20}
-                    :options [:show-line-range]
+                    :options [:show-line-range :show-point-range :highlight]
                     }}})
 

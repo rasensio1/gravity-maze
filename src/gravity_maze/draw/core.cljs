@@ -16,7 +16,8 @@
   (q/ellipse (pos 0) (pos 1) point-r point-r))
 
 
-(defmethod draw-elem :start [{:keys [pos drag-vec]} opts]
+(defmethod draw-elem :start [{:keys [pos drag-vec] :as start} opts]
+  (opt/draw-opts opts opt/draw-start-opts start)
   (q/fill 0 255 0)
   (q/ellipse (pos 0) (pos 1) start-r start-r)
   (prt/draw-arrow pos drag-vec))
@@ -33,7 +34,9 @@
 
 (defn main [state]
  (q/background 250)
-  (let [opts (options (:tmp @state) (get-kws (:mode @state)))]
-    (doseq [el (conj (:elements @state) (tmp-elem @state))]
-    (draw-elem el opts))))
+  (let [opts (options (:tmp @state) (get-kws (:mode @state)))
+        highlighted (assoc (tmp-elem @state) :highlight true)
+        elems (conj (:elements @state) highlighted)]
+    (doseq [el elems]
+      (draw-elem el opts))))
 

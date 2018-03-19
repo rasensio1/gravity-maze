@@ -8,7 +8,7 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - WIP Build - EDIT mode (click on and edit elements)
-   - unclick "Add line" -> doesn't show add menu
+    - Highligt clicked elem
     
   - BUG clicking a different mode when item is still in :editing... in limbo
 

@@ -23,10 +23,10 @@
           res (mode/exit-mode state)]
       (is (= (dissoc state :shoot-start) res))))
 
-  (testing "exits [:building :edit] properly"
+  (testing "exits [:building] properly"
     (let [elem {:id 0 :hi :ok}
           state {:elements []
-                 :mode {:building {:edit true}}
+                 :mode {:building true}
                  :tmp {:editing-elem elem}}
           res (mode/exit-mode state)]
       (is (= [elem] (:elements res))))))

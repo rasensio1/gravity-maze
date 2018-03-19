@@ -18,7 +18,7 @@
   (-> state
       (dissoc :shoot-start)))
 
-(defmethod exit-mode [:building :edit] [state]
+(defmethod exit-mode [:building] [state]
   (-> state
       bhlp/save-and-validate-tmp-elem))
 

@@ -1,8 +1,8 @@
-(ns gravity-maze.interact.building.core-test
+(ns gravity-maze.interact.building.main-test
   (:require [gravity-maze.test-helpers :refer [temp-elem]]
             [cljs.test :refer-macros [deftest testing is]]
 
-            [gravity-maze.interact.building.core :as bld]))
+            [gravity-maze.interact.building.main :as bld]))
 
 (deftest build-mouse-press-test
   (testing "Removes any temp elem"

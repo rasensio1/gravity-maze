@@ -2,7 +2,8 @@
   (:require [gravity-maze.state.core :as state]
             [gravity-maze.interact.building.validation :as bval]
             [gravity-maze.interact.helpers :refer [nothing]]
-            [gravity-maze.swappers.interact.core :as intr!])
+            [gravity-maze.swappers.interact.core :as intr!]
+            [gravity-maze.interact.building.main :as main])
 
   (:require-macros [gravity-maze.macros :as mac]))
 
@@ -35,23 +36,24 @@
          :mass (get-in @atm [:tmp :building :point :mass])
          :range (get-in @atm [:tmp :building :point :range])))
 
-(def click-fns {:line
-                {:mouse-pressed build-line-mouse-press
-                 :mouse-dragged build-line-mouse-drag
-                 :mouse-released intr!/save-and-validate-tmp-elem!
-                 }
-                :start
-                {:mouse-pressed build-start-mouse-press
-                 :mouse-dragged nothing
-                 :mouse-released intr!/save-and-validate-tmp-elem!
-                 }
-                :point
-                {:mouse-pressed build-point-mouse-press
-                 :mouse-dragged nothing
-                 :mouse-released intr!/save-and-validate-tmp-elem!
-                 }
-                :finish
-                {:mouse-pressed build-finish-mouse-press
-                 :mouse-dragged nothing
-                 :mouse-released intr!/save-and-validate-tmp-elem!}})
+(def click-fns (merge main/click-fns ;; default fns when no element opts is clicked
+                      {:line
+                       {:mouse-pressed build-line-mouse-press
+                        :mouse-dragged build-line-mouse-drag
+                        :mouse-released intr!/save-and-validate-tmp-elem!
+                        }
+                       :start
+                       {:mouse-pressed build-start-mouse-press
+                        :mouse-dragged nothing
+                        :mouse-released intr!/save-and-validate-tmp-elem!
+                        }
+                       :point
+                       {:mouse-pressed build-point-mouse-press
+                        :mouse-dragged nothing
+                        :mouse-released intr!/save-and-validate-tmp-elem!
+                        }
+                       :finish
+                       {:mouse-pressed build-finish-mouse-press
+                        :mouse-dragged nothing
+                        :mouse-released intr!/save-and-validate-tmp-elem!}}))
 

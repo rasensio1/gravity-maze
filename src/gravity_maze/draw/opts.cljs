@@ -12,28 +12,33 @@
     (when-let [opt-fn (elem-opts opt)]
       (opt-fn elem))))
 
+(defn highlight-circle [{:keys [pos range]}]
+  (q/fill 0 255 255)
+  (let [ctxt (context)
+        [x y] pos]
+    (.save ctxt)
+    (.beginPath ctxt)
+    (.arc ctxt x y (+ 8 range) 0 (* 2 Math/PI))
+    (goog.object/set ctxt "fillStyle" "#00FFFF")
+    (goog.object/set ctxt "strokeStyle" "transparent")
+    (.fill ctxt)
+    (.stroke ctxt)
+    (.restore ctxt)))
+
 (defmulti highlight  (fn [el] (when (:highlight el) (:type el)))
   :hierarchy st/elem-hierarchy)
 
-(defmethod highlight :start [{:keys [pos]}]
-  (q/fill 0 255 255)
-
-  (let [ctxt (context)
-        [x y] pos]
-   (.save ctxt)
-   (.beginPath ctxt)
-   (.arc ctxt x y 8 0 (* 2 Math/PI))
-   (goog.object/set ctxt "fillStyle" "#00FFFF")
-   (goog.object/set ctxt "strokeStyle" "transparent")
-   (.fill ctxt)
-   (.stroke ctxt)
-   (.restore ctxt)))
+(defmethod highlight :start [st]
+  (highlight-circle (assoc st :range 8)))
 
 (defmethod highlight :line [{:keys [pos]}]
   (let [ctxt (context)]
    (goog.object/set ctxt "lineWidth" 3)
    (goog.object/set ctxt "strokeStyle" "#00FFFF"))
   (apply q/line pos))
+
+(defmethod highlight :finish [el]
+  (highlight-circle el))
 
 (defmethod highlight :default [el] nil)
 
@@ -79,3 +84,4 @@
                      :highlight highlight})
 (def draw-point-opts {:show-point-range draw-point-range})
 (def draw-start-opts {:highlight highlight})
+(def draw-finish-opts {:highlight highlight})

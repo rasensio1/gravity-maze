@@ -27,6 +27,7 @@
   (apply q/line pos))
 
 (defmethod draw-elem :finish [{:keys [pos range] :as fin} opts]
+  (opt/draw-opts opts opt/draw-finish-opts fin)
   (q/fill 100)
   (q/ellipse (pos 0) (pos 1) (* 2 range) (* 2 range)))
 

@@ -8,10 +8,11 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - WIP Build - EDIT mode (click on and edit elements)
-    - Highligt clicked elem
+    - Highligt clicked elem (point, finish)
+    - make draw-*-range multimethod
     
-  - BUG clicking a different mode when item is still in :editing... in limbo
-
+  - BUG toggling mode removes :highlight
+    
   - Add full integration tests.
   
   - Clear all button

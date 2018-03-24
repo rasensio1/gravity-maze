@@ -39,8 +39,10 @@
   [:div.build-opts
    [:h3 "Options"]
    [:div.btn-group {:field :multi-select :id :tmp.building.options}
-    [:button.btn.btn-default {:key :show-line-range} "Show line ranges"]
-    [:button.btn.btn-default {:key :show-point-range} "Show point ranges"]]])
+    [:button.btn.btn-default {:key :show-range} "Show ranges"]
+    [:button.btn.btn-default {:key :highlight :visible? #(do false)}
+     "Highlight on click"]]])
+
 
 (def build-elem-params
   [:div.build-elem-params

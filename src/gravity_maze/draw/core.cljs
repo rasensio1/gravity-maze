@@ -11,23 +11,23 @@
 
 (defmulti draw-elem (fn [el opts] (:type el)))
 (defmethod draw-elem :point [{:keys [pos drag-vec] :as pt} opts]
-  (opt/draw-opts opts opt/draw-point-opts pt)
+  (opt/draw-opts opts pt)
   (q/fill 0)
   (q/ellipse (pos 0) (pos 1) point-r point-r))
 
 
 (defmethod draw-elem :start [{:keys [pos drag-vec] :as start} opts]
-  (opt/draw-opts opts opt/draw-start-opts start)
+  (opt/draw-opts opts start)
   (q/fill 0 255 0)
   (q/ellipse (pos 0) (pos 1) start-r start-r)
   (prt/draw-arrow pos drag-vec))
 
 (defmethod draw-elem :line [{:keys [pos] :as ln} opts]
-  (opt/draw-opts opts opt/draw-line-opts ln)
+  (opt/draw-opts opts ln)
   (apply q/line pos))
 
 (defmethod draw-elem :finish [{:keys [pos range] :as fin} opts]
-  (opt/draw-opts opts opt/draw-finish-opts fin)
+  (opt/draw-opts opts fin)
   (q/fill 100)
   (q/ellipse (pos 0) (pos 1) (* 2 range) (* 2 range)))
 

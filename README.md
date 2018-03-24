@@ -8,10 +8,8 @@ EXTREME GAMES OF CATCH!
 ### TODO
 
   - WIP Build - EDIT mode (click on and edit elements)
-    - Highligt clicked elem (point, finish)
-    - make draw-*-range multimethod
-    
-  - BUG toggling mode removes :highlight
+
+  - BUG move a line -> add a point -> line disappears
     
   - Add full integration tests.
   

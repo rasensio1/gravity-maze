@@ -7,11 +7,6 @@
   (-> (.getElementById js/document "host")
       (.getContext "2d")))
 
-(defn draw-opts [game-opts elem-opts elem]
-  (doseq [opt game-opts]
-    (when-let [opt-fn (elem-opts opt)]
-      (opt-fn elem))))
-
 (defn highlight-circle [{:keys [pos range]}]
   (q/fill 0 255 255)
   (let [ctxt (context)
@@ -42,7 +37,10 @@
 
 (defmethod highlight :default [el] nil)
 
-(defn draw-point-range [{:keys [pos range]}]
+(defmulti draw-range (fn [el] (:type el))
+  :hierarchy st/elem-hierarchy)
+
+(defmethod draw-range :point [{:keys [pos range]}]
   (let [[x y] pos
         ctxt (context)
         grad (.createRadialGradient ctxt x y range x y 0)]
@@ -56,7 +54,7 @@
       (.fill ctxt)
       (.restore ctxt))))
 
-(defn draw-line-range [{:keys [pos range]}]
+(defmethod draw-range :line [{:keys [pos range]}]
   (let [[ptA ptB] pos
         [[ptAx ptAy][ptBx ptBy]] [ptA ptB]
         n-vecs (mth/normal-vectors (mth/v- ptB ptA))
@@ -80,8 +78,12 @@
       (.stroke ctxt)
       (.restore ctxt))))
 
-(def draw-line-opts {:show-line-range draw-line-range
-                     :highlight highlight})
-(def draw-point-opts {:show-point-range draw-point-range})
-(def draw-start-opts {:highlight highlight})
-(def draw-finish-opts {:highlight highlight})
+(defmethod draw-range :default [el] nil)
+
+
+(def opts-fns {:highlight highlight
+               :show-range draw-range})
+
+(defn draw-opts [elem-opts elem]
+  (doseq [opt elem-opts]
+    ((opts-fns opt) elem)))
